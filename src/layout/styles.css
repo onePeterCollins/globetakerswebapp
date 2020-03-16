@@ -1,0 +1,11 @@
+/* STYLES */
+
+.app-toolbar-title.display-1 {
+    font-family: 'Kavivanar' !important;
+}
+
+.form-title {
+    font-family: 'Kavivanar';
+}
+
+.round {border-radius: 50% !important;}

@@ -1,0 +1,241 @@
+/* FONTS */
+
+html {
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+}
+
+@font-face {
+  font-family: 'Alata';
+  src: url(../assets/fonts/Alata/Alata-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'BadScript';
+  src: url(../assets/fonts/Bad_Script/BadScript-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Bangers';
+  src: url(../assets/fonts/Bangers/Bangers-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis-Bold';
+  src: url(../assets/fonts/Dosis/static/Dosis-Bold.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis-ExtraBold';
+  src: url(../assets/fonts/Dosis/static/Dosis-ExtraBold.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis-ExtraLight';
+  src: url(../assets/fonts/Dosis/static/Dosis-ExtraLight.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis-Light';
+  src: url(../assets/fonts/Dosis/static/Dosis-Light.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis-Medium';
+  src: url(../assets/fonts/Dosis/static/Dosis-Medium.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis';
+  src: url(../assets/fonts/Dosis/static/Dosis-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Dosis-SemiBold';
+  src: url(../assets/fonts/Dosis/static/Dosis-SemiBold.ttf)
+}
+
+@font-face {
+  font-family: 'Gayathri-Bold';
+  src: url(../assets/fonts/Gayathri/Gayathri-Bold.ttf)
+}
+
+@font-face {
+  font-family: 'Gayathri';
+  src: url(../assets/fonts/Gayathri/Gayathri-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Gayathri-Thin';
+  src: url(../assets/fonts/Gayathri/Gayathri-Thin.ttf)
+}
+
+@font-face {
+  font-family: 'Kavivanar';
+  src: url(../assets/fonts/Kavivanar/Kavivanar-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Black';
+  src: url(../assets/fonts/Montserrat/Montserrat-Black.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-BlackItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-BlackItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Bold';
+  src: url(../assets/fonts/Montserrat/Montserrat-Bold.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-BoldItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-BoldItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-ExtraBold';
+  src: url(../assets/fonts/Montserrat/Montserrat-ExtraBold.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-ExtraBoldItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-ExtraBoldItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-ExtraLight';
+  src: url(../assets/fonts/Montserrat/Montserrat-ExtraLight.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-ExtraLightItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-ExtraLightItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Italic';
+  src: url(../assets/fonts/Montserrat/Montserrat-Italic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Light';
+  src: url(../assets/fonts/Montserrat/Montserrat-Light.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-LightItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-LightItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Medium';
+  src: url(../assets/fonts/Montserrat/Montserrat-Medium.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-MediumItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-MediumItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Regular';
+  src: url(../assets/fonts/Montserrat/Montserrat-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-SemiBold';
+  src: url(../assets/fonts/Montserrat/Montserrat-SemiBold.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-SemiBoldItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-SemiBoldItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-Thin';
+  src: url(../assets/fonts/Montserrat/Montserrat-Thin.ttf)
+}
+
+@font-face {
+  font-family: 'Montserrat-ThinItalic';
+  src: url(../assets/fonts/Montserrat/Montserrat-ThinItalic.ttf)
+}
+
+@font-face {
+  font-family: 'Quicksand-Bold';
+  src: url(../assets/fonts/Quicksand/static/Quicksand-Bold.ttf)
+}
+
+@font-face {
+  font-family: 'Quicksand-Light';
+  src: url(../assets/fonts/Quicksand/static/Quicksand-Light.ttf)
+}
+
+@font-face {
+  font-family: 'Quicksand-Medium';
+  src: url(../assets/fonts/Quicksand/static/Quicksand-Medium.ttf)
+}
+
+@font-face {
+  font-family: 'Quicksand-Regular';
+  src: url(../assets/fonts/Quicksand/static/Quicksand-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'Quicksand-SemiBold';
+  src: url(../assets/fonts/Quicksand/static/Quicksand-SemiBold.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-Bold';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-Bold.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-BoldItalic';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-BoldItalic.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-Italic';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-Italic.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-Light';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-Light.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-LightItalic';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-LightItalic.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-Medium';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-Medium.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-MediumItalic';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-MediumItalic.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-Regular.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-Thin';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-Thin.ttf)
+}
+
+@font-face {
+  font-family: 'RobotoMono-ThinItalic';
+  src: url(../assets/fonts/Roboto_Mono/RobotoMono-ThinItalic.ttf)
+}

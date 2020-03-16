@@ -8,7 +8,9 @@
       align="center"
       justify="center"
     >
-      <p class="cyan--text">Menu</p>
+      <v-row justify="center">
+        <p class="cyan--text">Menu</p>
+      </v-row>
 
       <v-list dense>
         <v-list-item v-for="(link, sn) in navLinks" :key="sn" link :to="link.route" >

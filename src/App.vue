@@ -4,20 +4,21 @@
 
     <v-app-bar
       app
-      color="cyan"
+      color="cyan lighten-2"
       dark
     >      
       <v-toolbar-items>
-        <v-img
-        :src="require('./assets/images/logo.svg')"
-        contain
-        width="50"
-        height="50"
-        class="mr-3 mt-2"
-        transition="scale-transition" />
+        <v-avatar class="mt-1 mr-3 black">
+          <v-img
+          :src="require('./assets/images/logo.svg')"
+          contain
+          width="50"
+          height="50"
+          transition="scale-transition" />
+        </v-avatar>
       </v-toolbar-items>
       
-      <v-toolbar-title class="display-1">Globetakers</v-toolbar-title>
+      <v-toolbar-title class="display-1 app-toolbar-title">Globetakers</v-toolbar-title>
 
       <v-spacer />
 
@@ -45,7 +46,7 @@
 
           <span>terms</span>
         </v-btn>
-      </v-toolbar-items>
+      </v-toolbar-items>      
 
       <v-app-bar-nav-icon
       v-if="mobile"
@@ -57,6 +58,14 @@
     <v-content>
       <router-view/>
     </v-content>
+
+    <v-footer
+    app
+    fixed>
+      <v-row justify="center">
+        <span>&copy; Globetakers 2020 all rights reserved.</span>
+      </v-row>
+    </v-footer>
   </v-app>
 </template>
 
@@ -66,7 +75,7 @@ export default {
   name: 'App',
 
   data: () => ({
-    showNav: true
+    showNav: false
   }),
 
   computed: {
@@ -96,3 +105,7 @@ export default {
   }
 };
 </script>
+
+<style>
+html, body {overflow: hidden !important}
+</style>
