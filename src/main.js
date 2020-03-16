@@ -7,6 +7,12 @@ import vuetify from './plugins/vuetify';
 import 'roboto-fontface/css/roboto/roboto-fontface.css'
 import '@mdi/font/css/materialdesignicons.css'
 
+import {firestorePlugin} from 'vuefire'
+import globetakers from './plugins/globetakers'
+
+Vue.use(firestorePlugin)
+Vue.use(globetakers)
+
 Vue.config.productionTip = false
 
 new Vue({
