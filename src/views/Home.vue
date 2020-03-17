@@ -12,15 +12,11 @@
         <h2 class="form-title">LOGIN</h2>
       </v-row>
       <v-row>
-        <v-text-field prepend-icon="mdi-account" label="Username" hint="max 30 characters"  height="30" :value="username"/>
+        <v-text-field prepend-icon="mdi-account" label="NG***" hint="max 30 characters"  height="30" :value="username"/>
       </v-row>
 
       <v-row>
-        <v-text-field prepend-icon="mdi-email" label="Email" hint="max 30 characters"  height="30" :value="email"/>
-      </v-row>
-
-      <v-row>
-        <v-text-field prepend-icon="mdi-lock" label="Password" hint="max 30 characters"  height="30" :value="password"/>
+        <v-text-field prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
       </v-row>
 
       <span class="verification">Code: {verification code}</span>
