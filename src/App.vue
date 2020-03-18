@@ -8,9 +8,9 @@
       dark
     >      
       <v-toolbar-items>
-        <v-avatar class="mt-1 mr-3 black">
+        <v-avatar class="mt-1 mr-3">
           <v-img
-          :src="require('./assets/images/logo.svg')"
+          :src="require('./assets/images/logo.jpg')"
           contain
           width="50"
           height="50"
@@ -18,7 +18,7 @@
         </v-avatar>
       </v-toolbar-items>
       
-      <v-toolbar-title class="display-1 app-toolbar-title">Globetakers</v-toolbar-title>
+      <v-toolbar-title class="display-1 app-toolbar-title">GTBSi</v-toolbar-title>
 
       <v-spacer />
 

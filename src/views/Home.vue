@@ -1,7 +1,12 @@
 <template>
   <div class="home">
     <v-row>
-      <v-col class="col-11 ml-2">
+      <v-col v-if="!mobile" class="col-11 ml-2">
+        <h2 class="cyan--text">Globetakers business school</h2>
+        <h3>International</h3>
+      </v-col>
+
+      <v-col v-else-if="mobile" align="center">
         <h2 class="cyan--text">Globetakers business school</h2>
         <h3>International</h3>
       </v-col>
@@ -12,18 +17,26 @@
         <h2 class="form-title">LOGIN</h2>
       </v-row>
       <v-row>
-        <v-text-field prepend-icon="mdi-account" label="NG***" hint="max 30 characters"  height="30" :value="username"/>
+        <v-text-field prepend-icon="mdi-account" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
       </v-row>
+
+      <br />
 
       <v-row>
         <v-text-field prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
       </v-row>
 
+      <br />
+
       <span class="verification">Code: {verification code}</span>
+
+      <br />
 
       <v-row>
         <v-text-field prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
       </v-row>
+
+      <br />
 
       <v-row justify="center">
         <v-btn>Submit</v-btn>
@@ -38,6 +51,24 @@
 
 export default {
   name: 'Home',
+
+  data: () => ({
+    username: '',
+    password: '',
+    code: ''
+  }),
+
+  computed: {
+    mobile: () => {
+      let value
+
+      window.innerWidth < 1024
+      ? value = true
+      : value = false
+
+      return value
+    }
+  }
 }
 </script>
 

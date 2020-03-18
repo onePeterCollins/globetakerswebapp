@@ -40,7 +40,7 @@ export default {
       {sn: 1, title: 'Home', route: '/', icon: 'mdi-home'},
       {sn: 2, title: 'About', route: '/about', icon: 'mdi-help'},
       {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone'},
-      {sn: 4, title: 'Help', route: '/terms', icon: 'mdi-information'},
+      {sn: 4, title: 'Terms', route: '/terms', icon: 'mdi-information'},
     ]
   }),
 
@@ -66,7 +66,6 @@ export default {
       ? this.$emit("retract")
       : this.slide = this.showNav
     }
-
   }
 }
 </script>
