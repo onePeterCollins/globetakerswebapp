@@ -1,11 +1,12 @@
 <template>
-  <v-app>
+  <v-app id="GT">
     <g-navigation :showNav="showNav" @retract="retractNav"/>
 
     <v-app-bar
       app
       color="cyan lighten-2"
       dark
+      fixed
     >      
       <v-toolbar-items>
         <v-avatar class="mt-1 mr-3">
@@ -55,13 +56,11 @@
       
     </v-app-bar>
 
-    <v-content>
+    <v-content id="GT-content">
       <router-view/>
     </v-content>
 
-    <v-footer
-    app
-    fixed>
+    <v-footer class="gray">
       <v-row justify="center">
         <span>&copy; Globetakers 2020 all rights reserved.</span>
       </v-row>
@@ -90,6 +89,10 @@ export default {
     }
   },
 
+  watch: {
+
+  },
+
   methods: {
     toggleNav() {
       this.showNav
@@ -107,5 +110,11 @@ export default {
 </script>
 
 <style>
-html, body {overflow: hidden !important}
+@media screen and (max-width: 1023px) {
+  body {overflow: auto !important;}
+
+  #GT {overflow: hidden !important;}
+}
+
+html {overflow-Y: auto !important;}
 </style>

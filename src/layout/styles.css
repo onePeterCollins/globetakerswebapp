@@ -4,8 +4,20 @@
     font-family: 'RobotoMono-Light' !important;
 }
 
+form {
+    padding: 1.5rem !important;
+    border-radius: 0.5rem;
+    box-shadow: -0.5px 1.5px 0.25rem 0.5px rgba(0,0,0,0.25)
+}
+
 .form-title {
     font-family: 'Kavivanar';
 }
 
 .round {border-radius: 50% !important;}
+
+.center {margin-left: auto;
+margin-right: auto}
+
+/* COLORS */
+.gray {background: rgb(223, 218, 218) !important}

@@ -19,6 +19,26 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path: '/contact',
+    name: 'Contact',
+    component: () => import('../views/Contact.vue')
+  },
+  {
+    path: '/student-dashboard',
+    name: 'Student-dashboard',
+    component: () => import('../views/StudentDashboard.vue')
+  },
+  {
+    path: '/trainer',
+    name: 'Trainer',
+    component: () => import('../views/Contact.vue')
+  },
+  {
+    path: '/trainer-dashboard',
+    name: 'Trainer-dashboard',
+    component: () => import('../views/TrainerDashboard.vue')
+  },
+  {
     path: '/*',
     name: 'Uncharted',
     component: () => import('../views/Uncharted.vue')

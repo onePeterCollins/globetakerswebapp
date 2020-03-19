@@ -1,16 +1,35 @@
 <template>
   <div class="uncharted">
-    <v-row class="display-1"></v-row>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
     <v-row>
-      <v-col>
-        <span>Sorry this page is currently unavailable</span>
-        <span class="display-2">{{emoji.emojify(':confused:')}}</span>
+      <v-col align="center">
+        <span class="display-1">{{emoji.emojify(':confused:')}} </span>
+        <span> Oops, this page is currently unavailable</span>
       </v-col>
     </v-row>
 
     <v-row>
-        <v-btn>go back</v-btn>
+      <v-col align="center" v-if="pageName !== ''">
+        <span>Return to </span>
+        <v-btn @click="stepBack" class="info">previous</v-btn>
+        <span> page</span>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col align="center">
+        <span>Go to </span>
+        <v-btn href="/" class="info">Home</v-btn>
+        <span> page</span>
+      </v-col>
     </v-row>
   </div>
 </template>
@@ -20,11 +39,34 @@ export default {
   name: 'Uncharted',
 
   data: () => ({
-
+    pageName: ''
   }),
 
+  methods: {
+    stepBack() {
+      window.history.go(-1)
+    }
+  },
+
   mounted() {
-      alert(this.emoji.emojify(':confused:'))
+    let url
+
+    let routerPath = this.$route.path.split('')
+    routerPath.shift()
+    routerPath = routerPath.join('')
+    document.referrer === routerPath ? url = '/' : url = document.referrer
+
+    let string = url.split('').reverse()
+    let resolved = []
+
+    for(let i=0; i<string.length; i++) {
+      if(string[i].toUpperCase() === string[i].toLowerCase()) {
+        this.pageName = resolved.reverse().join('')
+        return
+      } else {
+        resolved.push(string[i])
+      }
+    }
   }
 }
 </script>

@@ -2,7 +2,7 @@
   <div class="home">
     <v-row>
       <v-col v-if="!mobile" class="col-11 ml-2">
-        <h2 class="cyan--text">Globetakers business school</h2>
+        <h2 class="cyan--text">Globetakers Business School</h2>
         <h3>International</h3>
       </v-col>
 
@@ -12,37 +12,26 @@
       </v-col>
     </v-row>
 
-    <v-form class="col-lg-3 col-10 login-form cyan lighten-5" transition="scale-transition">
-      <v-row justify="center">
-        <h2 class="form-title">LOGIN</h2>
-      </v-row>
-      <v-row>
-        <v-text-field prepend-icon="mdi-account" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
-      </v-row>
+    <g-student-login-form />
 
-      <br />
+    <br/>
 
-      <v-row>
-        <v-text-field prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
-      </v-row>
+    <v-row>
+      <v-col align="center" class="col-4 green--text accent-4">
+        <span>active: </span>
+        <span>50</span>
+      </v-col>
 
-      <br />
+      <v-col align="center" class="col-4 pink--text lighten-4">
+        <span>inactive: </span>
+        <span>70</span>
+      </v-col>
 
-      <span class="verification">Code: {verification code}</span>
-
-      <br />
-
-      <v-row>
-        <v-text-field prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
-      </v-row>
-
-      <br />
-
-      <v-row justify="center">
-        <v-btn>Submit</v-btn>
-      </v-row>
-    </v-form>
-    
+      <v-col align="center" class="col-4 cyan">
+        <span>total: </span>
+        <span>120</span>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
@@ -53,9 +42,7 @@ export default {
   name: 'Home',
 
   data: () => ({
-    username: '',
-    password: '',
-    code: ''
+
   }),
 
   computed: {
@@ -71,25 +58,3 @@ export default {
   }
 }
 </script>
-
-<style scoped>
-
-@media screen and (max-width: 1023px) {
-  .login-form {
-    padding: 1.5rem;
-    margin-left: auto;
-    margin-right: auto;
-    border-radius: 0.5rem;
-    box-shadow: -0.5px 1.5px 0.25rem 0.5px rgba(0,0,0,0.25)
-  }
-}
-
-.login-form {
-  padding: 1.5rem;
-  margin-left: auto;
-  margin-right: 7.5vw;
-  border-radius: 0.5rem;
-  box-shadow: -0.5px 1.5px 0.25rem 0.5px rgba(0,0,0,0.25)
-}
-
-</style>
