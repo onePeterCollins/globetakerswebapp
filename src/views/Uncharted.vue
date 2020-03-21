@@ -1,13 +1,18 @@
 <template>
   <div class="uncharted">
     <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
+    <v-row>
+      <v-col align="center">
+        <v-img 
+          :src="require('../assets/images/logo.jpg')"
+          contain
+          width="200"
+          height="200"
+          class="faint-4"
+          transition="scale-transition" />
+      </v-col>
+    </v-row>
+
 
     <v-row>
       <v-col align="center">

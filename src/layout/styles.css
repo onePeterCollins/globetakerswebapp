@@ -19,5 +19,13 @@ form {
 .center {margin-left: auto;
 margin-right: auto}
 
+.faint-4 {
+    opacity: 0.4;
+}
+
+.faint-5 {
+    opacity: 0.5;
+}
+
 /* COLORS */
 .gray {background: rgb(223, 218, 218) !important}

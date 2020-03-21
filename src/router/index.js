@@ -2,6 +2,7 @@ import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
 
+
 Vue.use(VueRouter)
 
 const routes = [
@@ -27,6 +28,16 @@ const routes = [
     path: '/student-dashboard',
     name: 'Student-dashboard',
     component: () => import('../views/StudentDashboard.vue')
+  },
+  {
+    path: '/student-dashboard/beginner',
+    name: 'Beginner-course',
+    component: () => import('../views/LearningOption.vue')
+  },
+  {
+    path: '/student-dashboard/advanced',
+    name: 'Advanced-course',
+    component: () => import('../views/Contact.vue')
   },
   {
     path: '/trainer',

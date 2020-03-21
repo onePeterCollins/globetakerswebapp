@@ -13,103 +13,59 @@
       </v-col>
     </v-row>
 
-    <v-row v-if="!mobile">
-    <v-card class="col-10 col-lg-4 center gray">
-      <v-row class="yellow">
-        <v-col align="center">
-          <h4>Beginner Course</h4>
-        </v-col>
-      </v-row>
+    <v-row>
+      <v-card class="col-10 col-lg-4 mb-5 center gray">
+        <v-row class="yellow">
+          <v-col align="center">
+            <h4>Beginner Course <span class="green--text">(free)</span></h4>
+          </v-col>
+        </v-row>
 
-      <v-row>
-        <v-col align="center">
-          <p>Get to know the basics;</p>
-          <p>* How the business works</p>
-          <p>* How you can grow with us</p>
-          <p>* How you can make profit</p>
-        </v-col>
-      </v-row>
+        <v-row justify="center">
+          <v-col class="col-lg-8" align="center">
+            <ul>
+              <p>Get to know the basics;</p>
+              <li>How the business works</li>
+              <li>How you can grow with us</li>
+              <li>How you can make profit</li>
+            </ul>
+          </v-col>
+        </v-row>
 
-      <v-row>
-        <v-col align="center">
-          <v-btn class="success">Continue</v-btn>
-        </v-col>
-      </v-row>
-    </v-card>
+        <v-row>
+          <v-col align="center">
+            <v-btn class="success" href="student-dashboard/beginner">Continue</v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
 
-    <br/>
+      <br/>
 
-    <v-card class="col-10 col-lg-4 center gray">
-      <v-row class="purple lighten-2">
-        <v-col align="center">
-          <h4>Advanced Course</h4>
-        </v-col>
-      </v-row>
+      <v-card class="col-10 col-lg-4 mb-5 center gray">
+        <v-row class="purple lighten-2">
+          <v-col align="center">
+            <h4>Advanced Course <span class="yellow--text">($7.99)</span></h4>
+          </v-col>
+        </v-row>
 
-      <v-row>
-        <v-col align="center">
-          <p>Get to know the basics;</p>
-          <p>* How the business works</p>
-          <p>* How you can grow with us</p>
-          <p>* How you can make profit</p>
-        </v-col>
-      </v-row>
+        <v-row justify="center">
+          <v-col class="col-lg-8" align="center">
+            <ul>
+              <p>Get to know the basics;</p>
+              <li>How the business works</li>
+              <li>How you can grow with us</li>
+              <li>How you can make profit</li>
+            </ul>
+          </v-col>
+        </v-row>
 
-      <v-row>
-        <v-col align="center">
-          <v-btn class="success">Continue</v-btn>
-        </v-col>
-      </v-row>
-    </v-card>
+        <v-row>
+          <v-col align="center">
+            <v-btn class="success" href="student-dashboard/advanced">Continue</v-btn>
+          </v-col>
+        </v-row>
+      </v-card>
     </v-row>
-
-    <v-card v-if="mobile" class="col-10 col-lg-4 center gray">
-      <v-row class="yellow">
-        <v-col align="center">
-          <h4>Beginner Course</h4>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col align="center">
-          <p>Get to know the basics;</p>
-          <p>* How the business works</p>
-          <p>* How you can grow with us</p>
-          <p>* How you can make profit</p>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col align="center">
-          <v-btn class="success">Continue</v-btn>
-        </v-col>
-      </v-row>
-    </v-card>
-
-    <br/>
-
-    <v-card v-if="mobile" class="col-10 col-lg-4 center gray">
-      <v-row class="purple lighten-2">
-        <v-col align="center">
-          <h4>Advanced Course</h4>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col align="center">
-          <p>Get to know the basics;</p>
-          <p>* How the business works</p>
-          <p>* How you can grow with us</p>
-          <p>* How you can make profit</p>
-        </v-col>
-      </v-row>
-
-      <v-row>
-        <v-col align="center">
-          <v-btn class="success">Continue</v-btn>
-        </v-col>
-      </v-row>
-    </v-card>
 
     <br/>
     <br/>
