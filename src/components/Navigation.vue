@@ -23,6 +23,10 @@
           </v-list-item-content>
         </v-list-item>
       </v-list>
+
+      <v-bottom-navigation>
+        <router-link to="/trainer">Trainers Login</router-link>
+      </v-bottom-navigation>
     </v-container>
   </v-navigation-drawer>
 </template>

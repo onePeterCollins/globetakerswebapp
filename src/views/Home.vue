@@ -25,6 +25,10 @@
     </v-row>
 
     <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
 
     <v-row>
       <v-col align="center" class="col-4 green--text accent-4">
@@ -42,6 +46,9 @@
         <span>120</span>
       </v-col>
     </v-row>
+
+    <br/>
+    
   </div>
 </template>
 

@@ -28,7 +28,7 @@
     <br />
 
     <v-row justify="center">
-        <v-btn href="student-dashboard">Login</v-btn>
+        <v-btn href="student-dashboard" class="green--text accent-3">Login</v-btn>
     </v-row>
   </v-form>
 </template>

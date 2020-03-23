@@ -17,7 +17,7 @@
       <v-card class="col-10 col-lg-4 mb-5 center gray">
         <v-row class="yellow">
           <v-col align="center">
-            <h4>Beginner Course <span class="green--text">(free)</span></h4>
+            <h4><span class="green--text">(free)</span> Beginner Course</h4>
           </v-col>
         </v-row>
 
@@ -44,7 +44,7 @@
       <v-card class="col-10 col-lg-4 mb-5 center gray">
         <v-row class="purple lighten-2">
           <v-col align="center">
-            <h4>Advanced Course <span class="yellow--text">($7.99)</span></h4>
+            <h4><span class="yellow--text">(paid)</span> Advanced Course</h4>
           </v-col>
         </v-row>
 
@@ -61,7 +61,7 @@
 
         <v-row>
           <v-col align="center">
-            <v-btn class="success" href="student-dashboard/advanced">Continue</v-btn>
+            <v-btn class="success" href="student-dashboard/course-access-denied">Continue</v-btn>
           </v-col>
         </v-row>
       </v-card>

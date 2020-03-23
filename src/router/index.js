@@ -35,9 +35,14 @@ const routes = [
     component: () => import('../views/LearningOption.vue')
   },
   {
-    path: '/student-dashboard/advanced',
-    name: 'Advanced-course',
-    component: () => import('../views/Contact.vue')
+    path: '/student-dashboard/course-access-denied',
+    name: 'Course-access-denied',
+    component: () => import('../views/CourseAccessDenied.vue')
+  },
+  {
+    path: '/student-dashboard/Lectures',
+    name: 'Lectures',
+    component: () => import('../views/Lectures.vue')
   },
   {
     path: '/trainer',

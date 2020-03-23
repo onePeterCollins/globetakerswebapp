@@ -29,3 +29,10 @@ margin-right: auto}
 
 /* COLORS */
 .gray {background: rgb(223, 218, 218) !important}
+
+
+/* FONTS */
+
+.bangers {
+    font-family: 'Bangers';
+}
