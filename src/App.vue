@@ -19,7 +19,7 @@
         </v-avatar>
       </v-toolbar-items>
       
-      <v-toolbar-title class="display-1 app-toolbar-title">GTBSi</v-toolbar-title>
+      <v-toolbar-title class="display-1 app-toolbar-title">GBSi</v-toolbar-title>
 
       <v-spacer />
 
@@ -60,9 +60,29 @@
       <router-view/>
     </v-content>
 
-    <v-footer class="gray">
+    <v-bottom-navigation>
       <v-row justify="center">
-        <span>&copy; Globetakers 2020 all rights reserved.</span>
+        <v-col align="center" class="col-12">
+          <v-btn class="mr-3">
+            <v-icon large class="blue--text lighten-4">mdi-facebook</v-icon>
+          </v-btn>
+
+          <v-btn light class="mr-3">
+            <v-icon large class="pink--text lighten-1">mdi-instagram</v-icon>
+          </v-btn>
+
+          <v-btn light class="mr-3">
+            <v-icon large class="cyan--text lighten-2">mdi-twitter</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+    </v-bottom-navigation>
+
+    <v-footer class="gray">
+      <v-row>
+        <v-col align="center">
+          <p>&copy; Globetakers 2020 all rights reserved.</p>
+        </v-col>
       </v-row>
     </v-footer>
   </v-app>

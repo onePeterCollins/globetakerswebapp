@@ -22,12 +22,12 @@
         </v-row>
 
         <v-row justify="center">
-          <v-col class="col-lg-8" align="center">
+          <v-col class="col-lg-11" align="center">
             <ul>
               <p>Get to know the basics;</p>
-              <li>How the business works</li>
-              <li>How you can grow with us</li>
-              <li>How you can make profit</li>
+              <li>Mindset paradigm shift (PT 1)</li>
+              <li>Mindset paradigm shift (PT 2)</li>
+              <li>Basic orientation uplines need to give downlines</li>
             </ul>
           </v-col>
         </v-row>
@@ -49,12 +49,12 @@
         </v-row>
 
         <v-row justify="center">
-          <v-col class="col-lg-8" align="center">
+          <v-col class="col-lg-11" align="center">
             <ul>
               <p>Get to know the basics;</p>
-              <li>How the business works</li>
-              <li>How you can grow with us</li>
-              <li>How you can make profit</li>
+              <li>Teamwork, the right strategy for MLM</li>
+              <li>Cotinual improvement, the leaders favourite</li>
+              <li>The 21st century business: pros &amp; cons</li>
             </ul>
           </v-col>
         </v-row>
@@ -69,6 +69,26 @@
 
     <br/>
     <br/>
+    <br/>
+    <br/>
+    <br/>
+        
+    <v-row justify="center">
+      <v-col align="center" class="col-4 col-lg-2 green--text accent-4">
+        <b>active: </b>
+        <span>50</span>
+      </v-col>
+
+      <v-col align="center" class="col-4 col-lg-2 pink--text lighten-4">
+        <b>inactive: </b>
+        <span>70</span>
+      </v-col>
+
+      <v-col align="center" class="col-4 col-lg-2 cyan--text">
+        <b>total: </b>
+        <span>120</span>
+      </v-col>
+    </v-row>
   </div>
 </template>
 

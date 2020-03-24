@@ -25,30 +25,10 @@
     </v-row>
 
     <br/>
-    <br/>
-    <br/>
-    <br/>
-    <br/>
-
-    <v-row>
-      <v-col align="center" class="col-4 green--text accent-4">
-        <span>active: </span>
-        <span>50</span>
-      </v-col>
-
-      <v-col align="center" class="col-4 pink--text lighten-4">
-        <span>inactive: </span>
-        <span>70</span>
-      </v-col>
-
-      <v-col align="center" class="col-4 cyan">
-        <span>total: </span>
-        <span>120</span>
-      </v-col>
-    </v-row>
-
-    <br/>
-    
+    <br v-if="mobile" />
+    <br v-if="mobile" />
+    <br v-if="mobile" />
+    <br v-if="mobile" />
   </div>
 </template>
 
