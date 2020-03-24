@@ -1,23 +1,54 @@
-/* STYLES */
+/* CUSTOM STYLES */
+
+/* POSITION */
+
+.absolute {
+    position: absolute !important;
+}
+
+.fixed {
+    position: fixed !important;
+}
+
+.relative {
+    position: relative !important;
+}
+
+.center {
+    margin-left: auto;
+    margin-right: auto;
+}
+
+
+/* FONTS */
 
 .app-toolbar-title.display-1 {
     font-family: 'RobotoMono-Light' !important;
-}
-
-form {
-    padding: 1.5rem !important;
-    border-radius: 0.5rem;
-    box-shadow: -0.5px 1.5px 0.25rem 0.5px rgba(0,0,0,0.25)
 }
 
 .form-title {
     font-family: 'Kavivanar';
 }
 
-.round {border-radius: 50% !important;}
+.bangers {
+    font-family: 'Bangers';
+}
 
-.center {margin-left: auto;
-margin-right: auto}
+
+/* SHAPE */
+
+.round {
+    border-radius: 50% !important;
+}
+
+
+/* COLORS */
+.gray {
+    background: rgb(223, 218, 218) !important;
+}
+
+
+/* TRANSPARENCY */
 
 .faint-4 {
     opacity: 0.4;
@@ -27,12 +58,17 @@ margin-right: auto}
     opacity: 0.5;
 }
 
-/* COLORS */
-.gray {background: rgb(223, 218, 218) !important}
 
+/* SPECIAL */
+form {
+    padding: 1.5rem !important;
+    border-radius: 0.5rem;
+    box-shadow: -0.5px 1.5px 0.25rem 0.5px rgba(0,0,0,0.25)
+}
 
-/* FONTS */
-
-.bangers {
-    font-family: 'Bangers';
+.banner {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    z-index: 1;
 }

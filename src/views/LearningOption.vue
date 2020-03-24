@@ -1,12 +1,12 @@
 <template>
   <div class="learning-option">
-    <v-row class="yellow">
+    <v-row class="yellow banner fixed">
       <v-col align="center">
         <h2>Choose your preferred learning option</h2>
       </v-col>
     </v-row>
 
-    <v-parallax class="col-12" height="400" :src="require('../assets/images/learn.jpg')" />
+    <v-parallax class="col-12" height="400" :src="src" />
 
     <br/>
 
@@ -15,7 +15,7 @@
         <v-row class="orange">
           <v-col align="center">
             <h2>
-              <v-avatar class="mr-5">
+              <v-avatar>
                 <v-icon class="white">mdi-headset</v-icon>
               </v-avatar>
               Audio
@@ -35,7 +35,7 @@
         <v-row class="orange">
           <v-col align="center">
             <h2>
-              <v-avatar class="mr-5">
+              <v-avatar>
                 <v-icon class="white">mdi-desktop-mac</v-icon>
               </v-avatar>
               Video
@@ -55,7 +55,7 @@
         <v-row class="orange">
           <v-col align="center">
             <h2>
-              <v-avatar class="mr-5">
+              <v-avatar>
                 <v-icon class="white">mdi-text</v-icon>
               </v-avatar>
               Text
@@ -80,8 +80,33 @@
 </template>
 
 <script>
+import desktopImg from '@/assets/images/books.jpg'
+import mobileImg from '@/assets/images/books1.png'
+
 export default {
   name: 'Learning-option',
+
+  computed: {
+    mobile: () => {
+      let value
+
+      window.innerWidth < 1024
+      ? value = true
+      : value = false
+
+      return value
+    },
+
+    src: () => {
+      let value
+
+      window.innerWidth < 1024
+      ? value = mobileImg
+      : value = desktopImg
+
+      return value
+    }
+  },
 
   methods: {
     takeLecture(type) {
@@ -109,9 +134,10 @@ export default {
 }
 
 .highlight:hover {
-  background: url('../assets/images/tutor1.jpg');
+  background: url('../assets/images/tutor1.jpg'), rgba(0, 0, 0, 0.75);
   background-size: cover;
   background-repeat: none;
+  background-blend-mode: multiply;
   filter: blur(0px);
   transition: 1s;
 }

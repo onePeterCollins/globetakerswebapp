@@ -1,5 +1,5 @@
 <template>
-  <v-form class="col-lg-3 col-10 center cyan lighten-5" transition="scale-transition">
+  <v-form class="col-lg-3 col-10 center pink lighten-5">
     <v-row justify="center">
         <h2 class="form-title">LOGIN</h2>
     </v-row>
@@ -17,7 +17,7 @@
     <br />
 
     <v-row justify="center">
-        <v-btn>Login</v-btn>
+        <v-btn class="green--text">Login</v-btn>
     </v-row>
   </v-form>
 </template>

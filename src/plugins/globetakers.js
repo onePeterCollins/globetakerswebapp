@@ -8,6 +8,7 @@
 import globalStyles from "../layout/globalStyles"
 import globalComponents from "../components/globalComponents"
 import globalMixins from "../mixins/globalMixins"
+import Popover  from 'vue-js-popover'
 
 export default {
 /* eslint-disable-next-line */
@@ -15,5 +16,6 @@ export default {
         Vue.use(globalStyles)
         Vue.use(globalComponents)
         Vue.use(globalMixins)
+        Vue.use(Popover)
     }
 }

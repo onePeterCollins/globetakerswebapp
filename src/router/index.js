@@ -47,7 +47,7 @@ const routes = [
   {
     path: '/trainer',
     name: 'Trainer',
-    component: () => import('../views/Contact.vue')
+    component: () => import('../views/Trainer.vue')
   },
   {
     path: '/trainer-dashboard',

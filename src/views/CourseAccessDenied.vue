@@ -13,27 +13,26 @@
       </v-col>
     </v-row>
 
-
     <v-row>
       <v-col align="center">
-        <h4><span class="display-1">{{emoji.emojify(':worried:')}} </span> Sorry, you don't have access to this course</h4><br/>
-        <span>Please contact the administrator.</span>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col align="center" v-if="pageName !== ''">
-        <span>Return to </span>
-        <v-btn @click="stepBack" class="info">previous</v-btn>
-        <span> page</span>
+        <h4><span class="display-1">{{emoji.emojify(':worried:')}} </span> Sorry, you don't have access to this course</h4>
+        <p>Please <a href="/contact">contact</a> the administrator.</p>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col align="center">
-        <span>Go to </span>
-        <v-btn href="/" class="info">Home</v-btn>
-        <span> page</span>
+        <p v-if="pageName !== ''">
+          <span>Return to </span>
+          <v-btn @click="stepBack" class="info">previous</v-btn>
+          <span> page</span>
+        </p>
+
+        <p>
+          <span>Go to </span>
+          <v-btn href="/" class="info">Home</v-btn>
+          <span> page</span>
+        </p>
       </v-col>
     </v-row>
   </div>
