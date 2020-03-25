@@ -26,7 +26,7 @@
         <v-row>
           <v-col class="col-9">
             <h4 class="ml-2">{{lecture.title + ' ' + lecture.sn}}</h4>
-            <span class="ml-2">Trainer: </span><span class="bangers">{{lecture.trainer}}</span>
+            <span class="ml-2">Trainer: </span><span class="dosis-semibold">{{lecture.trainer}}</span>
           </v-col>
           <!-- popover menu -->
           <v-col align="right">
@@ -82,12 +82,18 @@
         </v-row>
 
         <v-row justify="center">
-          <v-col align="center">
-            <p>{{lecture.summary + ' ' + lecture.sn}}</p>
+          <v-col align="left">
+            <p class="ml-2">{{lecture.summary + ' ' + lecture.sn}}</p>
           </v-col>
         </v-row>
       </v-card>
-    </v-row>    
+    </v-row>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    
   </div>
 </template>
 

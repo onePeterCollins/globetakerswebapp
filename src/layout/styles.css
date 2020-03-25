@@ -26,12 +26,20 @@
     font-family: 'RobotoMono-Light' !important;
 }
 
-.form-title {
-    font-family: 'Kavivanar';
-}
-
 .bangers {
     font-family: 'Bangers';
+}
+
+.dosis {
+    font-family: 'Dosis';
+}
+
+.dosis-semibold {
+    font-family: 'Dosis-SemiBold';
+}
+
+.form-title {
+    font-family: 'Kavivanar';
 }
 
 

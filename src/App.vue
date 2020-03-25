@@ -61,7 +61,23 @@
     </v-content>
 
     <v-bottom-navigation>
-      <v-row justify="center">
+      <v-row v-if="mobile" justify="center">
+        <v-col align="center" class="col-12">
+          <v-btn class="mr-3">
+            <v-icon class="blue--text lighten-4">mdi-facebook</v-icon>
+          </v-btn>
+
+          <v-btn light class="mr-3">
+            <v-icon class="pink--text lighten-1">mdi-instagram</v-icon>
+          </v-btn>
+
+          <v-btn light class="mr-3">
+            <v-icon class="cyan--text lighten-2">mdi-twitter</v-icon>
+          </v-btn>
+        </v-col>
+      </v-row>
+
+      <v-row v-else-if="!mobile" justify="center">
         <v-col align="center" class="col-12">
           <v-btn class="mr-3">
             <v-icon large class="blue--text lighten-4">mdi-facebook</v-icon>

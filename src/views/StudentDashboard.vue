@@ -22,18 +22,16 @@
         </v-row>
 
         <v-row justify="center">
-          <v-col class="col-lg-11" align="center">
+          <v-col class="col-lg-11 col-12" align="center">
             <ul>
-              <p>Get to know the basics;</p>
-              <li>Mindset paradigm shift (PT 1)</li>
-              <li>Mindset paradigm shift (PT 2)</li>
-              <li>Basic orientation uplines need to give downlines</li>
+              <span><i class="green--text">Get to know the basics;</i></span>
+              <li align="left">Mindset paradigm shift (PT 1)</li>
+              <li align="left">Mindset paradigm shift (PT 2)</li>
+              <li align="left">Basic orientation uplines need to give downlines</li>
             </ul>
           </v-col>
-        </v-row>
-
-        <v-row>
-          <v-col align="center">
+          <v-col class="col-12" align="center">
+            <p class="white"><i>6 lectures</i></p>
             <v-btn class="success" href="student-dashboard/beginner">Continue</v-btn>
           </v-col>
         </v-row>
@@ -49,18 +47,17 @@
         </v-row>
 
         <v-row justify="center">
-          <v-col class="col-lg-11" align="center">
+          <v-col class="col-lg-11 col-12" align="center">
             <ul>
-              <p>Get to know the basics;</p>
-              <li>Teamwork, the right strategy for MLM</li>
-              <li>Cotinual improvement, the leaders favourite</li>
-              <li>The 21st century business: pros &amp; cons</li>
+              <span><i class="green--text">Get excusive business insights;</i></span>
+              <li align="left">Teamwork, the right strategy for MLM</li>
+              <li align="left">Cotinual improvement, the leaders favourite</li>
+              <li align="left">The 21st century business: pros &amp; cons</li>
             </ul>
           </v-col>
-        </v-row>
 
-        <v-row>
-          <v-col align="center">
+          <v-col class="col-12" align="center">
+            <p class="white"><i>4 lectures</i></p>
             <v-btn class="success" href="student-dashboard/course-access-denied">Continue</v-btn>
           </v-col>
         </v-row>
