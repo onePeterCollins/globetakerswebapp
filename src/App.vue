@@ -49,9 +49,11 @@
         </v-btn>
       </v-toolbar-items>      
 
-      <v-app-bar-nav-icon
-      v-if="mobile"
-      @click.stop="toggleNav" />
+      <v-scale-transition>
+        <v-app-bar-nav-icon
+          v-if="mobile && animate"
+          @click.stop="toggleNav" />
+      </v-scale-transition>
 
       
     </v-app-bar>
@@ -60,45 +62,9 @@
       <router-view/>
     </v-content>
 
-    <v-bottom-navigation>
-      <v-row v-if="mobile" justify="center">
-        <v-col align="center" class="col-12">
-          <v-btn class="mr-3">
-            <v-icon class="blue--text lighten-4">mdi-facebook</v-icon>
-          </v-btn>
-
-          <v-btn light class="mr-3">
-            <v-icon class="pink--text lighten-1">mdi-instagram</v-icon>
-          </v-btn>
-
-          <v-btn light class="mr-3">
-            <v-icon class="cyan--text lighten-2">mdi-twitter</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-
-      <v-row v-else-if="!mobile" justify="center">
-        <v-col align="center" class="col-12">
-          <v-btn class="mr-3">
-            <v-icon large class="blue--text lighten-4">mdi-facebook</v-icon>
-          </v-btn>
-
-          <v-btn light class="mr-3">
-            <v-icon large class="pink--text lighten-1">mdi-instagram</v-icon>
-          </v-btn>
-
-          <v-btn light class="mr-3">
-            <v-icon large class="cyan--text lighten-2">mdi-twitter</v-icon>
-          </v-btn>
-        </v-col>
-      </v-row>
-    </v-bottom-navigation>
-
     <v-footer class="gray">
-      <v-row>
-        <v-col align="center">
+      <v-row justify="center">
           <p>&copy; Globetakers 2020 all rights reserved.</p>
-        </v-col>
       </v-row>
     </v-footer>
   </v-app>
@@ -110,7 +76,8 @@ export default {
   name: 'App',
 
   data: () => ({
-    showNav: false
+    showNav: false,
+    animate: ''
   }),
 
   computed: {
@@ -141,16 +108,16 @@ export default {
       ? this.showNav = false
       : this.showNav = false
     }
+  },
+
+  mounted() {
+    this.animate = true
   }
 };
 </script>
 
 <style>
-@media screen and (max-width: 1023px) {
-  body {overflow: auto !important;}
 
-  #GT {overflow: hidden !important;}
-}
-
+#GT {overflow: hidden !important;}
 html {overflow-Y: auto !important;}
 </style>

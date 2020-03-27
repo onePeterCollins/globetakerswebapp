@@ -1,36 +1,53 @@
 <template>
-  <v-form class="col-lg-3 col-10 student-login-form cyan lighten-5" transition="scale-transition">
-    <v-row justify="center">
-        <h2 class="form-title">LOGIN</h2>
-    </v-row>
+  <v-carousel-transition>
+    <v-form v-if="animate" class="col-lg-3 col-10 student-login-form cyan lighten-5" transition="scale-transition">
+      
+      <transition name="slideYneg">
+        <v-row v-if="anim[0]" justify="center">
+          <h2 class="form-title">LOGIN</h2>
+        </v-row>
+      </transition>
+      
+      <transition name="slideYneg">
+        <v-row v-if="anim[1]">
+          <v-text-field prepend-icon="mdi-account" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
+        </v-row>
+      </transition>
 
-    <v-row>
-        <v-text-field prepend-icon="mdi-account" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
-    </v-row>
+      <br />
 
-    <br />
+      <transition name="slideYneg">
+        <v-row v-if="anim[2]">
+          <v-text-field prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
+        </v-row>
+      </transition>
 
-    <v-row>
-        <v-text-field prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
-    </v-row>
+      <br />
 
-    <br />
+      <transition name="slideYneg">
+        <v-row v-if="anim[3]">
+          <span>Code: <span class="verification">0123</span></span>
+        </v-row>
+      </transition>
 
-    <span>Code: </span>
-    <span class="verification">0123</span>
+      <br />
 
-    <br />
+      <transition name="slideYneg">
+        <v-row v-if="anim[4]">
+          <v-text-field prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
+        </v-row>
+      </transition>
 
-    <v-row>
-        <v-text-field prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
-    </v-row>
+      <br />
 
-    <br />
+      <v-scale-transition>
+        <v-row v-if="anim[5]" justify="center">
+          <v-btn href="student-dashboard" class="green--text accent-3">Login</v-btn>
+      </v-row>
+      </v-scale-transition>
 
-    <v-row justify="center">
-        <v-btn href="student-dashboard" class="green--text accent-3">Login</v-btn>
-    </v-row>
-  </v-form>
+    </v-form>
+  </v-carousel-transition>
 </template>
 
 <script>
@@ -38,6 +55,8 @@ export default {
   name: 'g-student-login-form',
 
   data: () => ({
+    animate: '',
+    anim: [],
     username: '',
     password: '',
     code: ''
@@ -61,6 +80,25 @@ export default {
       // Compare data on all fields to what exists on database
       // if(matchFound) then load student dashboard
     }
+  },
+
+  watch: {
+    animate() {
+      let ROOT = this;
+
+      (function anim() {
+        if (ROOT.anim[5]) {
+          clearTimeout(anim, 150)
+        } else {
+          ROOT.anim.push(true)
+          setTimeout(anim, 150)
+        }
+      })()
+    }
+  },
+
+  mounted() {
+    this.animate = true
   }
 }
 </script>

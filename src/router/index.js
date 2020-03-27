@@ -30,8 +30,8 @@ const routes = [
     component: () => import('../views/StudentDashboard.vue')
   },
   {
-    path: '/student-dashboard/beginner',
-    name: 'Beginner-course',
+    path: '/student-dashboard/learning-option',
+    name: 'Learning-option',
     component: () => import('../views/LearningOption.vue')
   },
   {

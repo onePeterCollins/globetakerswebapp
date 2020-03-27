@@ -1,5 +1,19 @@
 /*ANIMATIONS*/
 
-@keyframes expand-Y {
-    
+.slideXneg-enter-active {
+    animation: slide-x-neg 1s;
+}
+
+@keyframes slide-x-neg {
+    0%{transform: translateX(10vw);}
+    100%{transform: translateX(0px);}
+}
+
+.slideYneg-enter-active {
+    animation: slide-y-neg 1.5s;
+}
+
+@keyframes slide-y-neg {
+    0%{transform: translateY(10vh);}
+    100%{transform: translateY(0px);}
 }

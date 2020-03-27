@@ -76,6 +76,8 @@
     <br/>
     <br/>
     <br/>
+
+    <g-student-counter />
   </div>
 </template>
 

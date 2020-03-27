@@ -2,14 +2,13 @@
   <div class="GT-S-dashboard">
     <v-row>
       <v-col align="center">
-        <span class="display-1">Welcome </span>
-        <span class="display-1">{Username}</span>
+        <h3>Welcome <span>{Username}</span></h3>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col align="center">
-        <p>What would you like to do?</p>
+        <h2>What would you like to do?</h2>
       </v-col>
     </v-row>
 
@@ -32,7 +31,7 @@
           </v-col>
           <v-col class="col-12" align="center">
             <p class="white"><i>6 lectures</i></p>
-            <v-btn class="success" href="student-dashboard/beginner">Continue</v-btn>
+            <v-btn class="success" href="student-dashboard/learning-option">Continue</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -49,7 +48,7 @@
         <v-row justify="center">
           <v-col class="col-lg-11 col-12" align="center">
             <ul>
-              <span><i class="green--text">Get excusive business insights;</i></span>
+              <span><i class="green--text">Get exclusive business insights;</i></span>
               <li align="left">Teamwork, the right strategy for MLM</li>
               <li align="left">Cotinual improvement, the leaders favourite</li>
               <li align="left">The 21st century business: pros &amp; cons</li>
@@ -58,7 +57,7 @@
 
           <v-col class="col-12" align="center">
             <p class="white"><i>4 lectures</i></p>
-            <v-btn class="success" href="student-dashboard/course-access-denied">Continue</v-btn>
+            <v-btn class="success" :href="advancedCourseAccess">Continue</v-btn>
           </v-col>
         </v-row>
       </v-card>
@@ -67,25 +66,9 @@
     <br/>
     <br/>
     <br/>
-    <br/>
-    <br/>
+    <br v-if="!mobile"/>
         
-    <v-row justify="center">
-      <v-col align="center" class="col-4 col-lg-2 green--text accent-4">
-        <b>active: </b>
-        <span>50</span>
-      </v-col>
-
-      <v-col align="center" class="col-4 col-lg-2 pink--text lighten-4">
-        <b>inactive: </b>
-        <span>70</span>
-      </v-col>
-
-      <v-col align="center" class="col-4 col-lg-2 cyan--text">
-        <b>total: </b>
-        <span>120</span>
-      </v-col>
-    </v-row>
+    <g-student-counter />
   </div>
 </template>
 
@@ -104,6 +87,20 @@ export default {
       window.innerWidth < 1024
       ? value = true
       : value = false
+
+      return value
+    },
+
+    userType () {
+      return this.$store.getters.getUserData.type
+    },
+
+    advancedCourseAccess () {
+      let value
+
+      this.userType === 'trainer'
+      ? value = 'student-dashboard/learning-option'
+      : value = 'student-dashboard/course-access-denied'
 
       return value
     }
