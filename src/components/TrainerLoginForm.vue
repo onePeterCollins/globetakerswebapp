@@ -17,7 +17,7 @@
     <br />
 
     <v-row justify="center">
-        <v-btn class="green--text" href="/trainer-dashboard">Login</v-btn>
+        <v-btn class="green--text" link to="/trainer-dashboard">Login</v-btn>
     </v-row>
   </v-form>
 </template>

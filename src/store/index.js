@@ -9,7 +9,8 @@ let state = {
     id: '',
     token: '',
     type: '',
-    email: ''
+    email: '',
+    loggedIn: ''
   },
 
   local: {
@@ -18,7 +19,11 @@ let state = {
   },
 
   network: {
-    lectures: {}
+    lectures: {
+      Audio: {},
+      Text: {},
+      video: {}
+    }
   }
 }
 

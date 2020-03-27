@@ -12,76 +12,72 @@
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-card class="col-10 col-lg-4 mb-5 center gray">
-        <v-row class="blue lighten-2">
-          <v-col align="center">
-            <h4>Take a Course</h4>
-          </v-col>
-        </v-row>
+    <br/>
 
-        <v-row justify="center">
-          <v-col class="col-lg-11 col-12" align="center">
-            <ul>
-              <span><i class="green--text">Explore the lectures section;</i></span>
-              <li align="left">View a new or existing course</li>
-              <li align="left">Redo any course of your choice</li>
-              <li align="left">Gain access to advanced courses</li>
-            </ul>
-          </v-col>
-          <v-col class="col-12" align="center">
-            <v-btn class="success" href="student-dashboard">Continue</v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
+    <v-row>
+      <transition name="slideYneg">
+        <v-card v-show="animate" class="col-10 col-lg-4 mb-5 center gray">
+          <v-row class="blue lighten-2">
+            <v-col align="center">
+              <h4>Teach a Course</h4>
+            </v-col>
+          </v-row>
+
+          <v-row justify="center">
+            <v-col class="col-lg-11 col-12" align="center">
+              <ul>
+                <span><i class="green--text">Provide study material for students;</i></span>
+                <li align="left">Create and modify lecture content</li>
+                <li align="left">Upload and link a lecture video</li>
+                <li align="left">Answer questions asked by students</li>
+              </ul>
+            </v-col>
+
+            <v-col class="col-12" align="center">
+              <v-scale-transition>
+                <v-btn v-show="anim[1]" class="success" link to="student-dashboard/course-access-denied">Continue</v-btn>
+              </v-scale-transition>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
 
       <br/>
 
-      <v-card class="col-10 col-lg-4 mb-5 center gray">
-        <v-row class="pink lighten-2">
-          <v-col align="center">
-            <h4>Teach a Course</h4>
-          </v-col>
-        </v-row>
+      <transition name="slideYneg">
+        <v-card v-show="anim[1]" class="col-10 col-lg-4 mb-5 center gray">
+          <v-row class="pink lighten-3">
+            <v-col align="center">
+              <h4>Take a Refresher Course</h4>
+            </v-col>
+          </v-row>
 
-        <v-row justify="center">
-          <v-col class="col-lg-11 col-12" align="center">
-            <ul>
-              <span><i class="green--text">Provide study material for students;</i></span>
-              <li align="left">Create and modify lecture content</li>
-              <li align="left">Upload and link a lecture video</li>
-              <li align="left">Answer questions asked by students</li>
-            </ul>
-          </v-col>
-
-          <v-col class="col-12" align="center">
-            <v-btn class="success" href="student-dashboard/course-access-denied">Continue</v-btn>
-          </v-col>
-        </v-row>
-      </v-card>
+          <v-row justify="center">
+            <v-col class="col-lg-11 col-12" align="center">
+              <ul>
+                <span><i class="green--text">Explore the lectures section;</i></span>
+                <li align="left">View a new or existing course</li>
+                <li align="left">Redo any course of your choice</li>
+                <li align="left">Gain access to advanced courses</li>
+              </ul>
+            </v-col>
+            <v-col class="col-12" align="center">
+              <v-scale-transition>
+                <v-btn v-show="anim[2]" class="success" link to="student-dashboard">Continue</v-btn>
+              </v-scale-transition>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
     </v-row>
 
     <br/>
     <br/>
     <br/>
     <br/>
+    <br v-if="!mobile" />
         
-    <v-row justify="center">
-      <v-col align="center" class="col-4 col-lg-2 green--text accent-4">
-        <b>active: </b>
-        <span>50</span>
-      </v-col>
-
-      <v-col align="center" class="col-4 col-lg-2 pink--text lighten-4">
-        <b>inactive: </b>
-        <span>70</span>
-      </v-col>
-
-      <v-col align="center" class="col-4 col-lg-2 cyan--text">
-        <b>total: </b>
-        <span>120</span>
-      </v-col>
-    </v-row>
+    <g-student-counter />
   </div>
 </template>
 
@@ -89,8 +85,48 @@
 export default {
   name: 'Trainer-dashboard',
 
-  computed: {
+  data: () => ({
+    animate: '',
+    anim: []
+  }),
 
+  computed: {
+    mobile: () => {
+      let value
+
+      window.innerWidth < 1024
+      ? value = true
+      : value = false
+
+      return value
+    },
+    
+    userType () {
+      return this.$store.getters.getUserData.type
+    }
+  },
+
+  watch: {
+    animate() {
+      let ROOT = this;
+
+      (function anim() {
+        if (ROOT.anim[2]) {
+          clearTimeout(anim, 300)
+        } else {
+          ROOT.anim.push(true)
+          setTimeout(anim, 300)
+        }
+      })()
+    }
+  },
+
+  mounted() {
+    let userType = {name: 'user', newVal: 'trainer', child: ['type']}
+
+    this.$store.dispatch('setValue', userType)
+
+    this.animate = true
   }
 }
 </script>

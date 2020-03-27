@@ -42,7 +42,7 @@
 
       <v-scale-transition>
         <v-row v-if="anim[5]" justify="center">
-          <v-btn href="student-dashboard" class="green--text accent-3">Login</v-btn>
+          <v-btn link to="student-dashboard" class="green--text accent-3">Login</v-btn>
       </v-row>
       </v-scale-transition>
 
