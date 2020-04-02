@@ -19,6 +19,46 @@
     margin-right: auto;
 }
 
+.z1 {
+    z-index: 1 !important
+}
+
+.z2 {
+    z-index: 2 !important
+}
+
+.z3 {
+    z-index: 3 !important
+}
+
+.z4 {
+    z-index: 4 !important
+}
+
+.z5 {
+    z-index: 5 !important
+}
+
+.z6 {
+    z-index: 6 !important
+}
+
+.z7 {
+    z-index: 7 !important
+}
+
+.z8 {
+    z-index: 8 !important
+}
+
+.z9 {
+    z-index: 9 !important
+}
+
+.z10 {
+    z-index: 10 !important
+}
+
 
 /* FONTS */
 
@@ -49,10 +89,18 @@
     border-radius: 50% !important;
 }
 
+.wide {
+    width: 100% !important
+}
+
 
 /* COLORS */
 .gray {
     background: rgb(223, 218, 218) !important;
+}
+
+.gray--text {
+    color: rgb(223, 218, 218) !important;
 }
 
 

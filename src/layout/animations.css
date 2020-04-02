@@ -1,19 +1,38 @@
 /*ANIMATIONS*/
 
+/* ENTRY ANIMATIONS */
 .slideXneg-enter-active {
-    animation: slide-x-neg 1s;
+    animation: slide-in-x-neg 1.5s;
 }
 
-@keyframes slide-x-neg {
+@keyframes slide-in-x-neg {
     0%{transform: translateX(10vw);}
     100%{transform: translateX(0px);}
 }
 
-.slideYneg-enter-active {
-    animation: slide-y-neg 1.5s;
+.slideXpos-enter-active {
+    animation: slide-in-x-pos 1.5s;
 }
 
-@keyframes slide-y-neg {
+@keyframes slide-in-x-pos {
+    0%{transform: translateX(-10vw);}
+    100%{transform: translateX(0px);}
+}
+
+.slideYneg-enter-active {
+    animation: slide-in-y-neg 1.5s;
+}
+
+@keyframes slide-in-y-neg {
     0%{transform: translateY(10vh);}
+    100%{transform: translateY(0px);}
+}
+
+.slideYpos-enter-active {
+    animation: slide-in-y-pos 1.5s;
+}
+
+@keyframes slide-in-y-pos {
+    0%{transform: translateY(-10vh);}
     100%{transform: translateY(0px);}
 }

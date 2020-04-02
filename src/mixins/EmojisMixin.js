@@ -8,7 +8,6 @@ export default {
         }),
 
         mounted() {
-          // alert(emojis.emojify(':heart:'))
           this.emoji = emojis
         }
       })

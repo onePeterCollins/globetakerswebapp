@@ -24,6 +24,8 @@ const routes = [
     name: 'Contact',
     component: () => import('../views/Contact.vue')
   },
+
+  // students
   {
     path: '/student-dashboard',
     name: 'Student-dashboard',
@@ -35,15 +37,17 @@ const routes = [
     component: () => import('../views/LearningOption.vue')
   },
   {
-    path: '/student-dashboard/course-access-denied',
-    name: 'Course-access-denied',
-    component: () => import('../views/CourseAccessDenied.vue')
-  },
-  {
     path: '/student-dashboard/Lectures',
     name: 'Lectures',
     component: () => import('../views/Lectures.vue')
   },
+  {
+    path: '/student-dashboard/course-access-denied',
+    name: 'Course-access-denied',
+    component: () => import('../views/CourseAccessDenied.vue')
+  },
+
+  // trainers
   {
     path: '/trainer',
     name: 'Trainer',
@@ -54,6 +58,18 @@ const routes = [
     name: 'Trainer-dashboard',
     component: () => import('../views/TrainerDashboard.vue')
   },
+  {
+    path: '/lesson-option',
+    name: 'Lesson-option',
+    component: () => import('../views/TeachingOption.vue')
+  },
+  {
+    path: '/upload-lesson',
+    name: 'Upload-lesson',
+    component: () => import('../views/UploadLesson.vue')
+  },
+
+  // catch all
   {
     path: '/*',
     name: 'Uncharted',

@@ -30,6 +30,9 @@
     <br v-if="mobile" />
 
     <g-social-media-links-bottom />
+    
+    <br/>
+    <br/>
   </div>
 </template>
 

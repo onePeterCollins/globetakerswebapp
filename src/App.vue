@@ -1,5 +1,8 @@
 <template>
   <v-app id="GT">
+    <div id="top-conceal" class="fixed z4"></div>
+    <div id="bottom-conceal" class="fixed z4"></div>
+
     <g-navigation :showNav="showNav" @retract="retractNav"/>
 
     <v-app-bar
@@ -24,25 +27,25 @@
       <v-spacer />
 
       <v-toolbar-items v-if="!mobile">
-        <v-btn href="/">
+        <v-btn link to="/">
           <v-icon small  class="mr-1">mdi-home</v-icon>
          
           <span>home</span>
         </v-btn>
 
-        <v-btn href="/about">
+        <v-btn link to="/about">
           <v-icon small class="mr-1">mdi-help</v-icon>
           
           <span>about</span>
         </v-btn>
 
-        <v-btn href="/contact">
+        <v-btn link to="/contact">
           <v-icon small class="mr-1">mdi-phone</v-icon>
 
           <span>contact</span>
         </v-btn>
 
-        <v-btn href="/terms">
+        <v-btn link to="/terms">
           <v-icon small class="mr-1">mdi-information</v-icon>
 
           <span>terms</span>
@@ -62,7 +65,7 @@
       <router-view/>
     </v-content>
 
-    <v-footer class="gray">
+    <v-footer class="gray z5" fixed>
       <v-row justify="center">
           <p>&copy; Globetakers 2020 all rights reserved.</p>
       </v-row>
@@ -118,6 +121,21 @@ export default {
 
 <style>
 
-#GT {overflow: hidden !important;}
+#GT {overflow: hidden !important;
+  background: white !important}
 html {overflow-Y: auto !important;}
+
+header.v-sheet {border-radius: 1.5rem 1.5rem 0px 0px;}
+footer.v-sheet {border-radius: 0px 0px 1.5rem 1.5rem;
+  box-shadow: 0.5px -0.5px 2.5px 1px rgba(0, 0, 0, 0.5)}
+
+#top-conceal {width: 100vw;
+  height: 1.5rem;
+  top: 0px;
+  background: black}
+
+#bottom-conceal {width: 100vw;
+  height: 1.5rem;
+  bottom: 0px;
+  background: black}
 </style>

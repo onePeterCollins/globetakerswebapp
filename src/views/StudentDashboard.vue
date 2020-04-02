@@ -14,7 +14,7 @@
 
     <v-row>
       <transition name="slideYneg">
-        <v-card v-show="animate" class="col-10 col-lg-4 mb-5 center gray">
+        <v-card v-show="$keys[0]" class="col-10 col-lg-4 mb-5 center gray">
           <v-row class="yellow">
             <v-col align="center">
               <h4><span class="green--text">(free)</span> Beginner Course</h4>
@@ -33,7 +33,7 @@
             <v-col class="col-12" align="center">
               <p class="white"><i>6 lectures</i></p>
               <v-scale-transition>
-                <v-btn v-show="anim[1]" class="success" link to="student-dashboard/learning-option">Continue</v-btn>
+                <v-btn v-show="$keys[2]" class="success" link to="student-dashboard/learning-option">Continue</v-btn>
               </v-scale-transition>
             </v-col>
           </v-row>
@@ -43,10 +43,10 @@
       <br/>
 
       <transition name="slideYneg">
-        <v-card v-show="anim[1]" class="col-10 col-lg-4 mb-5 center gray">
+        <v-card v-show="$keys[1]" class="col-10 col-lg-4 mb-5 center gray">
           <v-row class="purple lighten-2">
             <v-col align="center">
-              <h4><span class="yellow--text">(paid)</span> Advanced Course</h4>
+              <h4 class="white--text"><span class="yellow--text">(paid)</span> Advanced Course</h4>
             </v-col>
           </v-row>
 
@@ -63,7 +63,7 @@
             <v-col class="col-12" align="center">
               <p class="white"><i>4 lectures</i></p>
               <v-scale-transition>
-                <v-btn v-show="anim[2]" class="success" link :to="advancedCourseAccess">Continue</v-btn>
+                <v-btn v-show="$keys[3]" class="success" link :to="advancedCourseAccess">Continue</v-btn>
               </v-scale-transition>
             </v-col>
           </v-row>
@@ -85,8 +85,10 @@ export default {
   name: 'Student-dashboard',
 
   data: () => ({
-    animate: '',
-    anim: []
+    anim: {
+      delay: 100,
+      limit: 4
+    }
   }),
 
   computed: {
@@ -115,30 +117,15 @@ export default {
     }
   },
 
-  watch: {
-    animate() {
-      let ROOT = this;
-
-      (function anim() {
-        if (ROOT.anim[2]) {
-          clearTimeout(anim, 300)
-        } else {
-          ROOT.anim.push(true)
-          setTimeout(anim, 300)
-        }
-      })()
-    }
-  },
-
   mounted() {
-    this.animate = true
-
     if (this.userType !== 'trainer') {
       let userType = {name: 'user', newVal: 'student', child: ['type']}
 
       this.$store.dispatch('setValue', userType)
     }
-  }
+  },
+
+  hasAnim: true
 }
 </script>
 

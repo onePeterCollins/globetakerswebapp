@@ -6,70 +6,78 @@
       </v-col>
     </v-row>
 
-    <v-parallax class="col-12" height="400" :src="src" />
+    <transition name="slideYpos">
+      <v-parallax v-if="$keys[0]" class="col-12" height="400" :src="src" />
+    </transition>
 
     <br/>
 
     <v-row justify="center">
-      <v-card @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
-        <v-row class="orange">
-          <v-col align="center">
-            <h2>
-              <v-avatar>
-                <v-icon class="white">mdi-headset</v-icon>
+      <transition name="slideYneg">
+        <v-card v-if="$keys[2]" @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
+          <v-row class="orange">
+            <v-col align="center">
+              <h2>
+                <v-avatar>
+                  <v-icon class="white">mdi-headset</v-icon>
+                </v-avatar>
+                Audio
+              </h2>
+            </v-col>
+          </v-row>
+          <v-row class="highlight">
+            <v-col align="center">
+              <v-avatar height="150" width="150" class="mt-6 cyan">
+                <v-img :src="require('../assets/images/audio1.jpg')"/>
               </v-avatar>
-              Audio
-            </h2>
-          </v-col>
-        </v-row>
-        <v-row class="highlight">
-          <v-col align="center">
-            <v-avatar height="150" width="150" class="mt-6 cyan">
-              <v-img :src="require('../assets/images/audio1.jpg')"/>
-            </v-avatar>
-          </v-col>
-        </v-row>
-      </v-card>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
 
-      <v-card @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
-        <v-row class="orange">
-          <v-col align="center">
-            <h2>
-              <v-avatar>
-                <v-icon class="white">mdi-desktop-mac</v-icon>
+      <transition name="slideYneg">
+        <v-card v-if="$keys[4]" @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
+          <v-row class="orange">
+            <v-col align="center">
+              <h2>
+                <v-avatar>
+                  <v-icon class="white">mdi-desktop-mac</v-icon>
+                </v-avatar>
+                Video
+              </h2>
+            </v-col>
+          </v-row>
+          <v-row class="highlight">
+            <v-col align="center">
+              <v-avatar height="150" width="150" class="mt-6 cyan">
+                <v-img :src="require('../assets/images/video1.jpg')"/>
               </v-avatar>
-              Video
-            </h2>
-          </v-col>
-        </v-row>
-        <v-row class="highlight">
-          <v-col align="center">
-            <v-avatar height="150" width="150" class="mt-6 cyan">
-              <v-img :src="require('../assets/images/video1.jpg')"/>
-            </v-avatar>
-          </v-col>
-        </v-row>
-      </v-card>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
 
-      <v-card @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 choose-learning-mode">
-        <v-row class="orange">
-          <v-col align="center">
-            <h2>
-              <v-avatar>
-                <v-icon class="white">mdi-text</v-icon>
+      <transition name="slideYneg">
+        <v-card v-if="$keys[6]" @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 choose-learning-mode">
+          <v-row class="orange">
+            <v-col align="center">
+              <h2>
+                <v-avatar>
+                  <v-icon class="white">mdi-text</v-icon>
+                </v-avatar>
+                Text
+              </h2>
+            </v-col>
+          </v-row>
+          <v-row class="highlight">
+            <v-col align="center">
+              <v-avatar height="150" width="150" class="mt-6 cyan option">
+                <v-img :src="require('../assets/images/text1.jpg')"/>
               </v-avatar>
-              Text
-            </h2>
-          </v-col>
-        </v-row>
-        <v-row class="highlight">
-          <v-col align="center">
-            <v-avatar height="150" width="150" class="mt-6 cyan option">
-              <v-img :src="require('../assets/images/text1.jpg')"/>
-            </v-avatar>
-          </v-col>
-        </v-row>
-      </v-card>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
     </v-row>
 
     <br/>
@@ -113,10 +121,12 @@ export default {
   methods: {
     takeLecture(type) {
       !type
-      ? window.location.href = 'lectures'
-      : window.location.href = 'lectures'
+      ? this.$router.push('lectures')
+      : this.$router.push('lectures')
     }
-  }
+  },
+
+  hasAnim: true
 }
 </script>
 

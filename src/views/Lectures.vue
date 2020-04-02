@@ -1,21 +1,42 @@
 <template>
   <div>
-    <v-row class="yellow" justify="center">
-      <h3>Lectures</h3>
+    <v-row>
+      <h3 class="yellow z3 wide" align="center">Lectures</h3>
     </v-row>
 
-    <v-row justify="center">
-      <v-col class="col-12 gray">
-        <p class="ml-2">Before taking a lecture, make sure you have your writing materials.</p>
-        <p v-if="more" class="ml-2">Take a break every 30 minutes to review what has been covered in the lecture.</p>
-        <p v-if="more" class="ml-2">Write down your questions if any, and send them to your trainer.</p>
-        <p v-if="more" class="ml-2">Learning is a process, give yourself some time. <span>{{emoji.emojify(':wink:')}}</span> </p>
-      </v-col>
+    <transition name="slideYpos">
+      <v-row v-if="$keys[0]" justify="center">
+        <v-col class="col-12 black z2">
+          <p>
+            <b class="ml-lg-12 ml-2 gray--text">Before taking a lecture, make sure you have your writing materials.</b>
+          </p>
+          
+          <v-fab-transition>
+            <p>
+              <b v-if="more" class="ml-lg-12 ml-2 gray--text">Take a break every 30 minutes to review what has been covered in the lecture.</b>
+            </p>
+          </v-fab-transition>
 
-      <v-btn v-if="more === ''" @click="showMore" class="cyan--text">
-          <v-icon small class="mr-2">mdi-arrow-down</v-icon> more tips
-      </v-btn>
-    </v-row>
+          <v-fade-transition>
+            <p>
+              <b v-if="more" class="ml-lg-12 ml-2 gray--text">Write down your questions if any, and send them to your trainer.</b>
+            </p>
+          </v-fade-transition>
+
+          <v-fab-transition>
+            <p>
+              <b v-if="more" class="ml-lg-12 ml-2 gray--text">Learning is a process, give yourself some time. <span>{{emoji.emojify(':wink:')}}</span> </b>
+            </p>
+          </v-fab-transition>
+        </v-col>
+
+        <transition name="slideYpos">
+          <v-btn v-if="more === '' && $keys[2]" @click="showMore" class="cyan--text z1">
+            <v-icon small class="mr-2">mdi-arrow-down</v-icon> more tips
+          </v-btn>
+        </transition>
+      </v-row>
+    </transition>
 
     <br/>
     <br/>
@@ -148,7 +169,9 @@ export default {
       this.popmenuName = name
       this.popmenuSN = sn
     }
-  }
+  },
+
+  hasAnim: true
 }
 </script>
 

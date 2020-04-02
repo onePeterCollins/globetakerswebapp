@@ -5,10 +5,12 @@
  * @author -- Peter Collins cpnzereogu@gmail
  */
 
+import AnimationMixin from "./AnimationMixin.js"
 import Emojis from "./EmojisMixin.js"
 
 export default {
     install(Vue) {
+        Vue.use(AnimationMixin)
         Vue.use(Emojis)
     }
 }
