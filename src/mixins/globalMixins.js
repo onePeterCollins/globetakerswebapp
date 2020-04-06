@@ -7,10 +7,12 @@
 
 import AnimationMixin from "./AnimationMixin.js"
 import Emojis from "./EmojisMixin.js"
+import GetComputedStyles from "./GetComputedStyles.js"
 
 export default {
     install(Vue) {
         Vue.use(AnimationMixin)
         Vue.use(Emojis)
+        Vue.use(GetComputedStyles)
     }
 }

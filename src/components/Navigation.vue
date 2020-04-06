@@ -9,7 +9,7 @@
       justify="center"
     >
       <v-row justify="center">
-        <p class="cyan--text">Menu</p>
+        <h4 class="g-darkblue--text">Menu</h4>
       </v-row>
 
       <v-list dense>
@@ -24,9 +24,27 @@
         </v-list-item>
       </v-list>
 
-      <v-bottom-navigation>
-        <router-link to="/trainer">Trainers Login</router-link>
-      </v-bottom-navigation>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      <br/>
+      
+      <v-list class="mt-12">
+        <v-list-item v-for="(link, sn) in restrictedLinks" :key="sn" link :to="link.route" >
+            <v-list-item-action>
+              <v-icon>{{link.icon}}</v-icon>
+            </v-list-item-action>
+
+            <v-list-item-content>
+              <v-list-item-title>{{link.title}}</v-list-item-title>
+            </v-list-item-content>
+          </v-list-item>
+      </v-list>
     </v-container>
   </v-navigation-drawer>
 </template>
@@ -45,6 +63,11 @@ export default {
       {sn: 2, title: 'About', route: '/about', icon: 'mdi-help'},
       {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone'},
       {sn: 4, title: 'Terms', route: '/terms', icon: 'mdi-information'},
+    ],
+
+    restrictedLinks: [
+      {sn: 1, title: 'Trainer', route: '/trainer', icon: 'mdi-account-box-outline'},
+      {sn: 2, title: 'Proprietor', route: '/proprietor', icon: 'mdi-account'},
     ]
   }),
 
@@ -57,6 +80,14 @@ export default {
       : value = false
 
       return value
+    },
+
+    trainer() {
+      return false
+    },
+
+    proprietor() {
+      return false
     }
   },
 
@@ -74,6 +105,7 @@ export default {
 }
 </script>
 
-<style>
-
+<style scoped>
+.v-navigation-drawer {border-radius: 0px 1.5rem 1.5rem 0px;}
+.v-list-item--active {background: var(--cream);}
 </style>

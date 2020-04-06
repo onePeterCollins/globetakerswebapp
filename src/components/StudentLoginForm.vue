@@ -1,16 +1,16 @@
 <template>
   <v-carousel-transition>
-    <v-form v-if="$keys[0]" class="col-lg-3 col-10 student-login-form cyan lighten-5">
+    <v-form v-if="$keys[0]" class="col-lg-3 col-10 student-login-form g-white">
       
       <transition name="slideYneg">
         <v-row v-if="$keys[1]" justify="center">
-          <h2 class="form-title">LOGIN</h2>
+          <h2 class="form-title">-- LOGIN --</h2>
         </v-row>
       </transition>
       
       <transition name="slideYneg">
         <v-row v-if="$keys[2]">
-          <v-text-field prepend-icon="mdi-account" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
         </v-row>
       </transition>
 
@@ -18,7 +18,7 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[3]">
-          <v-text-field prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="Token" hint="Valid for 14 days only"  height="30" :value="password"/>
         </v-row>
       </transition>
 
@@ -34,7 +34,7 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[5]">
-          <v-text-field prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
         </v-row>
       </transition>
 
@@ -42,7 +42,7 @@
 
       <v-scale-transition>
         <v-row v-if="$keys[6]" justify="center">
-          <v-btn link to="student-dashboard" class="green--text accent-3">Login</v-btn>
+          <v-btn link to="student-dashboard" class="g-cream g-darkblue--text">Login</v-btn>
         </v-row>
       </v-scale-transition>
     </v-form>

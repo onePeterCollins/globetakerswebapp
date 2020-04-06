@@ -19,6 +19,14 @@
     margin-right: auto;
 }
 
+.bottom {
+    bottom: 0px;
+}
+
+.top {
+    top: 0px;
+}
+
 .z1 {
     z-index: 1 !important
 }

@@ -7,7 +7,7 @@
 
     <v-app-bar
       app
-      color="cyan lighten-2"
+      color="g-blue"
       dark
       fixed
     >      
@@ -110,11 +110,81 @@ export default {
       this.showNav
       ? this.showNav = false
       : this.showNav = false
+    },
+
+    hideaApp() {
+      let html = document.getElementsByTagName('html')[0]
+
+      if(this.getComputedStyles(html, 'visibility') === 'hidden') {
+        html.style.visibility = 'visible'
+      }
     }
   },
 
   mounted() {
+    let ROOT = this
+
     this.animate = true
+
+    window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection
+    window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
+    window.addEventListener('print', (e) => { alert ('action prohibited'); e.preventDefault() }) // prevent printing
+
+    // hide the app when some keys are pressed
+    window.addEventListener('keydown' , (e) => {
+      let html = document.getElementsByTagName('html')
+
+      switch (e.keyCode) {
+        case 17:
+          html[0].style.visibility = 'hidden';
+          e.preventDefault()
+          break;
+
+        case 42:
+          html[0].style.visibility = 'hidden';
+          break;
+
+        case 44:
+          html[0].style.visibility = 'hidden';
+          break;
+
+        case 91:
+          html[0].style.visibility = 'hidden';
+          break;
+
+        case 92:
+          html[0].style.visibility = 'hidden';
+          break;
+
+        case 93:
+          html[0].style.visibility = 'hidden';
+          e.preventDefault()
+          break;
+      }
+      return;
+    })
+
+    // hide the app when some keys are pressed on mobile
+    if(this.mobile) {
+      window.addEventListener('keydown' , (e) => {
+        let html = document.getElementsByTagName('html')
+
+        switch (e.keyCode) {
+          case 25:
+            html[0].style.visibility = 'hidden';
+            break;
+
+          case 26:
+            html[0].style.visibility = 'hidden';
+            break;
+        }
+      })
+    }
+
+    // make interface visible when the key is no longer pressed
+    window.addEventListener('keyup' , () => {
+      setTimeout(ROOT.hideaApp, 2000)
+    })
   }
 };
 </script>

@@ -2,13 +2,13 @@
   <div class="home">
     <v-row>
       <v-col v-if="!mobile" class="col-11 ml-5">
-        <h2 class="cyan--text">Globetakers Business School</h2>
-        <h3>International</h3>
+        <h2 class="g-darkblue--text">Globetakers Business School</h2>
+        <h3 class="g-blue--text">International</h3>
       </v-col>
 
       <v-col v-else-if="mobile" align="center">
-        <h2 class="cyan--text">Globetakers Business School</h2>
-        <h3>International</h3>
+        <h2 class="g-darkblue--text">Globetakers Business School</h2>
+        <h3 class="g-blue--text">International</h3>
       </v-col>
     </v-row>
 

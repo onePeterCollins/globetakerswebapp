@@ -7,8 +7,9 @@
 
 import Fonts from "./fonts.css"
 import Styles from "./styles.css"
+import Themes from "./theme.css"
 import Animations from "./animations.css"
 
 export default {
-    Fonts, Styles, Animations
+    Fonts, Styles, Themes, Animations
 }
