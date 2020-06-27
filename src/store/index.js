@@ -14,7 +14,17 @@ let state = {
   },
 
   local: {
-    device: {},
+    device: {
+      mobile: () => {
+        let value
+
+        window.innerWidth < 1024
+        ? value = true
+        : value = false
+
+        return value
+      }
+    },
     analytics: {}
   },
 

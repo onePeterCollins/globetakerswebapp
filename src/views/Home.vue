@@ -2,8 +2,8 @@
   <div class="home">
     <v-row>
       <v-col v-if="!mobile" class="col-11 ml-5">
-        <h2 class="g-darkblue--text">Globetakers Business School</h2>
-        <h3 class="g-blue--text">International</h3>
+        <h2 class="g-darkblue--text">Globetakers Business School <span class="g-blue--text">International</span></h2>
+        <p>...{{$User}}</p>
       </v-col>
 
       <v-col v-else-if="mobile" align="center">
@@ -21,7 +21,31 @@
         class="faint-4"
         transition="scale-transition" />
 
-      <g-student-login-form />
+      <v-col class="col-lg-4">
+        <h3 v-if="!mobile" class="pl-10">
+          To {{this.registerOrLogin}} click
+          <a @click="formFlip()">here</a>
+        </h3>
+
+        <h3 v-else-if="mobile" align="center">
+          To {{this.registerOrLogin}} click
+          <a @click="formFlip()">here</a>
+        </h3>
+
+        <v-col :class="this.flipForm + ' flipper'">
+          <v-row class="rear-form-container" justify="center">
+            <v-col class="rear-form">
+              <g-registration-form />
+            </v-col>
+          </v-row>
+
+          <v-row class="front-form-container">
+            <v-col class="front-form">
+              <g-student-login-form />
+            </v-col>
+          </v-row>
+        </v-col>
+      </v-col>
     </v-row>
 
     <br/>
@@ -38,12 +62,14 @@
 
 <script>
 // @ is an alias to /src
+import User from '../classes/User'
 
 export default {
   name: 'Home',
 
   data: () => ({
-
+    flipForm: '',
+    registerOrLogin: 'register'
   }),
 
   computed: {
@@ -56,6 +82,58 @@ export default {
 
       return value
     }
+  },
+
+  watch: {
+    flipForm () {
+      this.flipForm === ''
+      ? this.registerOrLogin = 'register'
+      : this.registerOrLogin = 'login'
+    }
+  },
+
+  methods: {
+    formFlip() {
+      this.flipForm === 'flip-form' ? this.flipForm = "" : this.flipForm = 'flip-form'
+    }
+  },
+
+  mounted() {
+    // this.$User.name('Peter Collins')
+    // this.$forceUpdate()
+    let user = new User()
+    user.setName('Peter Collins')
+    alert(user.getName())
   }
 }
 </script>
+
+<style scoped>
+.flip-form {
+  transform: rotateY(180deg);
+}
+
+.flipper {
+  transition-duration: 0.5s;
+}
+
+.front-form {
+  backface-visibility: hidden;
+}
+
+.flip-form .front-form-container {
+  display: none;
+}
+
+.rear-form {
+  transform: rotateY(180deg);
+}
+
+.flipper .rear-form-container {
+  display: none;
+}
+
+.flipper.flip-form .rear-form-container {
+  display: block;
+}
+</style>

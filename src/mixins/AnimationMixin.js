@@ -2,7 +2,7 @@
 
 export default {
     install (Vue) {
-      Vue.prototype.$keys = [] // available as $keys in all templates
+      Vue.prototype.$keys = [] // available as $keys in all component templates
 
       Vue.mixin({
         data: () => ({
@@ -47,10 +47,10 @@ export default {
 
         mounted() {
           if (this.$options.hasAnim) {
-            this.anim.on = ''
+            this.anim.on = null
             this.anim.on = true
           } else {
-            this.anim.on = ''
+            this.anim.on = null
             this.anim.on = false
           }
         }

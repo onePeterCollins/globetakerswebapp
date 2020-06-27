@@ -2,11 +2,12 @@
 //all global components are imported into the 'globetakers' plugin
 
 /**
- * @author -- Peter Collins cpnzereogu@gmail
+ * @author -- Peter Collins onepetercollins@gmail.com
  */
 
 import ContactForm from "./ContactForm.vue"
 import Navigation from "./Navigation.vue"
+import RegForm from "./RegistrationForm.vue"
 import SocialMediaLinksBottom from "./SocialMediaLinksBottom.vue"
 import StudentCounter from "./StudentCounter.vue"
 import StudentLoginForm from "./StudentLoginForm.vue"
@@ -17,6 +18,7 @@ export default {
     install(Vue) {
         Vue.component(ContactForm.name, ContactForm)
         Vue.component(Navigation.name, Navigation)
+        Vue.component(RegForm.name, RegForm)
         Vue.component(SocialMediaLinksBottom.name, SocialMediaLinksBottom)
         Vue.component(StudentCounter.name, StudentCounter)
         Vue.component(StudentLoginForm.name, StudentLoginForm)

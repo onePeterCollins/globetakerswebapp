@@ -127,29 +127,29 @@ export default {
     this.animate = true
 
     window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection
-    window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
+    // window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
     window.addEventListener('print', (e) => { alert ('action prohibited'); e.preventDefault() }) // prevent printing
 
     // hide the app when some keys are pressed
     window.addEventListener('keydown' , (e) => {
-      let html = document.getElementsByTagName('html')
+      let html = document.querySelector('html')
 
       switch (e.keyCode) {
         case 17:
-          html[0].style.visibility = 'hidden';
+          html.style.visibility = 'hidden';
           e.preventDefault()
           break;
 
         case 42:
-          html[0].style.visibility = 'hidden';
+          html.style.visibility = 'hidden';
           break;
 
         case 44:
-          html[0].style.visibility = 'hidden';
+          html.style.visibility = 'hidden';
           break;
 
         case 91:
-          html[0].style.visibility = 'hidden';
+          html.style.visibility = 'hidden';
           break;
 
         case 92:
@@ -157,7 +157,7 @@ export default {
           break;
 
         case 93:
-          html[0].style.visibility = 'hidden';
+          html.style.visibility = 'hidden';
           e.preventDefault()
           break;
       }
@@ -165,21 +165,21 @@ export default {
     })
 
     // hide the app when some keys are pressed on mobile
-    if(this.mobile) {
-      window.addEventListener('keydown' , (e) => {
-        let html = document.getElementsByTagName('html')
+    // if(this.mobile) {
+    //   window.addEventListener('keydown' , (e) => {
+    //     let html = document.getElementsByTagName('html')
 
-        switch (e.keyCode) {
-          case 25:
-            html[0].style.visibility = 'hidden';
-            break;
+    //     switch (e.keyCode) {
+    //       case 25:
+    //         html[0].style.visibility = 'hidden';
+    //         break;
 
-          case 26:
-            html[0].style.visibility = 'hidden';
-            break;
-        }
-      })
-    }
+    //       case 26:
+    //         html[0].style.visibility = 'hidden';
+    //         break;
+    //     }
+    //   })
+    // }
 
     // make interface visible when the key is no longer pressed
     window.addEventListener('keyup' , () => {

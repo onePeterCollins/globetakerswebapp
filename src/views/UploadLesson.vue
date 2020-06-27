@@ -22,7 +22,14 @@
               <h3  v-if="$keys[0]" class="form-title"><v-icon class="green--text">mdi-upload</v-icon> UPLOAD AUDIO LESSON</h3>
             </v-fade-transition>
           </v-row>
-          
+
+          <v-row justify="center">
+            <v-col class="col-12">
+              <v-fade-transition>
+                <v-text-field v-if="$keys[1]" prepend-icon="mdi-pen" hint="lecture title" label="lecture title" />
+              </v-fade-transition>
+            </v-col>
+          </v-row>
 
           <v-scale-transition>
             <v-file-input v-if="$keys[2]"

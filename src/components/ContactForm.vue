@@ -1,23 +1,23 @@
 <template>
   <v-form class="col-lg-5 col-10 contact-form center cyan lighten-5">
     <v-row justify="center">
-        <h2 class="form-title">-- CONTACT --</h2>
+        <h2 class="form-title">-- CONTACT US--</h2>
     </v-row>
 
     <v-row>
-        <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Name" hint="max 30 characters"  height="30" :value="username"/>
-    </v-row>
-
-    <br />
-
-    <v-row>
-        <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-email" label="Email" hint="max 30 characters"  height="30" :value="email"/>
+        <v-text-field color="g-rose" prepend-icon="mdi-account" label="Name" hint="max 30 characters"  height="30" :value="username"/>
     </v-row>
 
     <br />
 
     <v-row>
-        <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-pen" label="Subject" hint="max 30 characters"  height="30" :value="subject"/>
+        <v-text-field color="g-rose" prepend-icon="mdi-email" label="Email" hint="max 30 characters"  height="30" :value="email"/>
+    </v-row>
+
+    <br />
+
+    <v-row>
+        <v-text-field color="g-rose" prepend-icon="mdi-pen" label="Subject" hint="max 30 characters"  height="30" :value="subject"/>
     </v-row>
 
     <br />
@@ -25,7 +25,7 @@
     <br />
 
     <v-row>
-        <v-textarea color="rgb(255, 127, 165)" prepend-icon="mdi-pencil" label="Type your message here" hint="max 300 characters"  height="30" :value="message"/>
+        <v-textarea color="g-rose" prepend-icon="mdi-pencil" label="Type your message here" hint="max 300 characters"  height="30" :value="message"/>
     </v-row>
 
     <br />

@@ -1,7 +1,8 @@
 /* THEME COLORS */
 :root {
-    --blue:  rgb(127, 205, 255);
+    --deepblue: rgb(9, 50, 67);
     --darkblue:  rgb(29, 162, 216);
+    --blue:  rgb(127, 205, 255);
     --paleblue:  rgb(118, 182, 196);
     --white:  rgb(222,243,246);
     --cream:  rgb(255, 236, 127);
@@ -21,13 +22,17 @@
     }
 }
 
-.g-blue {background-color: var(--blue) !important;}
-.g-blue--text {color: var(--blue) !important;}
-.g-blue--shadow {box-shadow: 1px -0.5px 0.5px 1px var(--blue) !important;}
+.g-deepblue {background-color: var(--deepblue) !important;}
+.g-deepblue--text {color: var(--deepblue) !important;}
+.g-deepblue--shadow {box-shadow: 1px -0.5px 0.5px 1px var(--deepblue) !important;}
 
 .g-darkblue {background-color: var(--darkblue) !important;}
 .g-darkblue--text {color: var(--darkblue) !important;}
 .g-darkblue--shadow {box-shadow: 1px -0.5px 0.5px 1px var(--darkblue) !important;}
+
+.g-blue {background-color: var(--blue) !important;}
+.g-blue--text {color: var(--blue) !important;}
+.g-blue--shadow {box-shadow: 1px -0.5px 0.5px 1px var(--blue) !important;}
 
 .g-paleblue {background-color: var(--paleblue) !important;}
 .g-blue--text {color: var(--paleblue) !important;}

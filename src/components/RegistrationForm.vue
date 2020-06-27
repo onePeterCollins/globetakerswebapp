@@ -1,16 +1,16 @@
 <template>
   <v-carousel-transition>
-    <v-form v-if="$keys[1]" class="col-lg-10 col-11 student-login-form g-white">
+    <v-form v-if="$keys[1]" class="col-lg-10 col-11 reg-form g-white">
       
       <transition name="slideYneg">
         <v-row v-if="$keys[1]" justify="center">
-          <h2 class="form-title">-- LOGIN --</h2>
+          <h2 class="form-title">-- REGISTER --</h2>
         </v-row>
       </transition>
       
       <transition name="slideYneg">
-        <v-row v-if="$keys[3]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" hint="Name and surname max 30 characters"  height="30" :value="password"/>
+        <v-row v-if="$keys[2]">
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" hint="Name and surname max 30 characters"  height="30" :value="username"/>
         </v-row>
       </transition>
 
@@ -18,23 +18,15 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[2]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="NG **** ****" hint="Your Longrich code"  height="30" :value="username"/>
         </v-row>
       </transition>
 
       <br />
 
       <transition name="slideYneg">
-        <v-row v-if="$keys[4]">
-          <span>Code: <span class="verification"><b>0xV9Yp2k</b></span></span>
-        </v-row>
-      </transition>
-
-      <br />
-
-      <transition name="slideYneg">
-        <v-row v-if="$keys[5]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
+        <v-row v-if="$keys[3]">
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-pen" label="Group name" hint="The name of your team"  height="30" :value="password"/>
         </v-row>
       </transition>
 
@@ -42,7 +34,7 @@
 
       <v-scale-transition>
         <v-row v-if="$keys[6]" justify="center">
-          <v-btn link to="student-dashboard" class="g-cream g-darkblue--text">Login</v-btn>
+          <v-btn link to="student-dashboard" class="g-cream g-darkblue--text">Register</v-btn>
         </v-row>
       </v-scale-transition>
     </v-form>
@@ -51,7 +43,7 @@
 
 <script>
 export default {
-  name: 'g-student-login-form',
+  name: 'g-registration-form',
 
   data: () => ({
     username: '',
@@ -84,7 +76,7 @@ export default {
 </script>
 
 <style scoped>
-.student-login-form {
+.reg-form {
   padding: 1.5rem;
   margin-left: auto;
   margin-right: auto;
