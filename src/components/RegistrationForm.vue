@@ -48,7 +48,18 @@
 
       <br />
 
-      <p v-if="errorMessages.generalErrorMessage" class="g-deepblue g-cream--text px-2">{{errorMessages.generalErrorMessage}}</p>
+      <v-row v-if="errorMessages.generalErrorMessage" class="mb-5">
+        <v-col v-for="(errorMessage, sn) in errorMessages.generalErrorMessage" :key="sn" class="g-deepblue g-cream--text col-12 px-2 mb-2">
+          {{errorMessages.generalErrorMessage[sn]}}
+        </v-col>
+      </v-row>
+
+      <v-row v-if="networkMessage" class="mb-5">
+        <v-col class="col-12">
+          <p>{{networkMessage.success}}</p>
+          <p>{{networkMessage.error}}</p>
+        </v-col>
+      </v-row>
 
       <v-scale-transition>
         <v-row v-if="$keys[6]" justify="center">
@@ -60,7 +71,7 @@
 </template>
 
 <script>
-import newEntry from '../form_validation/RegistrationForm'
+import validator from '../form_validation/RegistrationForm'
 
 export default {
   name: 'g-registration-form',
@@ -79,7 +90,10 @@ export default {
       teamLeadsName: 'Fullname of your team leader',
       subTeam: 'The name of your sub-team',
       generalErrorMessage: null
-    }
+    },
+
+    errorFields: null,
+    networkMessage: null
   }),
 
   computed: {
@@ -97,14 +111,23 @@ export default {
   methods: {
     update(field, value) {
       // Validate and update input
-      newEntry(this, field, value)
+      validator.newEntry(this, field, value)
+
+      if (this.errorFields) {
+        this.errorFields = validator.scanEntries(this)
+      }
     },
 
     register() {
-      alert(this.$user)
       // Check for empty fields
-      // Compare data on all fields to what exists on database
-      // if(matchFound) then load student dashboard
+      this.errorFields = validator.scanEntries(this)
+
+      if (!this.errorFields) {
+        // Continue registration
+        // Compare data on 'fullname' and 'longrich code' fields to what exists on database
+        // if(matchFound) then block duplicate registration
+        // else upload this.$User and send it to the $store
+      }
     },
 
     usernameHint(errorMessage) {

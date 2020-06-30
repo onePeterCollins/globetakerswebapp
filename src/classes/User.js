@@ -12,6 +12,7 @@ export default class User {
         this._longrichCode = ''
         this._upline = {teamLeadsRank: '', teamLeadsName: '', subTeam: ''}
         this._email = ''
+        this._country = ''
         this._verified = false
         this._isOnline = false
         this._loginHistory = []
@@ -38,6 +39,10 @@ export default class User {
     }
 
     // upline
+    getUpline () {
+        return this._upline
+    }
+
     getTeamLeadsRank () {
         return this._upline.teamLeadsRank
     }
@@ -52,6 +57,10 @@ export default class User {
 
     getEmail () {
         return this._email
+    }
+
+    getCountry () {
+        return this._country
     }
 
     getVerificationStatus () {
@@ -145,7 +154,7 @@ export default class User {
     /**
      * @param {String} newTeamName
      */
-    setsubTeam (newTeamName) {
+    setSubTeam (newTeamName) {
         this._upline.subTeam = newTeamName
     }
 
@@ -154,6 +163,13 @@ export default class User {
      */
     setEmail (newEmail) {
         this._email = newEmail
+    }
+
+    /**
+     * @param {String} newCountry
+     */
+    setCountry (newCountry) {
+        this._country = newCountry
     }
 
     /**

@@ -4,14 +4,7 @@ import Vuex from 'vuex'
 Vue.use(Vuex)
 
 let state = {
-  user: {
-    name: '',
-    id: '',
-    token: '',
-    type: '',
-    email: '',
-    loggedIn: ''
-  },
+  user: {},
 
   local: {
     device: {
@@ -24,17 +17,11 @@ let state = {
 
         return value
       }
-    },
-    analytics: {}
+    }
   },
 
-  network: {
-    lectures: {
-      Audio: {},
-      Text: {},
-      video: {}
-    }
-  }
+  network: {},
+  analytics: {}
 }
 
 let mutations = {
@@ -60,7 +47,7 @@ let mutations = {
         } else if (payload.child.length === 6) {
           state[payload.name][payload.child[0]][payload.child[1]][payload.child[2]][payload.child[3]][payload.child[4]][payload.child[i]] = payload.newVal
         } else if (payload.child.length > 6) {
-          alert("value has exceeded setter's nesting limit @ store.js")
+          alert("nesting depth has exceeded setter's nesting limit @ store.js")
         }
       }
     } else {
@@ -79,7 +66,8 @@ let actions = {
 let getters = {
   getUserData (state) { return state.user },
   getLocalData (state) { return state.local },
-  getNetworkData (state) { return state.network }
+  getNetworkData (state) { return state.network },
+  getAnalyticsData (state) { return state.analytics }
 }
 
 export default new Vuex.Store({

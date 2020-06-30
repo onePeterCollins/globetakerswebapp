@@ -1,8 +1,9 @@
 import nameValidator from './NameValidation'
 import longrichCodeValidator from './LongrichCodeValidation'
-import rankValidator from './RankValidator'
+import rankValidator from './RankValidation'
+import subTeamValidator from './SubTeamValidation'
 
-export default function newEntry (instance, field, value) {
+function newEntry (instance, field, value) {
     switch(field) {
         case 'name':
             instance.username = nameValidator(value, instance.usernameHint)
@@ -18,5 +19,52 @@ export default function newEntry (instance, field, value) {
             instance.teamLeadsRank = rankValidator(value, instance.teamLeadsRankHint)
             instance.$User.setTeamLeadsRank(instance.teamLeadsRank)
             break;
+
+        case 'teamLeadsName':
+            instance.teamLeadsName = nameValidator(value, instance.teamLeadsNameHint)
+            instance.$User.setTeamLeadsName(instance.teamLeadsName)
+            break;
+
+        case 'subTeam':
+            instance.subTeam = subTeamValidator(value, instance.subTeamHint)
+            instance.$User.setSubTeam(instance.subTeam)
+            break;
     }
+}
+
+function scanEntries (instance) {
+    let error = false, errorMessages = [],
+
+    fields = [
+        {name: "'full name'",   data: instance.username,   errorMessage: instance.errorMessages.username,   default: 'Name and surname max 30 characters'},
+        {name: "'Longrich code'",   data: instance.longrichCode,   errorMessage: instance.errorMessages.longrichCode,   default: 'Your Longrich code'},
+        {name: "'team leaders rank'",   data: instance.teamLeadsRank,   errorMessage: instance.errorMessages.teamLeadsRank,   default: 'Example: D5, D6, D7 ...'},
+        {name: "'team leaders name'",   data: instance.teamLeadsName,   errorMessage: instance.errorMessages.teamLeadsName,   default: 'Fullname of your team leader'},
+        {name: "'sub-team name'",   data: instance.subTeam,   errorMessage: instance.errorMessages.subTeam,   default: 'The name of your sub-team'}
+      ]
+
+    for (let i in fields) {
+        // check for empty fields
+        if (fields[i].data === '') {
+            error = true
+            errorMessages.push(`${fields[i].name} field is empty`)
+        }
+
+        // check for error fields
+        if (fields[i].errorMessage != fields[i].default) {
+            if (!error) {
+                error = true
+                errorMessages.push(`${fields[i].name} field is invalid`)
+            }
+        }
+    }
+
+    error ? instance.errorMessages.generalErrorMessage = errorMessages : instance.errorMessages.generalErrorMessage = null
+
+    return error
+}
+
+export default {
+    newEntry: newEntry,
+    scanEntries: scanEntries
 }
