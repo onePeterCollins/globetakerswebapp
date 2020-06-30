@@ -9,7 +9,7 @@
       </transition>
       
       <transition name="slideYneg">
-        <v-row v-if="$keys[3]">
+        <v-row v-if="$keys[2]">
           <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" hint="Name and surname max 30 characters"  height="30" :value="password"/>
         </v-row>
       </transition>
@@ -17,7 +17,7 @@
       <br />
 
       <transition name="slideYneg">
-        <v-row v-if="$keys[2]">
+        <v-row v-if="$keys[3]">
           <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
         </v-row>
       </transition>

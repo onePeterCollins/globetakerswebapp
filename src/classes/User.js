@@ -10,7 +10,7 @@ export default class User {
     constructor() {
         this._name = ''
         this._longrichCode = ''
-        this._groupName = ''
+        this._upline = {teamLeadsRank: '', teamLeadsName: '', subTeam: ''}
         this._email = ''
         this._verified = false
         this._isOnline = false
@@ -20,10 +20,12 @@ export default class User {
         this._questions = []
         this._userTypes = ['student', 'tutor']
         this._typeIndex = 0
+        this._lectures = {audio: [], text: [], video: []}
         this._violations = []
         this._dateOfBirth = ''
         this._dateOfRegistration = ''
         this._complaints = []
+        this._blocked = false
     }
 
     // getters
@@ -31,62 +33,85 @@ export default class User {
         return this._name
     }
 
-    get getLongrichCode () {
+    getLongrichCode () {
         return this._longrichCode
     }
 
-    get getGroupName () {
-        return this._groupName
+    // upline
+    getTeamLeadsRank () {
+        return this._upline.teamLeadsRank
     }
 
-    get getEmail () {
+    getTeamLeadsName () {
+        return this._upline.teamLeadsName
+    }
+
+    getSubTeam () {
+        return this._upline.subTeam
+    }
+
+    getEmail () {
         return this._email
     }
 
-    get getVerificationStatus () {
+    getVerificationStatus () {
         return this._verified
     }
 
-    get getOnlineStatus () {
+    getOnlineStatus () {
         return this._isOnline
     }
 
-    get getLoginHistory () {
+    getLoginHistory () {
         return this._loginHistory
     }
 
-    get getNotifications () {
+    getNotifications () {
         return this._notifications
     }
 
-    get getQuestions () {
+    getQuestions () {
         return this._questions
     }
 
-    get getUserType () {
+    getUserType () {
         return this._userTypes[this._typeIndex]
     }
 
-    get getViolations () {
+    getLectures () {
+        let lectures = null
+
+        if (this.getUserType === 'tutor') {
+            lectures = this._lectures
+        }
+
+        return lectures
+    }
+
+    getViolations () {
         return this._violations
     }
 
-    get getDateOfBirth () {
+    getDateOfBirth () {
         return this._dateOfBirth
     }
 
-    get getDateOfRegistration () {
+    getDateOfRegistration () {
         return this._dateOfRegistration
     }
 
-    get getComplaints () {
+    getComplaints () {
         return this._complaints
+    }
+
+    blocked () {
+        return this._blocked
     }
 
     // setters
 
     /**
-     * @param {String} /newName
+     * @param {String} newName
      */
     setName (newName) {
         function action (obj, newName) {
@@ -99,49 +124,63 @@ export default class User {
     /**
      * @param {String} newCode
      */
-    set setLongrichCode (newCode) {
+    setLongrichCode (newCode) {
         this._longrichCode = newCode
     }
 
     /**
-     * @param {String} newGroupName
+     * @param {String} newRank
      */
-    set setGroupName (newGroupName) {
-        this._groupName = newGroupName
+    setTeamLeadsRank (newRank) {
+        this._upline.teamLeadsRank = newRank
+    }
+
+    /**
+     * @param {String} newName
+     */
+    setTeamLeadsName (newName) {
+        this._upline.teamLeadsName = newName
+    }
+
+    /**
+     * @param {String} newTeamName
+     */
+    setsubTeam (newTeamName) {
+        this._upline.subTeam = newTeamName
     }
 
     /**
      * @param {String} newEmail
      */
-    set setEmail (newEmail) {
+    setEmail (newEmail) {
         this._email = newEmail
     }
 
     /**
      * @param {String} newStatus
      */
-    set setVerificationStatus (newStatus) {
+    setVerificationStatus (newStatus) {
         this._verified = newStatus
     }
 
     /**
      * @param {String} newStatus
      */
-    set setOnlineStatus (newStatus) {
+    setOnlineStatus (newStatus) {
         this._isOnline = newStatus
     }
 
     /**
      * @param {String} newHistory
      */
-    set addLoginHistory (newHistory) {
+    addLoginHistory (newHistory) {
         this._loginHistory.push(newHistory)
     }
 
     /**
      * @param {String} newNotificationTitle
      */
-    set addSeenNotification (newNotificationTitle) {
+    addSeenNotification (newNotificationTitle) {
         this._notifications.push(newNotificationTitle)
         this._seenNotifications += 1
     }
@@ -149,42 +188,69 @@ export default class User {
     /**
      * @param {String} newQuestion
      */
-    set addQuestion (newQuestion) {
+    addQuestion (newQuestion) {
         this._questions.push(newQuestion)
     }
 
     /**
      * @param {String} index
      */
-    set setUserType (index) {
+    setUserType (index) {
         this._typeIndex = index
+    }
+
+    /**
+     * @param {String} lecture
+     */
+    addLecture (lecture) {
+        switch(lecture.format) {
+            case 'audio':
+                this._lectures.audio.push(lecture.title)
+                break;
+
+            case 'text':
+                this._lectures.text.push(lecture.title)
+                break;
+
+            case 'video':
+                this._lectures.video.push(lecture.title)
+                break;
+        }
     }
 
     /**
      * @param {String} newViolation
      */
-    set addViolation (newViolation) {
+    addViolation (newViolation) {
         this._violations.push(newViolation)
     }
 
     /**
      * @param {String} newDate
      */
-    set setDateOfBirth (newDate) {
+    setDateOfBirth (newDate) {
         this._dateOfBirth = newDate
     }
    
     /**
      * @param {String} newDate
      */
-    set setDateOfRegistration (newDate) {
+    setDateOfRegistration (newDate) {
         this._dateOfRegistration = newDate
     }
 
     /**
      * @param {String} newComplaint
      */
-    set addComplaint (newComplaint) {
+    addComplaint (newComplaint) {
         this._complaints.push(newComplaint)
+    }
+
+    block () {
+        this._blocked = true
+    }
+
+    unblock () {
+        this._blocked = false
     }
 }

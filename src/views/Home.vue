@@ -3,7 +3,6 @@
     <v-row>
       <v-col v-if="!mobile" class="col-11 ml-5">
         <h2 class="g-darkblue--text">Globetakers Business School <span class="g-blue--text">International</span></h2>
-        <p>...{{$User}}</p>
       </v-col>
 
       <v-col v-else-if="mobile" align="center">
@@ -62,7 +61,6 @@
 
 <script>
 // @ is an alias to /src
-import User from '../classes/User'
 
 export default {
   name: 'Home',
@@ -99,11 +97,7 @@ export default {
   },
 
   mounted() {
-    // this.$User.name('Peter Collins')
-    // this.$forceUpdate()
-    let user = new User()
-    user.setName('Peter Collins')
-    alert(user.getName())
+    
   }
 }
 </script>
