@@ -29,6 +29,12 @@ function newEntry (instance, field, value) {
             instance.subTeam = subTeamValidator(value, instance.subTeamHint)
             instance.$User.setSubTeam(instance.subTeam)
             break;
+
+        case 'verificationCode':
+            instance.verificationCode === instance.generatedCode
+            ? instance.verificationCodeHint()
+            : instance.verificationCodeHint('Enter the correct code')
+            break
     }
 }
 
@@ -40,21 +46,24 @@ function scanEntries (instance) {
         {name: "'Longrich code'",   data: instance.longrichCode,   errorMessage: instance.errorMessages.longrichCode,   default: 'Your Longrich code'},
         {name: "'team leaders rank'",   data: instance.teamLeadsRank,   errorMessage: instance.errorMessages.teamLeadsRank,   default: 'Example: D5, D6, D7 ...'},
         {name: "'team leaders name'",   data: instance.teamLeadsName,   errorMessage: instance.errorMessages.teamLeadsName,   default: 'Fullname of your team leader'},
-        {name: "'sub-team name'",   data: instance.subTeam,   errorMessage: instance.errorMessages.subTeam,   default: 'The name of your sub-team'}
+        {name: "'sub-team name'",   data: instance.subTeam,   errorMessage: instance.errorMessages.subTeam,   default: 'The name of your sub-team'},
+        {name: "'verification code'",   data: instance.verificationCode,   errorMessage: instance.errorMessages.verificationCode,   default: 'Enter the code above'}
       ]
 
     for (let i in fields) {
-        // check for empty fields
-        if (fields[i].data === '') {
-            error = true
-            errorMessages.push(`${fields[i].name} field is empty`)
-        }
-
-        // check for error fields
-        if (fields[i].errorMessage != fields[i].default) {
-            if (!error) {
+        if (fields[i].errorMessage) {
+            // check for empty fields
+            if (fields[i].data === '') {
                 error = true
-                errorMessages.push(`${fields[i].name} field is invalid`)
+                errorMessages.push(`${fields[i].name} field is empty`)
+            }
+
+            // check for error fields
+            if (fields[i].errorMessage != fields[i].default) {
+                if (!error) {
+                    error = true
+                    errorMessages.push(`${fields[i].name} field is invalid`)
+                }
             }
         }
     }

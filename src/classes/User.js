@@ -24,9 +24,11 @@ export default class User {
         this._lectures = {audio: [], text: [], video: []}
         this._violations = []
         this._dateOfBirth = ''
-        this._dateOfRegistration = ''
+        this._registrationDate = ''
         this._complaints = []
+        this._profileUploaded = false
         this._blocked = false
+        this._disabled = false
     }
 
     // getters
@@ -105,16 +107,24 @@ export default class User {
         return this._dateOfBirth
     }
 
-    getDateOfRegistration () {
-        return this._dateOfRegistration
+    getRegistrationDate () {
+        return this._registrationDate
     }
 
     getComplaints () {
         return this._complaints
     }
 
+    getProfile () {
+        return this._profileUploaded
+    }
+
     blocked () {
         return this._blocked
+    }
+
+    disabled () {
+        return this._disabled
     }
 
     // setters
@@ -251,8 +261,8 @@ export default class User {
     /**
      * @param {String} newDate
      */
-    setDateOfRegistration (newDate) {
-        this._dateOfRegistration = newDate
+    setRegistrationDate (newDate) {
+        this._registrationDate = newDate
     }
 
     /**
@@ -262,11 +272,26 @@ export default class User {
         this._complaints.push(newComplaint)
     }
 
+    /**
+     * @param {String} status
+     */
+    setProfile (status) {
+        this._profileUploaded = status
+    }
+
     block () {
         this._blocked = true
     }
 
     unblock () {
         this._blocked = false
+    }
+
+    disable () {
+        this._disabled = true
+    }
+
+    enable () {
+        this._disabled = false
     }
 }

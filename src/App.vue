@@ -92,7 +92,9 @@ export default {
       : value = false
 
       return value
-    }
+    },
+
+    getMobile()  {return this.$store.getters.getLocalData.device.mobile()}
   },
 
   watch: {

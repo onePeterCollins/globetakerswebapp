@@ -10,7 +10,7 @@
       
       <transition name="slideYneg">
         <v-row v-if="$keys[2]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" hint="Name and surname max 30 characters"  height="30" :value="password"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" :hint="errorMessages.username"  height="30" v-model="username" :value="$User.getName()" @input="update('name', username)" />
         </v-row>
       </transition>
 
@@ -18,7 +18,7 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[3]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="NG **** ****" hint="your longrich code"  height="30" :value="username"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="NG **** ****" :hint="errorMessages.longrichCode"  height="30" v-model="longrichCode"  :value="$User.getLongrichCode()" @input="update('longrichCode', longrichCode)" />
         </v-row>
       </transition>
 
@@ -26,7 +26,11 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[4]">
-          <span>Code: <span class="verification"><b>0xV9Yp2k</b></span></span>
+          <span class='g-blue mr-2'>Verification code:</span>
+
+          <span class="verification">
+            <b>0xV9Yp2k</b>
+          </span>
         </v-row>
       </transition>
 
@@ -34,15 +38,28 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[5]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-tag" label="Enter code" hint="enter the code above"  height="30" :value="code"/>
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-tag" label="Enter verification code" :hint="errorMessages.verificationCode"  height="30" v-model="verificationCode" @input="update('verificationCode', verificationCode)"  />
         </v-row>
       </transition>
 
       <br />
 
+      <v-row v-if="errorMessages.generalErrorMessage" class="mb-5">
+        <v-col v-for="(errorMessage, sn) in errorMessages.generalErrorMessage" :key="sn" class="g-deepblue g-cream--text col-12 px-2 mb-2">
+          {{errorMessages.generalErrorMessage[sn]}}
+        </v-col>
+      </v-row>
+
+      <v-row v-if="networkMessage" class="mb-5">
+        <v-col class="col-12">
+          <p><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
+          <p><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
+        </v-col>
+      </v-row>
+
       <v-scale-transition>
         <v-row v-if="$keys[6]" justify="center">
-          <v-btn link to="student-dashboard" class="g-cream g-darkblue--text">Login</v-btn>
+          <v-btn @click='login()' class="g-cream g-darkblue--text">Login</v-btn>
         </v-row>
       </v-scale-transition>
     </v-form>
@@ -50,13 +67,27 @@
 </template>
 
 <script>
+import validator from '../form_validation/.globalFormValidation'
+
 export default {
   name: 'g-student-login-form',
 
   data: () => ({
     username: '',
-    password: '',
-    code: ''
+    longrichCode: '',
+    verificationCode: '',
+    generatedCode: '0xV9Yp2k',
+
+    errorMessages: {
+      username: 'Name and surname max 30 characters',
+      longrichCode: 'Your Longrich code',
+      verificationCode: 'Enter the code above',
+      generalErrorMessage: null
+    },
+
+    errorFields: null,
+    networkMessage: null,
+    date: new Date()
   }),
 
   computed: {
@@ -68,15 +99,52 @@ export default {
       : value = false
 
       return value
-    }
+    },
+
+    date() {return this.$store.getters.getState.dateString()},
+    time() {return this.$store.getters.getState.timeString()},
+    timeZone() {return this.$store.getters.getState.timeZone()}
   },
 
   methods: {
+    update(field, value) {
+      // Validate and update input
+      validator.newEntry(this, field, value)
+
+      if (this.errorFields) {
+        this.errorFields = validator.scanEntries(this)
+      }
+    },
+
     login() {
-      // Validate input for all fields
-      // Compare data on all fields to what exists on database
-      // if(matchFound) then load student dashboard
-    }
+      // Check for error fields
+      this.errorFields = validator.scanEntries(this)
+
+      if (!this.errorFields) {
+        // Compare data on all fields to what exists on database
+        // if(matchFound) add login history, then load user details to store
+        // redirect to student dashboard
+        // if(noMatchFound) update network message
+      }
+    },
+
+    usernameHint(errorMessage) {
+      !errorMessage
+      ? this.errorMessages.username = 'Name and surname max 30 characters'
+      : this.errorMessages.username = errorMessage
+    },
+
+    longrichCodeHint(errorMessage) {
+      !errorMessage
+      ? this.errorMessages.longrichCode = 'Your Longrich code'
+      : this.errorMessages.longrichCode = errorMessage
+    },
+
+    verificationCodeHint(errorMessage) {
+      !errorMessage
+      ? this.errorMessages.verificationCode = 'Enter the code above'
+      : this.errorMessages.verificationCode = errorMessage
+    },
   },
 
   hasAnim: true

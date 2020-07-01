@@ -21,7 +21,26 @@ let state = {
   },
 
   network: {},
-  analytics: {}
+  analytics: {},
+  days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
+
+  dateString() {
+    let date = new Date()
+
+    return `${this.days[date.getDay()]}:  ${date.getDate()} / ${date.getMonth() + 1} / ${date.getFullYear()}`
+  },
+
+  timeString() {
+    let date = new Date()
+
+    return ` -- ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`
+  },
+
+  timeZone() {
+    let date = new Date()
+
+    return ` -- ${date.getTimezoneOffset()}`
+  }
 }
 
 let mutations = {
@@ -64,6 +83,7 @@ let actions = {
 }
 
 let getters = {
+  getState (state) { return state },
   getUserData (state) { return state.user },
   getLocalData (state) { return state.local },
   getNetworkData (state) { return state.network },

@@ -56,8 +56,8 @@
 
       <v-row v-if="networkMessage" class="mb-5">
         <v-col class="col-12">
-          <p>{{networkMessage.success}}</p>
-          <p>{{networkMessage.error}}</p>
+          <p><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
+          <p><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
         </v-col>
       </v-row>
 
@@ -71,7 +71,7 @@
 </template>
 
 <script>
-import validator from '../form_validation/RegistrationForm'
+import validator from '../form_validation/.globalFormValidation'
 
 export default {
   name: 'g-registration-form',
@@ -105,6 +105,20 @@ export default {
       : value = false
 
       return value
+    },
+
+    date() {return this.$store.getters.getState.dateString()},
+    time() {return this.$store.getters.getState.timeString()},
+    timeZone() {return this.$store.getters.getState.timeZone()}
+  },
+
+  watch: {
+    networkMessage () {
+      if (this.networkMessage) {
+        if (this.networkMessage.success) {
+          setTimeout(this.login, 3000)
+        }
+      }
     }
   },
 
@@ -119,14 +133,18 @@ export default {
     },
 
     register() {
-      // Check for empty fields
+      // Check for error fields
       this.errorFields = validator.scanEntries(this)
 
       if (!this.errorFields) {
-        // Continue registration
+        // Continue registration, set registration date
+        this.$User.setRegistrationDate(`${this.date} ${this.time} ${this.timeZone}`)
+
         // Compare data on 'fullname' and 'longrich code' fields to what exists on database
         // if(matchFound) then block duplicate registration
         // else upload this.$User and send it to the $store
+        // update network message
+        // redirect to 'awaiting verification' page
       }
     },
 
@@ -158,11 +176,15 @@ export default {
       !errorMessage
       ? this.errorMessages.subTeam = 'The name of your sub-team'
       : this.errorMessages.subTeam = errorMessage
+    },
+
+    login() {
+      // navigate to dashboard page (awaiting verification)
     }
   },
 
   mounted() {
-
+    
   },
 
   hasAnim: true
