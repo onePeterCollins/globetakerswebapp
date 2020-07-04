@@ -36,6 +36,22 @@ export default class User {
         return this._name
     }
 
+    getFirstName() {
+        let firstName = '', noSpace = true
+
+        this._name.split('').forEach((item) => {
+            if (item.toUpperCase() !== item.toLowerCase() && noSpace) {
+                firstName += item
+            }
+
+            if (item === ' ') {
+                noSpace = false
+            }
+        })
+
+        return firstName
+    }
+
     getLongrichCode () {
         return this._longrichCode
     }
@@ -65,7 +81,7 @@ export default class User {
         return this._country
     }
 
-    getVerificationStatus () {
+    verified () {
         return this._verified
     }
 

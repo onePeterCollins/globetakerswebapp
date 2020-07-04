@@ -67,14 +67,13 @@
 
     <v-footer class="gray z5" fixed>
       <v-row justify="center">
-          <p>&copy; Globetakers 2020 all rights reserved.</p>
+          <p>&copy; Globe Takers 2020 all rights reserved.</p>
       </v-row>
     </v-footer>
   </v-app>
 </template>
 
 <script>
-
 export default {
   name: 'App',
 
@@ -125,7 +124,6 @@ export default {
 
   mounted() {
     let ROOT = this
-
     this.animate = true
 
     window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection

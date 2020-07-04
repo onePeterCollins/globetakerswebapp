@@ -101,6 +101,10 @@
     width: 100% !important
 }
 
+.no-overflow {
+    overflow: hidden !important;
+}
+
 
 /* COLORS */
 .gray {

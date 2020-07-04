@@ -42,7 +42,7 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[6]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-pen" label="sub-team name" :hint="errorMessages.subTeam"  height="30" v-model='subTeam' :value="$User.getSubTeam()" @input="update('subTeam', subTeam)" />
+          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account-group" label="sub-team name" :hint="errorMessages.subTeam"  height="30" v-model='subTeam' :value="$User.getSubTeam()" @input="update('subTeam', subTeam)" />
         </v-row>
       </transition>
 
@@ -56,8 +56,8 @@
 
       <v-row v-if="networkMessage" class="mb-5">
         <v-col class="col-12">
-          <p><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
-          <p><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
+          <p v-if="networkMessage.success"><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
+          <p v-if="networkMessage.error"><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
         </v-col>
       </v-row>
 
@@ -72,6 +72,7 @@
 
 <script>
 import validator from '../form_validation/.globalFormValidation'
+import {db} from '../firebase'
 
 export default {
   name: 'g-registration-form',
@@ -93,8 +94,13 @@ export default {
     },
 
     errorFields: null,
-    networkMessage: null
+    networkMessage: null,
+    users: []
   }),
+
+  firestore: {
+    users: db.collection('users')
+  },
 
   computed: {
     mobile: () => {
@@ -118,6 +124,10 @@ export default {
         if (this.networkMessage.success) {
           setTimeout(this.login, 3000)
         }
+
+        if (this.networkMessage.error === 'You have already registered') {
+          setTimeout(this.login, 3000)
+        }
       }
     }
   },
@@ -137,14 +147,42 @@ export default {
       this.errorFields = validator.scanEntries(this)
 
       if (!this.errorFields) {
+        let matchFound
+
         // Continue registration, set registration date
         this.$User.setRegistrationDate(`${this.date} ${this.time} ${this.timeZone}`)
 
         // Compare data on 'fullname' and 'longrich code' fields to what exists on database
-        // if(matchFound) then block duplicate registration
-        // else upload this.$User and send it to the $store
-        // update network message
-        // redirect to 'awaiting verification' page
+        for (let item in this.users) {
+          // if (no network) then alert the user
+          if (this.users.length === 0) {
+            this.networkMessage = {error: 'Bad network'}
+          }
+
+          // if(matchFound) then block duplicate registration
+          if (this.users[item]._name === this.$User.getName() && this.users[item]._longrichCode === this.$User.getLongrichCode()) {
+            this.networkMessage = {error: 'You have already registered'}
+            matchFound = true
+
+            // set the global user object in the store
+            this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+          } else if (this.users[item]._longrichCode === this.$User.getLongrichCode()) {
+            this.networkMessage = {error: 'This Longrich code has already been used'}
+            matchFound = true
+          }
+        }
+
+        if (!matchFound) {
+          // else upload this.$User and send it to the $store
+          this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User)
+
+          // set the global user object in the store
+          this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+          // update network message and redirect to 'awaiting verification' page
+          this.networkMessage = {success: 'Registered successfully'}
+        }
       }
     },
 
@@ -179,7 +217,8 @@ export default {
     },
 
     login() {
-      // navigate to dashboard page (awaiting verification)
+      // go to user dashboard
+      this.$router.push('/student-dashboard')
     }
   },
 

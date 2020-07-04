@@ -1,8 +1,7 @@
 // FIREBASE INITIALIZER
-import firebase from 'firebase/app'
-import 'firebase/firestore'
+import firebase from 'firebase'
 
-const firebaseConfig = {
+  const firebaseConfig = {
     apiKey: "AIzaSyAjeIe1ra_P4FKIEFP7RjWWIbmRWK0mvb8",
     authDomain: "globetakersonline.firebaseapp.com",
     databaseURL: "https://globetakersonline.firebaseio.com",
@@ -14,7 +13,7 @@ const firebaseConfig = {
   };
 
 // Get a Firestore instance
-export const db = firebase.initializeApp({firebaseConfig}).firestore()
+export const db = firebase.initializeApp(firebaseConfig).firestore()
 
 const { Timestamp, GeoPoint } = firebase.firestore
 export { Timestamp, GeoPoint }

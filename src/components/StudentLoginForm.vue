@@ -26,7 +26,7 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[4]">
-          <span class='g-blue mr-2'>Verification code:</span>
+          <span class='g-cream px-2 mr-2'>Verification code:</span>
 
           <span class="verification">
             <b>0xV9Yp2k</b>
@@ -87,7 +87,6 @@ export default {
 
     errorFields: null,
     networkMessage: null,
-    date: new Date()
   }),
 
   computed: {

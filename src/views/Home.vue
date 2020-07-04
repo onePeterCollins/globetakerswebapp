@@ -2,11 +2,11 @@
   <div class="home">
     <v-row>
       <v-col v-if="!mobile" class="col-11 ml-5">
-        <h2 class="g-darkblue--text">Globetakers Business School <span class="g-blue--text">International</span></h2>
+        <h2 class="g-darkblue--text">Globe Takers Business School <span class="g-blue--text">International</span></h2>
       </v-col>
 
       <v-col v-else-if="mobile" align="center">
-        <h2 class="g-darkblue--text">Globetakers Business School</h2>
+        <h2 class="g-darkblue--text">Globe Takers Business School</h2>
         <h3 class="g-blue--text">International</h3>
       </v-col>
     </v-row>
@@ -20,7 +20,9 @@
         class="faint-4"
         transition="scale-transition" />
 
-      <v-col class="col-lg-4">
+      
+
+      <v-col class="col-lg-4 mt-10 mt-lg-0">
         <h3 v-if="!mobile" class="pl-10">
           To {{this.registerOrLogin}} click
           <a @click="formFlip()">here</a>
@@ -48,9 +50,8 @@
     </v-row>
 
     <br/>
-    <br v-if="mobile" />
-    <br v-if="mobile" />
-    <br v-if="mobile" />
+    <br/>
+    <br v-if="!mobile"/>
 
     <g-social-media-links-bottom />
     

@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation class="z1">
+  <v-bottom-navigation class="z1 mt-12">
     <v-row justify="center">
       <v-col align="center" class="col-12">
         <v-btn class="mr-3" href="https://facebook.com" target="_blank">

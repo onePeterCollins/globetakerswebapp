@@ -14,14 +14,14 @@
     </v-row>
 
     <v-row>
-      <v-col align="center">
+      <v-col v-if="mounted" align="center">
         <h4><span class="display-1">{{emoji.emojify(':confused:')}} </span> Oops, this page is currently unavailable</h4>
       </v-col>
     </v-row>
 
     <v-row>
       <v-col align="center">
-        <p v-if="pageName !== ''">
+        <p>
           <span>Return to </span>
           <v-btn @click="stepBack" class="info">previous</v-btn>
           <span> page</span>
@@ -29,7 +29,7 @@
 
         <p>
           <span>Go to </span>
-          <v-btn href="/" class="info">Home</v-btn>
+          <v-btn link to="/" class="info">Home</v-btn>
           <span> page</span>
         </p>
       </v-col>
@@ -42,7 +42,7 @@ export default {
   name: 'Uncharted',
 
   data: () => ({
-    pageName: ''
+    mounted: false
   }),
 
   methods: {
@@ -52,28 +52,7 @@ export default {
   },
 
   mounted() {
-    let url
-
-    let routerPath = this.$route.path.split('')
-    routerPath.shift()
-    routerPath = routerPath.join('')
-    document.referrer === routerPath ? url = '/' : url = document.referrer
-
-    let string = url.split('').reverse()
-    let resolved = []
-
-    for(let i=0; i<string.length; i++) {
-      if(string[i].toUpperCase() === string[i].toLowerCase()) {
-        this.pageName = resolved.reverse().join('')
-        return
-      } else {
-        resolved.push(string[i])
-      }
-    }
+    this.mounted = true
   }
 }
 </script>
-
-<style>
-
-</style>
