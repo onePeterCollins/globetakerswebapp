@@ -44,6 +44,14 @@
 
       <br />
 
+      <transition name="slideYneg">
+        <v-row v-if="$keys[6]">
+          <v-checkbox class="mt-0 ml-8" color="rgb(255, 127, 165)" label="stay logged in on this device"  height="0" v-model="persistUser" @change="remember(persistUser)" />
+        </v-row>
+      </transition>
+
+      <br />
+
       <v-row v-if="errorMessages.generalErrorMessage" class="mb-5">
         <v-col v-for="(errorMessage, sn) in errorMessages.generalErrorMessage" :key="sn" class="g-deepblue g-cream--text col-12 px-2 mb-2">
           {{errorMessages.generalErrorMessage[sn]}}
@@ -52,8 +60,8 @@
 
       <v-row v-if="networkMessage" class="mb-5">
         <v-col class="col-12">
-          <p><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
-          <p><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
+          <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
+          <p v-if='networkMessage.error'><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
         </v-col>
       </v-row>
 
@@ -68,6 +76,7 @@
 
 <script>
 import validator from '../form_validation/.globalFormValidation'
+import {db} from '../firebase'
 
 export default {
   name: 'g-student-login-form',
@@ -77,6 +86,7 @@ export default {
     longrichCode: '',
     verificationCode: '',
     generatedCode: '0xV9Yp2k',
+    persistUser: false,
 
     errorMessages: {
       username: 'Name and surname max 30 characters',
@@ -87,22 +97,29 @@ export default {
 
     errorFields: null,
     networkMessage: null,
+    users: []
   }),
 
   computed: {
-    mobile: () => {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    },
-
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     date() {return this.$store.getters.getState.dateString()},
     time() {return this.$store.getters.getState.timeString()},
-    timeZone() {return this.$store.getters.getState.timeZone()}
+    timeZone() {return this.$store.getters.getState.timeZone()},
+    user() {return this.$store.getters.getUserData}
+  },
+
+  firestore: {
+    users: db.collection('users')
+  },
+
+  watch: {
+    networkMessage () {
+      if (this.networkMessage) {
+        if (this.networkMessage.success) {
+          setTimeout(this.access, 1000)
+        }
+      }
+    }
   },
 
   methods: {
@@ -120,10 +137,54 @@ export default {
       this.errorFields = validator.scanEntries(this)
 
       if (!this.errorFields) {
+        let matchFound
+
         // Compare data on all fields to what exists on database
-        // if(matchFound) add login history, then load user details to store
-        // redirect to student dashboard
-        // if(noMatchFound) update network message
+        for (let item in this.users) {
+          // if (no network) then alert the user
+          if (this.users.length === 0) {
+            this.networkMessage = {error: 'Bad network'}
+          }
+
+          if (this.users[item]._name === this.$User.getName() && this.users[item]._longrichCode === this.$User.getLongrichCode()) {
+            matchFound = true
+
+            this.$Download(this.users[item]).then((response) => {
+              this.$User = response
+
+              //set persistence
+              this.$User.setPersistence(this.persistUser)
+
+              // set the global user object in the store
+              this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+              
+              // update network message and redirect to 'dashboard' page
+              this.networkMessage = {success: 'logged in'}
+
+              // send to local storage
+              localStorage.setItem('userPayload', JSON.stringify(this.$User))
+            })
+          }
+        }
+
+        // if(matchFound) add login history, load new user details to store, and upload
+        if (matchFound) {
+          // add login history
+          this.$User.setOnlineStatus(true)
+
+          // upload the new online status
+          this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+            // set the global user object in the store
+            this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+            // send to local storage
+            localStorage.setItem('userPayload', JSON.stringify(this.$User))
+          })
+          
+        } else {
+          // if(noMatchFound) update network message
+          this.networkMessage = {error: 'Incorrect username or longrich code'}
+        }
       }
     },
 
@@ -144,6 +205,16 @@ export default {
       ? this.errorMessages.verificationCode = 'Enter the code above'
       : this.errorMessages.verificationCode = errorMessage
     },
+
+    access() {
+      this.$router.push('/student-dashboard')
+    },
+
+    remember(token) {
+      alert(this.persistUser)
+      this.$User.setPersistence(token)
+      this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+    }
   },
 
   hasAnim: true

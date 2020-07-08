@@ -6,6 +6,7 @@
  */
 
 import AnimationMixin from "./AnimationMixin.js"
+import Downloader from "./Downloader.js"
 import Emojis from "./EmojisMixin.js"
 import GetComputedStyles from "./GetComputedStyles.js"
 import Uploader from "./Uploader.js"
@@ -13,6 +14,7 @@ import Uploader from "./Uploader.js"
 export default {
     install(Vue) {
         Vue.use(AnimationMixin)
+        Vue.use(Downloader)
         Vue.use(Emojis)
         Vue.use(GetComputedStyles)
         Vue.use(Uploader)

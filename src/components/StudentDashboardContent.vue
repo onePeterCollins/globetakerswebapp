@@ -41,34 +41,6 @@
       </transition>
 
       <br/>
-
-      <!-- <transition name="slideYneg">
-        <v-card v-show="$keys[1]" class="col-10 col-lg-4 mb-5 center gray">
-          <v-row class="purple lighten-2">
-            <v-col align="center">
-              <h4 class="white--text"><span class="yellow--text">(paid)</span> Advanced Course</h4>
-            </v-col>
-          </v-row>
-
-          <v-row justify="center">
-            <v-col class="col-lg-11 col-12" align="center">
-              <ul>
-                <span><i class="green--text">Get exclusive business insights;</i></span>
-                <li align="left">Teamwork, the right strategy for MLM</li>
-                <li align="left">Cotinual improvement, the leaders favourite</li>
-                <li align="left">The 21st century business: pros &amp; cons</li>
-              </ul>
-            </v-col>
-
-            <v-col class="col-12" align="center">
-              <p class="white"><i>4 lectures</i></p>
-              <v-scale-transition>
-                <v-btn v-show="$keys[3]" class="success" link to="student-dashboard/learning-option">Continue</v-btn>
-              </v-scale-transition>
-            </v-col>
-          </v-row>
-        </v-card>
-      </transition> -->
     </v-row>
 
     <br/>
@@ -90,15 +62,7 @@ export default {
   }),
 
   computed: {
-    mobile: () => {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    }
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
   },
 
   mounted() {

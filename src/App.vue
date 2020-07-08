@@ -27,7 +27,7 @@
       <v-spacer />
 
       <v-toolbar-items v-if="!mobile">
-        <v-btn link to="/">
+        <v-btn link :to="homeLink">
           <v-icon small  class="mr-1">mdi-home</v-icon>
          
           <span>home</span>
@@ -79,25 +79,35 @@ export default {
 
   data: () => ({
     showNav: false,
-    animate: ''
+    animate: '',
+    loggedIn: false,
+    homeLink: '/'
   }),
 
   computed: {
-    mobile: () => {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    },
-
-    getMobile()  {return this.$store.getters.getLocalData.device.mobile()}
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
+    user() {return this.$store.getters.getUserData},
+    persistUser() {return this.user ? this.user._persist : false}
   },
 
   watch: {
+    user() {
+      if (this.user) {
+        if (this.user._isOnline) {
+          this.loggedIn = true
+        }
+      } else {
+        this.loggedIn = false
+      }
+    },
 
+    loggedIn() {
+      if (this.loggedIn) {
+        this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainers-dashboard'
+      } else {
+        this.homeLink = '/'
+      }
+    }
   },
 
   methods: {
@@ -123,8 +133,21 @@ export default {
   },
 
   mounted() {
-    let ROOT = this
     this.animate = true
+
+    let ROOT = this, 
+    userPayload = JSON.parse(localStorage.getItem('userPayload'))
+
+    if (!this.loggedIn && userPayload) {
+      this.$store.dispatch('setValue',{name: 'user', newVal: userPayload})
+      alert(userPayload._persist)
+
+      if(userPayload._persist && userPayload._typeIndex === 0) {
+        this.$router.push('/student-dashboard')
+      } else if (userPayload._persist && userPayload._typeIndex === 1) {
+        this.$router.push('/trainer-dashboard')
+      }
+    }
 
     window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection
     // window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
@@ -184,6 +207,10 @@ export default {
     // make interface visible when the key is no longer pressed
     window.addEventListener('keyup' , () => {
       setTimeout(ROOT.hideaApp, 2000)
+    })
+
+    window.addEventListener('unload', () => {
+      
     })
   }
 };

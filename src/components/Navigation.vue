@@ -22,6 +22,16 @@
             <v-list-item-title>{{link.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
+
+        <v-list-item v-if="loggedIn">
+          <v-list-item-action>
+            <v-icon>mdi-lock</v-icon>
+          </v-list-item-action>
+
+          <v-list-item-content>
+            <v-list-item-title>Logout</v-list-item-title>
+          </v-list-item-content>
+        </v-list-item>
       </v-list>
 
       <br/>
@@ -57,6 +67,8 @@ export default {
 
   data: () => ({
     slide: null,
+    loggedIn: false,
+    homeLink: '/',
 
     navLinks: [
       {sn: 1, title: 'Home', route: '/', icon: 'mdi-home'},
@@ -72,15 +84,8 @@ export default {
   }),
 
   computed: {
-    mobile() {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    },
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
+    user() {return this.$store.getters.getUserData},
 
     trainer() {
       return false
@@ -100,6 +105,24 @@ export default {
       !this.slide
       ? this.$emit("retract")
       : this.slide = this.showNav
+    },
+
+    user() {
+      if (this.user) {
+        if (this.user._isOnline) {
+          this.loggedIn = true
+        }
+      } else {
+        this.loggedIn = false
+      }
+    },
+
+    loggedIn() {
+      if (this.loggedIn) {
+        this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainers-dashboard'
+      } else {
+        this.homeLink = '/'
+      }
     }
   }
 }

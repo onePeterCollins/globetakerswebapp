@@ -29,6 +29,8 @@ export default class User {
         this._profileUploaded = false
         this._blocked = false
         this._disabled = false
+        this._typeof = 'user'
+        this._persist = false
     }
 
     // getters
@@ -309,5 +311,12 @@ export default class User {
 
     enable () {
         this._disabled = false
+    }
+
+    /**
+     * @param {String} status
+     */
+    setPersistence (status) {
+        this._persist = status
     }
 }

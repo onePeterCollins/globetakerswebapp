@@ -27,17 +27,22 @@ export default {
   }),
 
   computed: {
-    mobile() {return this.$store.getters.getLocalData.device.mobile()}
+    mobile() {return this.$store.getters.getLocalData.device.mobile()},
+    user() {return this.$store.getters.getUserData ? this.$store.getters.getUserData : JSON.parse(localStorage.getItem('userPayload'))},
+    isOnline() {return this.user ? this.user._isOnline : false}
   },
 
   mounted() {
-    this.$User = this.$store.getters.getState.user
-
-    if (!this.$User.getFirstName) {
-      this.$router.push('/not-found')
-    } else {
-      this.showContent = true
-    }
+    this.$Download(this.user).then((result) => {
+      if (!result._isOnline) {
+        this.$router.push('/not-found')
+      } else if (result.getFirstName() === '') {
+        this.$router.push('/not-found')
+      } else {
+        this.$User = result
+        this.showContent = true
+      }
+    })
   },
 
   hasAnim: true

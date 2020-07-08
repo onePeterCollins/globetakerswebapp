@@ -61,15 +61,7 @@ export default {
   }),
 
   computed: {
-    mobile: () => {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    }
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
   },
 
   mounted() {

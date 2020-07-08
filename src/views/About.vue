@@ -70,14 +70,14 @@
       <v-row>
         <v-col class="px-7">
           <v-row justify="center">
-            <v-col class="col-lg-6 yellow px-1 py-1 mb-3">
+            <v-col class="col-lg-6 yellow px-1 py-1 mb-5">
               <v-card class="py-3 mb-5">
-                <v-avatar height="200" width="200" class="round">
+                <v-avatar height="200" width="200" class="round pb-8">
                   <v-img
                     :src="require('../assets/images/team-member-1.jpg')"
                     cover
-                    height="300"
-                    width="300"
+                    height="290"
+                    width="290"
                     transition="scale-transition" />
                 </v-avatar>
               </v-card>
@@ -88,7 +88,7 @@
               </p>
             </v-col>
 
-            <v-col class="col-lg-6 red lighten-1 px-1 py-1 mb-3">
+            <v-col class="col-lg-6 red lighten-1 px-1 py-1 mb-5">
               <v-card class="py-3 mb-5">
                 <v-avatar height="200" width="200" class="round pt-8">
                   <v-img

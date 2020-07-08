@@ -103,16 +103,7 @@ export default {
   },
 
   computed: {
-    mobile: () => {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    },
-
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     date() {return this.$store.getters.getState.dateString()},
     time() {return this.$store.getters.getState.timeString()},
     timeZone() {return this.$store.getters.getState.timeZone()}
@@ -175,13 +166,13 @@ export default {
 
         if (!matchFound) {
           // else upload this.$User and send it to the $store
-          this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User)
-
-          // set the global user object in the store
-          this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
-
-          // update network message and redirect to 'awaiting verification' page
-          this.networkMessage = {success: 'Registered successfully'}
+          this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+            // set the global user object in the store
+            this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+            
+            // update network message and redirect to 'awaiting verification' page
+            this.networkMessage = {success: 'Registered successfully'}
+          })        
         }
       }
     },

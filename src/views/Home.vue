@@ -51,7 +51,7 @@
 
     <br/>
     <br/>
-    <br v-if="!mobile"/>
+    <br v-if="!mobile" />
 
     <g-social-media-links-bottom />
     
@@ -72,15 +72,7 @@ export default {
   }),
 
   computed: {
-    mobile: () => {
-      let value
-
-      window.innerWidth < 1024
-      ? value = true
-      : value = false
-
-      return value
-    }
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()}
   },
 
   watch: {
