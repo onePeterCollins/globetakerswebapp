@@ -81,13 +81,19 @@ export default {
     showNav: false,
     animate: '',
     loggedIn: false,
-    homeLink: '/'
+    homeLink: '/',
+    userIsLoggedIn: ''
   }),
 
   computed: {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     user() {return this.$store.getters.getUserData},
-    persistUser() {return this.user ? this.user._persist : false}
+    persistUser() {return this.user ? this.user._persist : false},
+    cookieDate() {return this.$store.getters.getState.cookieDate()}
+  },
+
+  firebase: {
+    userIsLoggedIn: ''
   },
 
   watch: {
@@ -129,22 +135,127 @@ export default {
       if(this.getComputedStyles(html, 'visibility') === 'hidden') {
         html.style.visibility = 'visible'
       }
+    },
+
+    encrypt(object) {
+      let objString = JSON.stringify(object), result = '', key = keyGen(), keyTracker = 0
+
+      for (let i=0; i<objString.length; i++) {
+        result += String.fromCharCode(key[i % (key.length % (i ^ 7))]^objString.charCodeAt(i));
+      }
+
+      function keyGen() {
+        let base = Math.random().toString().split('').reverse(),
+        keyLength = 0,
+        charCode,
+        key = ''
+
+        // set key length to 20 characters max
+        base.forEach ((item) => {
+          if (item != '0' && item != '.') {
+            if (keyLength < 10 && keyLength < 20) {
+              keyLength += (1 * item)
+            }
+
+            // limit the keyLength to 20
+            if (keyLength > 20) {
+              keyLength = 20
+            }
+          }
+        })
+
+        for (let i=0; i<keyLength; i++) {
+          charCode = Math.floor(Math.random() * 10)
+          key += charCode.toString()
+        }
+        return key
+      }
+
+      function embedKey (key, code) {
+        let matrix = String.fromCharCode(key.length), chunk
+
+        for (let i in code) {
+          if (i > 0 && i % key.length === 0) {
+            keyTracker === key.length ? keyTracker = 0 : null
+            chunk = code.slice(i - (key.length - 1), i) + key[keyTracker]
+            matrix += chunk
+            keyTracker++
+          }
+        }
+        return matrix
+      }
+
+      alert('result = ' + result.length)
+      return embedKey(key, result);
+    },
+
+    decrypt(token) {
+      let keyLength = token.charCodeAt(0),
+      pureToken = getPureToken(token),
+      extractedKey = extractKey(pureToken),
+      extractedToken = extractToken(pureToken)
+
+      function getPureToken (token) {
+        let pureToken = ''
+        for (let i in token) {
+          if (i > 0) {
+            pureToken += token[i]
+          }
+        }
+        return pureToken
+      }
+
+      function extractKey (token) {
+        let extractedKey = '', chunk
+        for (let i in token) {
+          if (i > 0 && i % keyLength === 0) {
+            chunk = token.slice(i - keyLength, i)
+
+            if (extractedKey.length < keyLength) {
+              extractedKey += chunk.split('').pop()
+            }
+          }
+        }
+
+        alert(extractedKey + '  key length = ' + keyLength)
+        return extractedKey
+      }
+
+      function extractToken (token) {
+        let extractedToken = '', chunk = ''
+
+        for (let i in token) {
+          if (i > 0 && i % keyLength === 0) {
+            chunk = token.slice(i - keyLength, i)
+            
+            for (let index in chunk) {
+              if (index < chunk.length) {
+                extractedToken += chunk[index]
+              }
+            }
+          }
+        }
+        return extractedToken
+      }
+
+      alert('key = ' + extractedKey + ' ' + 'token = ' + extractedToken.length)
     }
   },
 
   mounted() {
     this.animate = true
-
+    
     let ROOT = this, 
     userPayload = JSON.parse(localStorage.getItem('userPayload'))
 
+    this.decrypt(this.encrypt(userPayload))
+
     if (!this.loggedIn && userPayload) {
       this.$store.dispatch('setValue',{name: 'user', newVal: userPayload})
-      alert(userPayload._persist)
 
-      if(userPayload._persist && userPayload._typeIndex === 0) {
+      if(userPayload._persist && userPayload._typeIndex === 0 && window.location.pathname === '/') {
         this.$router.push('/student-dashboard')
-      } else if (userPayload._persist && userPayload._typeIndex === 1) {
+      } else if (userPayload._persist && userPayload._typeIndex === 1 && window.location.pathname === '/') {
         this.$router.push('/trainer-dashboard')
       }
     }

@@ -106,7 +106,9 @@ export default {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     date() {return this.$store.getters.getState.dateString()},
     time() {return this.$store.getters.getState.timeString()},
-    timeZone() {return this.$store.getters.getState.timeZone()}
+    timeZone() {return this.$store.getters.getState.timeZone()},
+    device() {return this.$store.getters.getLocalData.device},
+    loginHistory() {return {date: this.date, time: this.time, timeZone: this.timeZone, platform: this.device.platform, userAgent: this.device.userAgent}}
   },
 
   watch: {
@@ -152,11 +154,30 @@ export default {
 
           // if(matchFound) then block duplicate registration
           if (this.users[item]._name === this.$User.getName() && this.users[item]._longrichCode === this.$User.getLongrichCode()) {
-            this.networkMessage = {error: 'You have already registered'}
             matchFound = true
 
-            // set the global user object in the store
-            this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+            this.$Download(this.users[item]).then((response) => {
+              this.$User = response
+
+              // add login history
+              this.$User.addLoginHistory(this.loginHistory)
+
+              // set online status
+              this.$User.setOnlineStatus(true)
+
+              // upload the new online status
+              this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+                // set the global user object in the store
+                this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+                // send to local storage
+                localStorage.clear()
+                localStorage.setItem('userPayload', JSON.stringify(this.$User))
+
+                // update network message and redirect to 'dashboard' page
+                this.networkMessage = {error: 'You have already registered'}
+              })
+            })
 
           } else if (this.users[item]._longrichCode === this.$User.getLongrichCode()) {
             this.networkMessage = {error: 'This Longrich code has already been used'}
@@ -165,11 +186,22 @@ export default {
         }
 
         if (!matchFound) {
-          // else upload this.$User and send it to the $store
+          // else initialize and upload this.$User and send it to the $store
+
+          // add login history
+          this.$User.addLoginHistory(this.loginHistory)
+
+          // set online status
+          this.$User.setOnlineStatus(true)
+
           this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
             // set the global user object in the store
             this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
             
+            // send to local storage
+            localStorage.clear()
+            localStorage.setItem('userPayload', JSON.stringify(this.$User))
+
             // update network message and redirect to 'awaiting verification' page
             this.networkMessage = {success: 'Registered successfully'}
           })        

@@ -105,7 +105,9 @@ export default {
     date() {return this.$store.getters.getState.dateString()},
     time() {return this.$store.getters.getState.timeString()},
     timeZone() {return this.$store.getters.getState.timeZone()},
-    user() {return this.$store.getters.getUserData}
+    user() {return this.$store.getters.getUserData},
+    device() {return this.$store.getters.getLocalData.device},
+    loginHistory() {return {date: this.date, time: this.time, timeZone: this.timeZone, platform: this.device.platform, userAgent: this.device.userAgent}}
   },
 
   firestore: {
@@ -146,6 +148,7 @@ export default {
             this.networkMessage = {error: 'Bad network'}
           }
 
+          // if(matchFound) add login history, load new user details to store, and upload
           if (this.users[item]._name === this.$User.getName() && this.users[item]._longrichCode === this.$User.getLongrichCode()) {
             matchFound = true
 
@@ -155,33 +158,29 @@ export default {
               //set persistence
               this.$User.setPersistence(this.persistUser)
 
-              // set the global user object in the store
-              this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
-              
-              // update network message and redirect to 'dashboard' page
-              this.networkMessage = {success: 'logged in'}
+              // add login history
+              this.$User.addLoginHistory(this.loginHistory)
 
-              // send to local storage
-              localStorage.setItem('userPayload', JSON.stringify(this.$User))
+              // set online status
+              this.$User.setOnlineStatus(true)
+
+              // upload the new online status
+              this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+                // set the global user object in the store
+                this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+                // send to local storage
+                localStorage.clear()
+                localStorage.setItem('userPayload', JSON.stringify(this.$User))
+
+                // update network message and redirect to 'dashboard' page
+                this.networkMessage = {success: 'logged in'}
+              })
             })
           }
         }
 
-        // if(matchFound) add login history, load new user details to store, and upload
-        if (matchFound) {
-          // add login history
-          this.$User.setOnlineStatus(true)
-
-          // upload the new online status
-          this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
-            // set the global user object in the store
-            this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
-
-            // send to local storage
-            localStorage.setItem('userPayload', JSON.stringify(this.$User))
-          })
-          
-        } else {
+        if (!matchFound) {
           // if(noMatchFound) update network message
           this.networkMessage = {error: 'Incorrect username or longrich code'}
         }
@@ -211,7 +210,6 @@ export default {
     },
 
     remember(token) {
-      alert(this.persistUser)
       this.$User.setPersistence(token)
       this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
     }

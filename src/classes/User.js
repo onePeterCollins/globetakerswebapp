@@ -31,6 +31,7 @@ export default class User {
         this._disabled = false
         this._typeof = 'user'
         this._persist = false
+        this._id = ''
     }
 
     // getters
@@ -318,5 +319,12 @@ export default class User {
      */
     setPersistence (status) {
         this._persist = status
+    }
+
+    /**
+     * @param {String} newId
+     */
+    setId (newId) {
+        this._id = newId
     }
 }

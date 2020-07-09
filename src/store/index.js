@@ -16,7 +16,10 @@ let state = {
         : value = false
 
         return value
-      }
+      },
+
+      platform: navigator.platform,
+      userAgent: navigator.userAgent
     }
   },
 
@@ -40,6 +43,19 @@ let state = {
     let date = new Date()
 
     return ` -- ${date.getTimezoneOffset()}`
+  },
+
+  cookieDate() {
+    let date = new Date(),
+    weekDays = ['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'],
+    months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'],
+    weekDay = weekDays[date.getDay()],
+    monthDay = date.getDate(),
+    month = months[date.getMonth() + 1],
+    year = date.getFullYear(),
+    value = `${weekDay} ${monthDay} ${month} ${year} 12:00:00 UTC`
+
+    return value
   }
 }
 
