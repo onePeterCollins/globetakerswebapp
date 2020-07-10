@@ -168,24 +168,34 @@ export default {
           charCode = Math.floor(Math.random() * 10)
           key += charCode.toString()
         }
+
+        alert('encrypt: encryption key = ' + key)
         return key
       }
 
       function embedKey (key, code) {
-        let matrix = String.fromCharCode(key.length), chunk
+        let matrix = String.fromCharCode(key.length), chunk, firstStop = 0
 
         for (let i in code) {
           if (i > 0 && i % key.length === 0) {
             keyTracker === key.length ? keyTracker = 0 : null
-            chunk = code.slice(i - (key.length - 1), i) + key[keyTracker]
+            chunk = code.slice(i - key.length, i) + key[keyTracker]
             matrix += chunk
             keyTracker++
+            firstStop = i
           }
         }
+
+        for (let i = firstStop; i<code.length; i++) {
+          matrix += code[i]
+          alert('encrypt: remainder = ' + i + ' character = ' + code[i])
+        }
+
+        alert('encrypt: matrix length = ' + matrix.length)
         return matrix
       }
 
-      alert('result = ' + result.length)
+      alert(objString)
       return embedKey(key, result);
     },
 
@@ -193,7 +203,12 @@ export default {
       let keyLength = token.charCodeAt(0),
       pureToken = getPureToken(token),
       extractedKey = extractKey(pureToken),
-      extractedToken = extractToken(pureToken)
+      extractedToken = extractToken(pureToken),
+      result = ''
+
+      for (let i=0; i<extractedToken.length; i++) {
+        result += String.fromCharCode(extractedKey[i % (extractedKey.length % (i ^ 7))]^extractedToken.charCodeAt(i));
+      }
 
       function getPureToken (token) {
         let pureToken = ''
@@ -208,8 +223,8 @@ export default {
       function extractKey (token) {
         let extractedKey = '', chunk
         for (let i in token) {
-          if (i > 0 && i % keyLength === 0) {
-            chunk = token.slice(i - keyLength, i)
+          if (i > 0 && i % (keyLength + 1) === 0) {
+            chunk = token.slice(i - (keyLength + 1), i)
 
             if (extractedKey.length < keyLength) {
               extractedKey += chunk.split('').pop()
@@ -222,23 +237,31 @@ export default {
       }
 
       function extractToken (token) {
-        let extractedToken = '', chunk = ''
+        let extractedToken = '', chunk = '', key = '', firstStop = 0
 
         for (let i in token) {
-          if (i > 0 && i % keyLength === 0) {
-            chunk = token.slice(i - keyLength, i)
+          if (i > 0 && i % (keyLength + 1) === 0) {
+            chunk = token.slice(i - (keyLength + 1), i).split('')
             
-            for (let index in chunk) {
-              if (index < chunk.length) {
-                extractedToken += chunk[index]
-              }
+            if (key.length < keyLength) {
+              key += chunk.pop()
+              extractedToken += chunk.join('')
+              key.length === keyLength ? key = '' : null
+              firstStop = i
             }
+            // alert('chunk = ' + chunk + ' ' + 'extrcted token = ' + extractedToken)
           }
+        }
+
+        // push remainder after stripping encryption key
+        for (let i = firstStop; i<token.length; i++) {
+          alert(token[i])
+          extractedToken += token[i]
         }
         return extractedToken
       }
 
-      alert('key = ' + extractedKey + ' ' + 'token = ' + extractedToken.length)
+      alert('key = ' + extractedKey + ' token = ' + extractedToken.length + ' result = ' + result)
     }
   },
 
