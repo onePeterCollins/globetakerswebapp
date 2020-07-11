@@ -47,7 +47,6 @@ function scanEntries (instance) {
         {name: "'team leaders rank'",   data: instance.teamLeadsRank,   errorMessage: instance.errorMessages.teamLeadsRank,   default: 'Example: D5, D6, D7 ...'},
         {name: "'team leaders name'",   data: instance.teamLeadsName,   errorMessage: instance.errorMessages.teamLeadsName,   default: 'Fullname of your team leader'},
         {name: "'sub-team name'",   data: instance.subTeam,   errorMessage: instance.errorMessages.subTeam,   default: 'The name of your sub-team'},
-        {name: "'verification code'",   data: instance.verificationCode,   errorMessage: instance.errorMessages.verificationCode,   default: 'Enter the code above'}
       ]
 
     for (let i in fields) {

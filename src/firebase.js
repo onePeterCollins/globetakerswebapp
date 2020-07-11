@@ -13,7 +13,8 @@ import firebase from 'firebase'
   };
 
 // Get a Firestore instance
-export const db = firebase.initializeApp(firebaseConfig).firestore()
+export const App = firebase.initializeApp(firebaseConfig)
+export const db = App.firestore()
 
 const { Timestamp, GeoPoint } = firebase.firestore
 export { Timestamp, GeoPoint }

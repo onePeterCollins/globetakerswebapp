@@ -26,22 +26,13 @@
 
       <transition name="slideYneg">
         <v-row v-if="$keys[4]">
-          <span class='g-cream px-2 mr-2'>Verification code:</span>
-
-          <span class="verification">
-            <b>0xV9Yp2k</b>
+          <span>
+            <b id="verification"></b>
           </span>
         </v-row>
       </transition>
 
       <br />
-
-      <transition name="slideYneg">
-        <v-row v-if="$keys[5]">
-          <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-tag" label="Enter verification code" :hint="errorMessages.verificationCode"  height="30" v-model="verificationCode" @input="update('verificationCode', verificationCode)"  />
-        </v-row>
-      </transition>
-
       <br />
 
       <transition name="slideYneg">
@@ -76,6 +67,7 @@
 
 <script>
 import validator from '../form_validation/.globalFormValidation'
+import firebase from 'firebase'
 import {db} from '../firebase'
 
 export default {
@@ -85,13 +77,12 @@ export default {
     username: '',
     longrichCode: '',
     verificationCode: '',
-    generatedCode: '0xV9Yp2k',
+    recaptchaVerifierRendered: false,
     persistUser: false,
 
     errorMessages: {
       username: 'Name and surname max 30 characters',
       longrichCode: 'Your Longrich code',
-      verificationCode: 'Enter the code above',
       generalErrorMessage: null
     },
 
@@ -135,10 +126,27 @@ export default {
     },
 
     login() {
+      if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
+        // display recaptcha challenge
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verification', {
+          'callback': (response) => {
+            this.verificationCode = response
+            this.login()
+          },
+          'expired-callback': () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            window.location.reload()
+          }
+        })
+
+        window.recaptchaVerifier.render()
+        this.recaptchaVerifierRendered = true
+      }
+
       // Check for error fields
       this.errorFields = validator.scanEntries(this)
 
-      if (!this.errorFields) {
+      if (!this.errorFields && this.verificationCode.length !== 0) {
         let matchFound, userData, userKey, encryptedData, encryptedToken, encryptedKey
 
         // Compare data on all fields to what exists on database
@@ -215,19 +223,19 @@ export default {
       : this.errorMessages.longrichCode = errorMessage
     },
 
-    verificationCodeHint(errorMessage) {
-      !errorMessage
-      ? this.errorMessages.verificationCode = 'Enter the code above'
-      : this.errorMessages.verificationCode = errorMessage
-    },
-
     access() {
-      this.$router.push('/student-dashboard')
+      this.$User._typeIndex === 0
+      ? this.$router.push('/student-dashboard')
+      : this.$router.push('/trainer-dashboard')
     },
 
     remember(token) {
       this.$User.setPersistence(token)
     }
+  },
+
+  mounted() {
+
   },
 
   hasAnim: true
