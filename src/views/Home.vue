@@ -68,7 +68,7 @@ export default {
 
   data: () => ({
     flipForm: '',
-    registerOrLogin: 'register'
+    registerOrLogin: 'register',
   }),
 
   computed: {

@@ -1,6 +1,6 @@
 <template>
   <v-app id="GT">
-    <div id="top-conceal" class="fixed z4"></div>
+    <div id="top-conceal" class="fixed z4 lg-white"></div>
     <div id="bottom-conceal" class="fixed z4"></div>
 
     <g-navigation :showNav="showNav" @retract="retractNav"/>
@@ -50,6 +50,12 @@
 
           <span>terms</span>
         </v-btn>
+
+        <v-btn v-if="showLogoutButton" @click="logout()">
+          <v-icon small class="mr-1">mdi-lock</v-icon>
+
+          <span>logout</span>
+        </v-btn>
       </v-toolbar-items>      
 
       <v-scale-transition>
@@ -74,16 +80,24 @@
 </template>
 
 <script>
+import {db} from './firebase'
+
 export default {
   name: 'App',
 
   data: () => ({
     showNav: false,
     animate: '',
-    loggedIn: false,
     homeLink: '/',
-    userIsLoggedIn: ''
+    users: [],
+    showLogoutButton: false,
+    loggedIn: sessionStorage.getItem('loginState'),
+    persistence: localStorage.getItem('loginState')
   }),
+
+  firestore: {
+    users: db.collection('users')
+  },
 
   computed: {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
@@ -92,26 +106,16 @@ export default {
     cookieDate() {return this.$store.getters.getState.cookieDate()}
   },
 
-  firebase: {
-    userIsLoggedIn: ''
-  },
-
   watch: {
     user() {
       if (this.user) {
         if (this.user._isOnline) {
-          this.loggedIn = true
+          this.showLogoutButton = true
+          this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainer-dashboard'
+        } else {
+          this.showLogoutButton = false
+          this.homeLink = '/'
         }
-      } else {
-        this.loggedIn = false
-      }
-    },
-
-    loggedIn() {
-      if (this.loggedIn) {
-        this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainers-dashboard'
-      } else {
-        this.homeLink = '/'
       }
     }
   },
@@ -137,151 +141,111 @@ export default {
       }
     },
 
-    encrypt(object) {
-      let objString = JSON.stringify(object), result = '', key = keyGen(), keyTracker = 0
+    loadUser() {
+      let sessionToken = sessionStorage.getItem('userToken'),
+      persistentToken = localStorage.getItem('userToken'),
+      matchFound,
+      userData
 
-      for (let i=0; i<objString.length; i++) {
-        result += String.fromCharCode(key[i % (key.length % (i ^ 7))]^objString.charCodeAt(i));
-      }
+      if (this.loggedIn === 'true' && sessionToken) {
+        this.users = db.collection('users').get().then((querySnapshot) => {
 
-      function keyGen() {
-        let base = Math.random().toString().split('').reverse(),
-        keyLength = 0,
-        charCode,
-        key = ''
+          querySnapshot.forEach((item) => {
+            if (!matchFound) {
+              if (this.$GetDataWithToken(item.data(), sessionToken)) {
+                matchFound = true
 
-        // set key length to 20 characters max
-        base.forEach ((item) => {
-          if (item != '0' && item != '.') {
-            if (keyLength < 10 && keyLength < 20) {
-              keyLength += (1 * item)
+                userData = this.$Decrypt(item.data().data)
+
+                this.$Download(JSON.parse(userData.token)).then((result) => {
+                  this.$User = result
+
+                  // set online status
+                  this.$User.setOnlineStatus(true)
+                  
+                  //send user object to store
+                  this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+                  if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
+                    this.$router.push('/student-dashboard')
+                  } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
+                    this.$router.push('/trainer-dashboard')
+                  }
+                })
+              }
             }
-
-            // limit the keyLength to 20
-            if (keyLength > 20) {
-              keyLength = 20
-            }
-          }
+          })
         })
+      } else if (this.persistence === 'true' && persistentToken) {
+        this.users = db.collection('users').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            if (!matchFound) {
+              if (this.$GetDataWithToken(item.data(), persistentToken)) {
+                matchFound = true
 
-        for (let i=0; i<keyLength; i++) {
-          charCode = Math.floor(Math.random() * 10)
-          key += charCode.toString()
-        }
+                userData = this.$Decrypt(item.data().data)
 
-        alert('encrypt: encryption key = ' + key)
-        return key
+                this.$User = this.$Download(JSON.parse(userData.token)).then((result) => {
+                  this.$User = result
+
+                  // set online status
+                  this.$User.setOnlineStatus(true)
+
+                  //send user object to store
+                  this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+                  if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
+                    this.$router.push('/student-dashboard')
+                  } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
+                    this.$router.push('/trainer-dashboard')
+                  }
+                })
+              }
+            }
+          })
+        })
       }
-
-      function embedKey (key, code) {
-        let matrix = String.fromCharCode(key.length), chunk, firstStop = 0
-
-        for (let i in code) {
-          if (i > 0 && i % key.length === 0) {
-            keyTracker === key.length ? keyTracker = 0 : null
-            chunk = code.slice(i - key.length, i) + key[keyTracker]
-            matrix += chunk
-            keyTracker++
-            firstStop = i
-          }
-        }
-
-        for (let i = firstStop; i<code.length; i++) {
-          matrix += code[i]
-          alert('encrypt: remainder = ' + i + ' character = ' + code[i])
-        }
-
-        alert('encrypt: matrix length = ' + matrix.length)
-        return matrix
-      }
-
-      alert(objString)
-      return embedKey(key, result);
     },
 
-    decrypt(token) {
-      let keyLength = token.charCodeAt(0),
-      pureToken = getPureToken(token),
-      extractedKey = extractKey(pureToken),
-      extractedToken = extractToken(pureToken),
-      result = ''
+    logout() {
+      let encryptedData, encryptedToken
 
-      for (let i=0; i<extractedToken.length; i++) {
-        result += String.fromCharCode(extractedKey[i % (extractedKey.length % (i ^ 7))]^extractedToken.charCodeAt(i));
-      }
+      //modify the user object to reflect logged out state
+      this.$User = this.user
 
-      function getPureToken (token) {
-        let pureToken = ''
-        for (let i in token) {
-          if (i > 0) {
-            pureToken += token[i]
-          }
-        }
-        return pureToken
-      }
+      //cancel persistence
+      this.$User.setPersistence(false)
 
-      function extractKey (token) {
-        let extractedKey = '', chunk
-        for (let i in token) {
-          if (i > 0 && i % (keyLength + 1) === 0) {
-            chunk = token.slice(i - (keyLength + 1), i)
+      // set online status
+      this.$User.setOnlineStatus(false)
 
-            if (extractedKey.length < keyLength) {
-              extractedKey += chunk.split('').pop()
-            }
-          }
-        }
+      //encrypt the modified user object
+      encryptedData = this.$Encrypt(JSON.stringify(this.$User))
+      encryptedToken = {data: encryptedData.token}
 
-        alert(extractedKey + '  key length = ' + keyLength)
-        return extractedKey
-      }
+      // upload the encrypted object with offline status
+      this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
+        //delete user object from the store
+        this.$store.dispatch('setValue', {name: 'user', newVal: {}})
+        
+        //clear session storage
+        sessionStorage.clear()
 
-      function extractToken (token) {
-        let extractedToken = '', chunk = '', key = '', firstStop = 0
+        //clear local storage
+        localStorage.clear()
 
-        for (let i in token) {
-          if (i > 0 && i % (keyLength + 1) === 0) {
-            chunk = token.slice(i - (keyLength + 1), i).split('')
-            
-            if (key.length < keyLength) {
-              key += chunk.pop()
-              extractedToken += chunk.join('')
-              key.length === keyLength ? key = '' : null
-              firstStop = i
-            }
-            // alert('chunk = ' + chunk + ' ' + 'extrcted token = ' + extractedToken)
-          }
-        }
-
-        // push remainder after stripping encryption key
-        for (let i = firstStop; i<token.length; i++) {
-          alert(token[i])
-          extractedToken += token[i]
-        }
-        return extractedToken
-      }
-
-      alert('key = ' + extractedKey + ' token = ' + extractedToken.length + ' result = ' + result)
+        //redirect to home route
+        this.$router.push('/')
+      })
     }
   },
 
   mounted() {
+    this.loadUser()
+
     this.animate = true
     
-    let ROOT = this, 
-    userPayload = JSON.parse(localStorage.getItem('userPayload'))
-
-    this.decrypt(this.encrypt(userPayload))
-
-    if (!this.loggedIn && userPayload) {
-      this.$store.dispatch('setValue',{name: 'user', newVal: userPayload})
-
-      if(userPayload._persist && userPayload._typeIndex === 0 && window.location.pathname === '/') {
-        this.$router.push('/student-dashboard')
-      } else if (userPayload._persist && userPayload._typeIndex === 1 && window.location.pathname === '/') {
-        this.$router.push('/trainer-dashboard')
-      }
-    }
+    let ROOT = this
 
     window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection
     // window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
@@ -342,10 +306,6 @@ export default {
     window.addEventListener('keyup' , () => {
       setTimeout(ROOT.hideaApp, 2000)
     })
-
-    window.addEventListener('unload', () => {
-      
-    })
   }
 };
 </script>
@@ -369,4 +329,10 @@ footer.v-sheet {border-radius: 0px 0px 1.5rem 1.5rem;
   height: 1.5rem;
   bottom: 0px;
   background: black}
+
+  @media screen and (min-width: 1264px) {
+    #top-conceal, #bottom-conceal {
+      background: white;
+    }
+  }
 </style>

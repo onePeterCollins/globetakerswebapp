@@ -9,6 +9,7 @@ import AnimationMixin from "./AnimationMixin.js"
 import Downloader from "./Downloader.js"
 import Emojis from "./EmojisMixin.js"
 import GetComputedStyles from "./GetComputedStyles.js"
+import Tokenizer from "./Tokenizer.js"
 import Uploader from "./Uploader.js"
 
 export default {
@@ -17,6 +18,7 @@ export default {
         Vue.use(Downloader)
         Vue.use(Emojis)
         Vue.use(GetComputedStyles)
+        Vue.use(Tokenizer)
         Vue.use(Uploader)
     }
 }

@@ -66,7 +66,7 @@
       </v-row>
 
       <v-scale-transition>
-        <v-row v-if="$keys[6]" justify="center">
+        <v-row v-if="$keys[7]" justify="center">
           <v-btn @click='login()' class="g-cream g-darkblue--text">Login</v-btn>
         </v-row>
       </v-scale-transition>
@@ -139,7 +139,7 @@ export default {
       this.errorFields = validator.scanEntries(this)
 
       if (!this.errorFields) {
-        let matchFound
+        let matchFound, userData, userKey, encryptedData, encryptedToken, encryptedKey
 
         // Compare data on all fields to what exists on database
         for (let item in this.users) {
@@ -148,11 +148,15 @@ export default {
             this.networkMessage = {error: 'Bad network'}
           }
 
+          // decrypt existing user data and check for a match
+          userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
+          userKey = this.$Decrypt(this.users[item].data).key
+
           // if(matchFound) add login history, load new user details to store, and upload
-          if (this.users[item]._name === this.$User.getName() && this.users[item]._longrichCode === this.$User.getLongrichCode()) {
+          if (userData._name === this.$User.getName() && userData._longrichCode === this.$User.getLongrichCode()) {
             matchFound = true
 
-            this.$Download(this.users[item]).then((response) => {
+            this.$Download(userData).then((response) => {
               this.$User = response
 
               //set persistence
@@ -164,14 +168,26 @@ export default {
               // set online status
               this.$User.setOnlineStatus(true)
 
+              // encrypt the updated data
+              encryptedData = this.$User._persist ? this.$Encrypt(JSON.stringify(userData), userKey) : this.$Encrypt(JSON.stringify(userData))
+              encryptedToken = {data: encryptedData.token}
+              encryptedKey = encryptedData.key
+
               // upload the new online status
-              this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+              this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
                 // set the global user object in the store
                 this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
-                // send to local storage
-                localStorage.clear()
-                localStorage.setItem('userPayload', JSON.stringify(this.$User))
+                // send to local or session storage
+                if (this.$User._persist) {
+                  localStorage.clear()
+                  localStorage.setItem('userToken', encryptedKey)
+                  localStorage.setItem('loginState', 'true')
+                } else {
+                  sessionStorage.clear()
+                  sessionStorage.setItem('userToken', encryptedKey)
+                  sessionStorage.setItem('loginState', 'true')
+                }
 
                 // update network message and redirect to 'dashboard' page
                 this.networkMessage = {success: 'logged in'}
@@ -211,7 +227,6 @@ export default {
 
     remember(token) {
       this.$User.setPersistence(token)
-      this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
     }
   },
 

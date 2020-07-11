@@ -140,7 +140,7 @@ export default {
       this.errorFields = validator.scanEntries(this)
 
       if (!this.errorFields) {
-        let matchFound
+        let matchFound, userData, userKey, encryptedData, encryptedToken, encryptedKey
 
         // Continue registration, set registration date
         this.$User.setRegistrationDate(`${this.date} ${this.time} ${this.timeZone}`)
@@ -152,11 +152,16 @@ export default {
             this.networkMessage = {error: 'Bad network'}
           }
 
+          // decrypt existing user data and check for a match
+          userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
+          alert(this.users[item].data)
+          userKey = this.$Decrypt(this.users[item].data).key
+
           // if(matchFound) then block duplicate registration
-          if (this.users[item]._name === this.$User.getName() && this.users[item]._longrichCode === this.$User.getLongrichCode()) {
+          if (userData._name === this.$User.getName() && userData._longrichCode === this.$User.getLongrichCode()) {
             matchFound = true
 
-            this.$Download(this.users[item]).then((response) => {
+            this.$Download(userData).then((response) => {
               this.$User = response
 
               // add login history
@@ -165,21 +170,27 @@ export default {
               // set online status
               this.$User.setOnlineStatus(true)
 
+              // encrypt the updated data
+              encryptedData = (this.$User._persist || this.$User._isOnline) ? this.$Encrypt(JSON.stringify(userData), userKey) : this.$Encrypt(JSON.stringify(userData))
+              encryptedToken = {data: encryptedData.token}
+              encryptedKey = encryptedData.key
+
               // upload the new online status
-              this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+              this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
                 // set the global user object in the store
                 this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
-                // send to local storage
-                localStorage.clear()
-                localStorage.setItem('userPayload', JSON.stringify(this.$User))
+                // send to session storage
+                sessionStorage.clear()
+                sessionStorage.setItem('userToken', encryptedKey)
+                sessionStorage.setItem('loginState', 'true')
 
                 // update network message and redirect to 'dashboard' page
                 this.networkMessage = {error: 'You have already registered'}
               })
             })
 
-          } else if (this.users[item]._longrichCode === this.$User.getLongrichCode()) {
+          } else if (userData._longrichCode === this.$User.getLongrichCode()) {
             this.networkMessage = {error: 'This Longrich code has already been used'}
             matchFound = true
           }
@@ -187,6 +198,10 @@ export default {
 
         if (!matchFound) {
           // else initialize and upload this.$User and send it to the $store
+          let token, key
+
+          // set user id
+          this.$User.setId(`${this.username.replace(/ /g, "")}${this.generateId()}`)
 
           // add login history
           this.$User.addLoginHistory(this.loginHistory)
@@ -194,19 +209,37 @@ export default {
           // set online status
           this.$User.setOnlineStatus(true)
 
-          this.$Upload('users', `${this.username}${this.longrichCode}`, this.$User).then(() => {
+          // encrypt user data
+          encryptedData = this.$Encrypt(JSON.stringify(this.$User))
+          token = {data: encryptedData.token}
+          key = encryptedData.key
+
+          this.$Upload('users', `${this.$User._id}`, token).then(() => {
             // set the global user object in the store
             this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
             
-            // send to local storage
-            localStorage.clear()
-            localStorage.setItem('userPayload', JSON.stringify(this.$User))
+            // send to session storage
+            sessionStorage.clear()
+            sessionStorage.setItem('userToken', key)
+            sessionStorage.setItem('loginState', 'true')
 
             // update network message and redirect to 'awaiting verification' page
             this.networkMessage = {success: 'Registered successfully'}
           })        
         }
       }
+    },
+
+    generateId() {
+      let charCode,
+      value = ''
+
+      for (let i=0; i<12; i++) {
+        charCode = Math.floor(Math.random() * 10)
+        value += charCode.toString()
+      }
+
+      return value
     },
 
     usernameHint(errorMessage) {

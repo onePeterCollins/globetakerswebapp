@@ -8,13 +8,7 @@ export default {
         Vue.mixin({
             mounted() {
                 this.$Upload = async function (collection, document, token) {
-                    let object = {}
-
-                    for (let item in token) {
-                        object[item] = token[item]
-                    }
-
-                    return db.collection(collection).doc(document).set(object)
+                    return db.collection(collection).doc(document).set(token)
                 }
             }
         })

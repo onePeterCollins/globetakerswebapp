@@ -28,21 +28,39 @@ export default {
 
   computed: {
     mobile() {return this.$store.getters.getLocalData.device.mobile()},
-    user() {return this.$store.getters.getUserData ? this.$store.getters.getUserData : JSON.parse(localStorage.getItem('userPayload'))},
+    user() {return this.$store.getters.getUserData},
     isOnline() {return this.user ? this.user._isOnline : false}
   },
 
-  mounted() {
-    this.$Download(this.user).then((result) => {
-      if (!result._isOnline) {
-        this.$router.push('/not-found')
-      } else if (result.getFirstName() === '') {
-        this.$router.push('/not-found')
-      } else {
-        this.$User = result
-        this.showContent = true
+  watch: {
+    user() {
+      if (this.user) {
+        if (this.user._isOnline) {
+          this.loadDashbord()
+        }
       }
-    })
+    }
+  },
+
+  methods: {
+    loadDashbord() {
+      this.$Download(this.user).then((result) => {
+        if (!result) {
+          this.$router.push('/not-found')
+        } else {
+          this.$User = result
+          this.showContent = true
+        }
+      })
+    }
+  },
+
+  mounted() {
+    if (this.user) {
+      if (this.user._isOnline) {
+        this.loadDashbord()
+      }
+    }
   },
 
   hasAnim: true
