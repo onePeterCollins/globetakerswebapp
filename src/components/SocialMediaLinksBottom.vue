@@ -1,5 +1,5 @@
 <template>
-  <v-bottom-navigation class="z1 mt-12">
+  <v-bottom-navigation class="z1 mt-12 bottom-nav">
     <v-row justify="center">
       <v-col align="center" class="col-12">
         <v-btn class="mr-3" href="https://facebook.com" target="_blank">
@@ -25,5 +25,9 @@ export default {
 </script>
 
 <style>
-
+  .bottom-nav {
+    position: relative;
+    bottom: 0rem !important;
+    z-index: 200
+  }
 </style>

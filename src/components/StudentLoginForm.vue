@@ -25,9 +25,9 @@
       <br />
 
       <transition name="slideYneg">
-        <v-row v-if="$keys[4]">
+        <v-row v-if="$keys[3]">
           <span>
-            <b id="verification"></b>
+            <b id="loginVerification"></b>
           </span>
         </v-row>
       </transition>
@@ -36,7 +36,7 @@
       <br />
 
       <transition name="slideYneg">
-        <v-row v-if="$keys[6]">
+        <v-row v-if="$keys[4]">
           <v-checkbox class="mt-0 ml-8" color="rgb(255, 127, 165)" label="stay logged in on this device"  height="0" v-model="persistUser" @change="remember(persistUser)" />
         </v-row>
       </transition>
@@ -57,7 +57,7 @@
       </v-row>
 
       <v-scale-transition>
-        <v-row v-if="$keys[7]" justify="center">
+        <v-row v-if="$keys[5]" justify="center">
           <v-btn @click='login()' class="g-cream g-darkblue--text">Login</v-btn>
         </v-row>
       </v-scale-transition>
@@ -128,7 +128,7 @@ export default {
     login() {
       if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
         // display recaptcha challenge
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verification', {
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('loginVerification', {
           'callback': (response) => {
             this.verificationCode = response
             this.login()
@@ -160,8 +160,8 @@ export default {
           userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
           userKey = this.$Decrypt(this.users[item].data).key
 
-          // if(matchFound) add login history, load new user details to store, and upload
-          if (userData._name === this.$User.getName() && userData._longrichCode === this.$User.getLongrichCode()) {
+          // if(matchFound) add login history, update user details to store, and upload
+          if (userData._name.toUpperCase() === this.$User.getName().toUpperCase() && userData._longrichCode === this.$User.getLongrichCode()) {
             matchFound = true
 
             this.$Download(userData).then((response) => {
@@ -225,8 +225,8 @@ export default {
 
     access() {
       this.$User._typeIndex === 0
-      ? this.$router.push('/student-dashboard')
-      : this.$router.push('/trainer-dashboard')
+      ? this.$router.push('student-dashboard')
+      : this.$router.push('trainer-dashboard')
     },
 
     remember(token) {

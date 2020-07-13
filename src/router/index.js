@@ -69,6 +69,23 @@ const routes = [
     component: () => import('../views/UploadLesson.vue')
   },
 
+  // admin
+  {
+    path: '/proprietor',
+    name: 'proprietor',
+    component: () => import('../views/Proprietor.vue')
+  },
+  {
+    path: '/admin-dashboard',
+    name: 'admin-dashboard',
+    component: () => import('../views/Admin.vue')
+  },
+  {
+    path: '/proprietor/student-manager',
+    name: 'student-manager',
+    component: () => import('../components/StudentManager.vue')
+  },
+
   // catch all
   {
     path: '/*',

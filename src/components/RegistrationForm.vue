@@ -48,6 +48,17 @@
 
       <br />
 
+      <transition name="slideYneg">
+        <v-row v-if="$keys[3]">
+          <span>
+            <b id="signupVerification"></b>
+          </span>
+        </v-row>
+      </transition>
+
+      <br/>
+      <br/>
+
       <v-row v-if="errorMessages.generalErrorMessage" class="mb-5">
         <v-col v-for="(errorMessage, sn) in errorMessages.generalErrorMessage" :key="sn" class="g-deepblue g-cream--text col-12 px-2 mb-2">
           {{errorMessages.generalErrorMessage[sn]}}
@@ -72,6 +83,7 @@
 
 <script>
 import validator from '../form_validation/.globalFormValidation'
+import firebase from 'firebase'
 import {db} from '../firebase'
 
 export default {
@@ -83,6 +95,8 @@ export default {
     teamLeadsRank: '',
     teamLeadsName: '',
     subTeam: '',
+    verificationCode: '',
+    recaptchaVerifierRendered: false,
 
     errorMessages: {
       username: 'Name and surname max 30 characters',
@@ -154,7 +168,6 @@ export default {
 
           // decrypt existing user data and check for a match
           userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
-          alert(this.users[item].data)
           userKey = this.$Decrypt(this.users[item].data).key
 
           // if(matchFound) then block duplicate registration
@@ -200,32 +213,51 @@ export default {
           // else initialize and upload this.$User and send it to the $store
           let token, key
 
-          // set user id
-          this.$User.setId(`${this.username.replace(/ /g, "")}${this.generateId()}`)
+          if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
+            // display recaptcha challenge
+            window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('signupVerification', {
+              'callback': (response) => {
+                this.verificationCode = response
+                this.register()
+              },
+              'expired-callback': () => {
+                // Response expired. Ask user to solve reCAPTCHA again.
+                window.location.reload()
+              }
+            })
 
-          // add login history
-          this.$User.addLoginHistory(this.loginHistory)
+            window.recaptchaVerifier.render()
+            this.recaptchaVerifierRendered = true
+          }
 
-          // set online status
-          this.$User.setOnlineStatus(true)
+          if (this.verificationCode.length !== 0) {
+            // set user id
+            this.$User.setId(`${this.username.replace(/ /g, "")}${this.generateId()}`)
 
-          // encrypt user data
-          encryptedData = this.$Encrypt(JSON.stringify(this.$User))
-          token = {data: encryptedData.token}
-          key = encryptedData.key
+            // add login history
+            this.$User.addLoginHistory(this.loginHistory)
 
-          this.$Upload('users', `${this.$User._id}`, token).then(() => {
-            // set the global user object in the store
-            this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
-            
-            // send to session storage
-            sessionStorage.clear()
-            sessionStorage.setItem('userToken', key)
-            sessionStorage.setItem('loginState', 'true')
+            // set online status
+            this.$User.setOnlineStatus(true)
 
-            // update network message and redirect to 'awaiting verification' page
-            this.networkMessage = {success: 'Registered successfully'}
-          })        
+            // encrypt user data
+            encryptedData = this.$Encrypt(JSON.stringify(this.$User))
+            token = {data: encryptedData.token}
+            key = encryptedData.key
+
+            this.$Upload('users', `${this.$User._id}`, token).then(() => {
+              // set the global user object in the store
+              this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+              
+              // send to session storage
+              sessionStorage.clear()
+              sessionStorage.setItem('userToken', key)
+              sessionStorage.setItem('loginState', 'true')
+
+              // update network message and redirect to 'awaiting verification' page
+              this.networkMessage = {success: 'Registered successfully'}
+            })
+          }
         }
       }
     },

@@ -63,9 +63,9 @@
           v-if="mobile && animate"
           @click.stop="toggleNav" />
       </v-scale-transition>
-
-      
     </v-app-bar>
+
+    <g-logout-dialog />
 
     <v-content id="GT-content">
       <router-view/>
@@ -90,13 +90,16 @@ export default {
     animate: '',
     homeLink: '/',
     users: [],
+    admin: [],
     showLogoutButton: false,
     loggedIn: sessionStorage.getItem('loginState'),
-    persistence: localStorage.getItem('loginState')
+    persistence: localStorage.getItem('loginState'),
+    adminToken: sessionStorage.getItem('adminToken')
   }),
 
   firestore: {
-    users: db.collection('users')
+    users: db.collection('users'),
+    admin: db.collection('admin')
   },
 
   computed: {
@@ -141,6 +144,23 @@ export default {
       }
     },
 
+    loadAdmin() {
+      let adminToken = this.adminToken,
+      matchFound
+
+      this.admin = db.collection('admin').get().then((querySnapshot) => {
+        querySnapshot.forEach((item) => {
+          if (!matchFound) {
+            if (item.data().token === adminToken) {
+              matchFound = true
+              this.$store.dispatch('setValue', {name: 'adminAccess', newVal: true})
+              this.$router.push('admin-dashboard')
+            }
+          }
+        })
+      })
+    },
+
     loadUser() {
       let sessionToken = sessionStorage.getItem('userToken'),
       persistentToken = localStorage.getItem('userToken'),
@@ -167,9 +187,9 @@ export default {
                   this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
                   if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
-                    this.$router.push('/student-dashboard')
+                    this.$router.push('student-dashboard')
                   } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
-                    this.$router.push('/trainer-dashboard')
+                    this.$router.push('trainer-dashboard')
                   }
                 })
               }
@@ -195,9 +215,9 @@ export default {
                   this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
                   if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
-                    this.$router.push('/student-dashboard')
+                    this.$router.push('student-dashboard')
                   } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
-                    this.$router.push('/trainer-dashboard')
+                    this.$router.push('trainer-dashboard')
                   }
                 })
               }
@@ -208,35 +228,7 @@ export default {
     },
 
     logout() {
-      let encryptedData, encryptedToken
-
-      //modify the user object to reflect logged out state
-      this.$User = this.user
-
-      //cancel persistence
-      this.$User.setPersistence(false)
-
-      // set online status
-      this.$User.setOnlineStatus(false)
-
-      //encrypt the modified user object
-      encryptedData = this.$Encrypt(JSON.stringify(this.$User))
-      encryptedToken = {data: encryptedData.token}
-
-      // upload the encrypted object with offline status
-      this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
-        //delete user object from the store
-        this.$store.dispatch('setValue', {name: 'user', newVal: {}})
-        
-        //clear session storage
-        sessionStorage.clear()
-
-        //clear local storage
-        localStorage.clear()
-
-        //redirect to home route
-        this.$router.push('/')
-      })
+      this.$store.dispatch('setValue', {name: 'loggingOut', newVal: true})
     }
   },
 

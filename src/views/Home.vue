@@ -52,6 +52,8 @@
     <br/>
     <br/>
     <br v-if="!mobile" />
+    <br v-if="!mobile" />
+    <br v-if="!mobile" />
 
     <g-social-media-links-bottom />
     

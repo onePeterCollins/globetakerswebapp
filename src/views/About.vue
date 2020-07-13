@@ -70,9 +70,9 @@
       <v-row>
         <v-col class="px-7">
           <v-row justify="center">
-            <v-col class="col-lg-6 yellow px-1 py-1 mb-5">
-              <v-card class="py-3 mb-5">
-                <v-avatar height="200" width="200" class="round pb-8">
+            <v-col class="col-lg-4 yellow px-1 py-1 mb-5 mx-lg-12">
+              <v-card class="py-3 mb-5 social-media-sketch-pattern">
+                <v-avatar height="200" width="200" class="round pb-9">
                   <v-img
                     :src="require('../assets/images/team-member-1.jpg')"
                     cover
@@ -88,14 +88,14 @@
               </p>
             </v-col>
 
-            <v-col class="col-lg-6 red lighten-1 px-1 py-1 mb-5">
-              <v-card class="py-3 mb-5">
-                <v-avatar height="200" width="200" class="round pt-8">
+            <v-col class="col-lg-4 red lighten-1 px-1 py-1 mb-5 mx-lg-12">
+              <v-card class="py-3 mb-5 social-media-sketch-pattern">
+                <v-avatar height="200" width="200" class="round">
                   <v-img
                     :src="require('../assets/images/team-member-2.jpg')"
                     cover
-                    height="300"
-                    width="150"
+                    height="200"
+                    width="100"
                     transition="scale-transition" />
                 </v-avatar>
               </v-card>
@@ -117,3 +117,9 @@
 
   </div>
 </template>
+
+<style scoped>
+  .social-media-sketch-pattern {
+    background: linear-gradient(to left rgba(255, 255, 255, 0.75), rgba(255, 255, 255, 0.75)), url('../assets/images/social-media-sketch-pattern.jpg');
+  }
+</style>

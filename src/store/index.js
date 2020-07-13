@@ -56,7 +56,10 @@ let state = {
     value = `${weekDay} ${monthDay} ${month} ${year} 12:00:00 UTC`
 
     return value
-  }
+  },
+
+  loggingOut: false,
+  adminAccess: false
 }
 
 let mutations = {

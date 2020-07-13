@@ -23,8 +23,8 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item v-if="loggedIn">
-          <v-list-item-action>
+        <v-list-item v-if="loggedIn" @click="logout()">
+          <v-list-item-action >
             <v-icon>mdi-lock</v-icon>
           </v-list-item-action>
 
@@ -32,28 +32,6 @@
             <v-list-item-title>Logout</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
-      </v-list>
-
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      <br/>
-      
-      <v-list class="mt-12">
-        <v-list-item v-for="(link, sn) in restrictedLinks" :key="sn" link :to="link.route" >
-            <v-list-item-action>
-              <v-icon>{{link.icon}}</v-icon>
-            </v-list-item-action>
-
-            <v-list-item-content>
-              <v-list-item-title>{{link.title}}</v-list-item-title>
-            </v-list-item-content>
-          </v-list-item>
       </v-list>
     </v-container>
   </v-navigation-drawer>
@@ -68,31 +46,24 @@ export default {
   data: () => ({
     slide: null,
     loggedIn: false,
-    homeLink: '/',
-
-    navLinks: [
-      {sn: 1, title: 'Home', route: '/', icon: 'mdi-home'},
-      {sn: 2, title: 'About', route: '/about', icon: 'mdi-help'},
-      {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone'},
-      {sn: 4, title: 'Terms', route: '/terms', icon: 'mdi-information'},
-    ],
-
-    restrictedLinks: [
-      {sn: 1, title: 'Trainer', route: '/trainer', icon: 'mdi-account-box-outline'},
-      {sn: 2, title: 'Proprietor', route: '/proprietor', icon: 'mdi-account'},
-    ]
+    homeLink: '/'
   }),
 
   computed: {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     user() {return this.$store.getters.getUserData},
 
-    trainer() {
-      return false
-    },
+    navLinks() {
+      let value
 
-    proprietor() {
-      return false
+      value = [
+        {sn: 1, title: 'Home', route: this.homeLink, icon: 'mdi-home'},
+        {sn: 2, title: 'About', route: '/about', icon: 'mdi-help'},
+        {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone'},
+        {sn: 4, title: 'Terms', route: '/terms', icon: 'mdi-information'},
+      ]
+
+      return value
     }
   },
 
@@ -111,9 +82,9 @@ export default {
       if (this.user) {
         if (this.user._isOnline) {
           this.loggedIn = true
+        } else {
+          this.loggedIn = false
         }
-      } else {
-        this.loggedIn = false
       }
     },
 
@@ -123,6 +94,12 @@ export default {
       } else {
         this.homeLink = '/'
       }
+    }
+  },
+
+  methods: {
+    logout() {
+      this.$store.dispatch('setValue', {name: 'loggingOut', newVal: true})
     }
   }
 }

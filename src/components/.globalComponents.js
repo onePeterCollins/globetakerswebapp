@@ -5,11 +5,12 @@
  * @author -- Peter Collins onepetercollins@gmail.com
  */
 
+import AdminLoginForm from "./AdminLoginForm.vue"
 import AwaitingVerification from "./AwaitingVerification.vue"
 import ContactForm from "./ContactForm.vue"
+import LogoutDialog from "./LogoutDialog.vue"
 import Navigation from "./Navigation.vue"
 import ProfileSetup from "./ProfileSetup.vue"
-
 import RegForm from "./RegistrationForm.vue"
 import SocialMediaLinksBottom from "./SocialMediaLinksBottom.vue"
 import StudentCounter from "./StudentCounter.vue"
@@ -20,8 +21,10 @@ import TrainerLoginForm from "./TrainerLoginForm.vue"
 
 export default {
     install(Vue) {
+        Vue.component(AdminLoginForm.name, AdminLoginForm)
         Vue.component(AwaitingVerification.name, AwaitingVerification)
         Vue.component(ContactForm.name, ContactForm)
+        Vue.component(LogoutDialog.name, LogoutDialog)
         Vue.component(Navigation.name, Navigation)
         Vue.component(ProfileSetup.name, ProfileSetup)
         Vue.component(RegForm.name, RegForm)

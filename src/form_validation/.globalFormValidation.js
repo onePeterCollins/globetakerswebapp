@@ -29,12 +29,6 @@ function newEntry (instance, field, value) {
             instance.subTeam = subTeamValidator(value, instance.subTeamHint)
             instance.$User.setSubTeam(instance.subTeam)
             break;
-
-        case 'verificationCode':
-            instance.verificationCode === instance.generatedCode
-            ? instance.verificationCodeHint()
-            : instance.verificationCodeHint('Enter the correct code')
-            break
     }
 }
 
