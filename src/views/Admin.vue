@@ -8,6 +8,8 @@
 
     <br/>
     <br/>
+    <br/>
+    <br/>
 
     <v-row justify="center">
       <v-col v-for="(link, sn) in navLinks" :key="sn" align="center" class="col-lg-6 px-lg-10 col-11">
