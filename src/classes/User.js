@@ -152,11 +152,7 @@ export default class User {
      * @param {String} newName
      */
     setName (newName) {
-        function action (obj, newName) {
-            obj._name = newName
-        }
-
-        return action(this, newName)
+        this._name = newName
     }
 
     /**

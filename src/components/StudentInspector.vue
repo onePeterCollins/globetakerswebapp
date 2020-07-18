@@ -8,9 +8,6 @@
 
     <v-row>
       <v-col>
-        <br/>
-        <br/>
-        <br/>
         <v-card>
           <v-row class="ml-lg-5 ml-3 mb-3">
             <v-col class="g-white">
@@ -61,14 +58,14 @@
               <b class="g-deepblue--text">Team lead: </b>
               <span class="g-rose--text">{{$User.getTeamLeadsName()}}</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3 mb-lg-5">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3 mb-lg-5" @click="editStringValue('teamLeadsName')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editStringValue('teamLeadsName')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -80,14 +77,14 @@
               <b class="g-deepblue--text">Team leaders rank: </b>
               <span class="g-rose--text">{{$User.getTeamLeadsRank()}}</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3  mb-lg-5">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3  mb-lg-5" @click="editStringValue('teamLeadsRank')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editStringValue('teamLeadsRank')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -99,14 +96,14 @@
               <b class="g-deepblue--text">Subteam Name: </b>
               <span class="g-rose--text">{{$User.getSubTeam()}}</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3 mb-lg-5">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3 mb-lg-5" @click="editStringValue('subTeamName')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editStringValue('subTeamName')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -121,14 +118,14 @@
               <span class="g-rose--text">{{$User.getEmail()}}</span>
               <span v-if="$User.getEmail().length === 0 && this.$User._id" class="red--text">Pending</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editStringValue('email')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editStringValue('email')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -143,14 +140,14 @@
               <span class="g-rose--text">{{$User.getCountry()}}</span>
               <span v-if="$User.getCountry().length === 0 && this.$User._id" class="red--text">Pending</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editStringValue('country')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editStringValue('country')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -165,14 +162,14 @@
               <span v-if="$User.verified() && this.$User._id" class="green--text">Verified</span>
               <span v-else-if="!$User.verified() && this.$User._id" class="red--text">Pending</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('verification')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editBooleanValue('verification')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -194,13 +191,15 @@
               <b class="g-deepblue--text">Login History: </b>
               <span v-if="$User.getLoginHistory().length === 0 && this.$User._id">None yet</span>
 
-              <v-card v-for="(item, sn) in $User.getLoginHistory()" :key="sn" class="mb-2">
-                <p>{{item.date}}</p>
-                <p>{{item.time}}</p>
-                <p>{{item.timeZone}}</p>
-                <p>{{item.platform}}</p>
-                <p>{{item.userAgent}}</p>
-              </v-card>
+              <v-col class="g-white max-height-50">
+                <v-card v-for="(item, sn) in $User.getLoginHistory()" :key="sn" class="mb-2">
+                  <p>{{item.date}}</p>
+                  <p>{{item.time}}</p>
+                  <p>{{item.timeZone}}</p>
+                  <p>{{item.platform}}</p>
+                  <p>{{item.userAgent}}</p>
+                </v-card>
+              </v-col>
             </v-col>
           </v-row>
 
@@ -209,10 +208,12 @@
               <b class="g-deepblue--text">Questions: </b>
               <span v-if="$User.getQuestions().length === 0 && this.$User._id">None yet</span>
 
-              <v-card v-for="(item, sn) in $User.getQuestions()" :key="sn" class="mb-2">
-                <span>{{item.question}}</span>
-                <span>{{item.date}}</span>
-              </v-card>
+              <v-col class="g-white max-height-50">
+                <v-card v-for="(item, sn) in $User.getQuestions()" :key="sn" class="mb-2">
+                  <span>{{item.question}}</span>
+                  <span>{{item.date}}</span>
+                </v-card>
+              </v-col>
             </v-col>
           </v-row>
 
@@ -221,10 +222,12 @@
               <b class="g-deepblue--text">Violations: </b>
               <span v-if="$User.getViolations().length === 0 && this.$User._id">None yet</span>
 
-              <v-card v-for="(item, sn) in $User.getViolations()" :key="sn" class="mb-2">
-                <span>{{item.violation}}</span>
-                <span>{{item.date}}</span>
-              </v-card>
+              <v-col class="g-white max-height-50">
+                <v-card v-for="(item, sn) in $User.getViolations()" :key="sn" class="mb-2">
+                  <span>{{item.violation}}</span>
+                  <span>{{item.date}}</span>
+                </v-card>
+              </v-col>
             </v-col>
           </v-row>
 
@@ -234,14 +237,14 @@
               <span class="g-rose--text">{{$User.getDateOfBirth()}}</span>
               <span v-if="$User.getDateOfBirth().length === 0 && this.$User._id" class="red--text">Pending</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editDateValue('dateOfBirth')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editDateValue('dateOfBirth')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -262,10 +265,12 @@
               <b class="g-deepblue--text">Complaints: </b>
               <span v-if="$User.getComplaints().length === 0 && this.$User._id">None yet</span>
 
-              <v-card v-for="(item, sn) in $User.getComplaints()" :key="sn" class="mb-2">
-                <span>{{item.complaint}}</span>
-                <span>{{item.date}}</span>
-              </v-card>
+              <v-col class="g-white max-height-50">
+                <v-card v-for="(item, sn) in $User.getComplaints()" :key="sn" class="mb-2">
+                  <span>{{item.complaint}}</span>
+                  <span>{{item.date}}</span>
+                </v-card>
+              </v-col>
             </v-col>
           </v-row>
 
@@ -275,14 +280,14 @@
               <span v-if="$User.blocked() && this.$User._id" class="red--text">Blocked</span>
               <span v-else-if="!$User.blocked() && this.$User._id" class="green--text">Not blocked</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('blocked')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editBooleanValue('blocked')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -297,14 +302,14 @@
               <span v-if="$User.disabled() && this.$User._id" class="red--text">Disabled</span>
               <span v-else-if="!$User.disabled() && this.$User._id" class="green--text">Not Disabled</span>
 
-              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3">
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('disabled')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
                 <span>Edit</span>
               </v-btn>
 
               <v-row v-else-if="mobile && this.$User._id">
                 <v-col>
-                  <v-btn>
+                  <v-btn @click="editBooleanValue('disabled')">
                     <v-icon class="mr-3">mdi-pen</v-icon>
                     <span>Edit</span>
                   </v-btn>
@@ -317,7 +322,62 @@
             <v-card class="px-3 py-3 ">
               <h3 class="px-3 py-3 g-deepblue--text">Edit {{editField}}</h3>
 
-              <v-text-field prepend-icon="mdi-pen" :label="inputLabel" :hint="inputHint" height="30" v-model="newString"/>
+              <v-text-field prepend-icon="mdi-pen" :label="inputLabel" :hint="inputHint" height="30" v-model="newValue"/>
+            
+              <v-row justify="center">
+                <v-col align="left">
+                  <v-btn class="g-rose" @click="cancelEdit()">Cancel</v-btn>
+                </v-col>
+
+                <v-col align="right">
+                  <v-btn class="green accent-3">Save</v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog persistent v-model="editBoolean" :width="dialogWidth">
+            <v-card class="px-3 py-3 ">
+              <h3 class="px-3 py-3 g-deepblue--text">Edit {{editField}}</h3>
+
+              <v-row>
+                <v-col class="col-6">
+                  <v-btn fab class="ml-10" @click="newValue = false">
+                    <v-icon class="red--text">mdi-cancel</v-icon>
+                  </v-btn>
+                </v-col>
+
+                <v-col class="col-6" align="right">
+                  <v-btn fab class="mr-10" @click="newValue = true">
+                    <v-icon class="green--text accent-3">mdi-check</v-icon>
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-row justify="center">
+                <p>{{inputLabel}}</p>
+              </v-row>
+            
+              <v-row justify="center">
+                <v-col align="left">
+                  <v-btn class="g-rose" @click="cancelEdit()">Cancel</v-btn>
+                </v-col>
+
+                <v-col align="right">
+                  <v-btn class="green accent-3">Save</v-btn>
+                </v-col>
+              </v-row>
+            </v-card>
+          </v-dialog>
+
+          <v-dialog persistent v-model="editDate" :width="dialogWidth">
+            <v-card class="px-3 py-3 ">
+              <h3 class="px-3 py-3 g-deepblue--text">Edit {{editField}}</h3>
+
+              <v-row justify="center">
+                <v-date-picker dark :reactive="true" :show-current="true" type='date' v-model="newValue">
+                </v-date-picker>
+              </v-row>
             
               <v-row justify="center">
                 <v-col align="left">
@@ -353,9 +413,10 @@ export default {
     editDate: false,
     editField: '',
 
-    newString: '',
+    newValue: '',
     persons: [],
-    users: []
+    users: [],
+    encryptionKey: ''
   }),
 
   computed: {
@@ -382,6 +443,56 @@ export default {
     users: db.collection('users')
   },
 
+  watch: {
+    newValue() {
+      switch(this.editField !== '') {
+        case this.editField === 'Username':
+          this.$User.setName(this.newValue)
+        break
+
+        case this.editField === 'Longrich Code':
+          this.$User.setLongrichCode(this.newValue)
+        break
+
+        case this.editField === 'Team Leaders Name':
+          this.$User.setTeamLeadsName(this.newValue)
+        break
+
+        case this.editField === 'Team Leaders Rank':
+          this.$User.setTeamLeadsRank(this.newValue)
+        break
+
+        case this.editField === 'Sub Team Name':
+          this.$User.setSubTeam(this.newValue)
+        break
+
+        case this.editField === 'Email':
+          this.$User.setEmail(this.newValue)
+        break
+
+        case this.editField === 'Country':
+          this.$User.setCountry(this.newValue)
+        break
+
+        case this.editField === 'Verification Status':
+          this.$User.setVerificationStatus(this.newValue)
+        break
+
+        case this.editField === 'Blocked Status':
+          this.newValue ? this.$User.block() : this.$User.unblock()
+        break
+
+        case this.editField === 'Disabled Status':
+          this.newValue ? this.$User.disable() : this.$User.enable()
+        break
+
+        case this.editField === 'Date of Birth':
+          this.$User.setDateOfBirth(this.newValue)
+        break
+      }
+    }
+  },
+
   methods: {
     loadUserData() {
       this.persons = db.collection('users').get().then((querySnapshot) => {
@@ -389,6 +500,7 @@ export default {
           this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
             if (result._id === this.personOfInterest) {
               this.$User = result
+              this.encryptionKey = this.$Decrypt(item.data().data).key
               this.$forceUpdate()
             }
           })
@@ -408,14 +520,72 @@ export default {
           this.editField = 'Longrich Code';
         break
 
+        case field === 'teamLeadsName':
+          this.editString = true
+          this.editField = 'Team Leaders Name';
+        break
+
+        case field === 'teamLeadsRank':
+          this.editString = true
+          this.editField = 'Team Leaders Rank';
+        break
+
+        case field === 'subTeamName':
+          this.editString = true
+          this.editField = 'Sub Team Name';
+        break
+
+        case field === 'email':
+          this.editString = true
+          this.editField = 'Email';
+        break
+
+        case field === 'country':
+          this.editString = true
+          this.editField = 'Country';
+        break
+      }
+    },
+
+    editBooleanValue(field) {
+      switch(field !== '') {
+        case field === 'verification':
+          this.editBoolean = true
+          this.editField = 'Verification Status'
+        break
+
+        case field === 'blocked':
+          this.editBoolean = true
+          this.editField = 'Blocked Status'
+        break
+
+        case field === 'disabled':
+          this.editBoolean = true
+          this.editField = 'Disabled Status'
+        break
+      }
+    },
+
+    editDateValue(field) {
+      switch(field !== '') {
+        case field === 'dateOfBirth':
+          this.editDate = true
+          this.editField = 'Date of Birth'
+        break
       }
     },
 
     cancelEdit() {
+      this.editField = ''
+      this.newValue = ''
       this.editString = false
       this.editBoolean = false
       this.editDate = false
-      this.editField = ''
+      this.loadUserData()
+    },
+
+    uploadEditedProfile() {
+
     }
   },
 
@@ -431,3 +601,10 @@ export default {
   }
 }
 </script>
+
+<style scoped>
+.max-height-50 {
+  max-height: 50vh !important;
+  overflow: auto !important;
+}
+</style>
