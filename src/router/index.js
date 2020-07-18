@@ -85,6 +85,17 @@ const routes = [
     name: 'student-manager',
     component: () => import('../components/StudentManager.vue')
   },
+  {
+    path: '/proprietor/student-manager/student-inspector',
+    name: 'student-inspector',
+    component: () => import('../components/StudentInspector.vue')
+  },
+  {
+    path: '/proprietor/security',
+    name: 'admin-security',
+    component: () => import('../components/AdminSecurity.vue')
+  },
+
 
   // catch all
   {

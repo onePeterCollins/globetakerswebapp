@@ -73,7 +73,7 @@
       </v-row>
 
       <v-scale-transition>
-        <v-row v-if="$keys[6]" justify="center">
+        <v-row v-if="$keys[5]" justify="center">
           <v-btn @click="register()" class="g-cream g-darkblue--text">Register</v-btn>
         </v-row>
       </v-scale-transition>

@@ -9,20 +9,25 @@
     <br/>
 
     <v-row justify="center">
-      <v-col class="col-lg-5 px-lg-0 px-8">
+      <v-col class="col-lg-3 px-lg-0 px-8 mx-2">
         <p><b class="g-deepblue--text">Total students: </b> {{totalStudents}}</p>
         <p><b class="green--text">Verified: </b> {{verified}}</p>
         <p><b class="red--text">Pending: </b> {{pending}}</p>
       </v-col>
+
+      <v-col align="center" class="col-lg-3 col-11 px-lg-0 px-8 mx-2 my-3 my-lg-0 g-deepblue--shadow">
+        <p class="g-darkblue--text dosis">Attendance History</p>
+        <v-btn class="g-white" @click="attendanceHistory()">view history</v-btn> 
+      </v-col>
       
-      <v-col align="center" class="col-lg-6 col-11 g-deepblue--shadow">
+      <v-col align="center" class="col-lg-3 col-11 mx-2 my-3 my-lg-0 g-deepblue--shadow">
         <v-row justify="center">
           <v-col class="col-5">
             <h3 class="g-darkblue--text dosis">Message all students</h3>
           </v-col>
 
           <v-col class="col-5">
-            <v-btn class="g-white">compose</v-btn>
+            <v-btn class="g-white" @click="generalMessage()">compose</v-btn>
           </v-col>
         </v-row>
         
@@ -62,12 +67,14 @@
                     <v-row justify="center">
                       <v-col class="col-6">
                         <h4 class="pl-2 green--text">Verified: {{team.verified}}</h4>
-                        <v-btn>show</v-btn>
+                        <v-btn v-if="verifiedUsers !== team.name" @click="showVerified(team.name)">show</v-btn>
+                        <v-btn v-if="verifiedUsers === team.name" @click="showVerified(team.name)">hide</v-btn>
                       </v-col>
 
                       <v-col class="col-6">
                         <h4 class="pl-2 red--text">Pending: {{team.pending}}</h4>
-                        <v-btn>show</v-btn>
+                        <v-btn v-if="pendingUsers !== team.name" @click="showPending(team.name)">show</v-btn>
+                        <v-btn v-if="pendingUsers === team.name" @click="showPending(team.name)">hide</v-btn>
                       </v-col>
                     </v-row>
                   </v-list-item-title>
@@ -76,7 +83,7 @@
             </v-row>
 
             <v-row>
-              <v-card v-if="dropDown === team.name" class="col-12 px-1">
+              <v-card v-if="dropDown === team.name || pendingUsers === team.name || verifiedUsers === team.name" class="col-12 px-1">
                 <v-card-title class="px-0 py-0">
                   <v-col align="center" class="col-5 px-1 py-0">
                     <p class="g-cream g-deepblue--text">Name</p>
@@ -93,13 +100,13 @@
 
                 <v-card-text class="px-0 py-0 my-0">
                   <v-row v-for="(member, sn) in members" :key="sn" class="px-3">
-                    <v-col align="center" class="col-5 px-1 py-0 my-0">
-                      <p class="g-white g-deepblue--text py-2">{{member.name}}</p>
+                    <v-col align="left" class="col-5 px-1 py-0 my-0">
+                      <p class="g-white g-deepblue--text py-2 pl-3">{{member.name}}</p>
                     </v-col>
 
                     <v-col align="center" class="col-3 px-1 py-0">
                       <p v-if="member.status" class="green accent-2 g-deepblue--text py-2"><b>Verified</b></p>
-                      <v-checkbox v-else-if="!member.status" class="ml-5 mr-10 my-0" label="verify" />
+                      <v-checkbox v-else-if="!member.status" class="ml-5 mr-10 my-0" label="verify" @change="verify(member.id)" />
                     </v-col>
 
                     <v-col align="center" class="col-4 px-1 py-0">
@@ -136,7 +143,10 @@ export default {
     teams: [],
     members: [],
     users: [],
-    dropDown: ''
+    dropDown: '',
+    pendingUsers: '',
+    verifiedUsers: '',
+    refreshTeam: ''
   }),
 
   computed: {
@@ -150,6 +160,12 @@ export default {
   methods: {
     loadTeamNames() {
       let userTeam
+
+      this.teamNames = []
+      this.teams = []
+      this.totalStudents = 0
+      this.verified = 0
+      this.pending = 0
 
       this.users = db.collection('users').get().then((querySnapshot) => {
         querySnapshot.forEach((item) => {
@@ -190,21 +206,23 @@ export default {
             userTeam = result.getSubTeam()
             verified = result.verified()
 
-            this.totalStudents++
+            if (result.getUserType() === 'student') {
+              this.totalStudents++
 
-            for (let i in this.teamNames) {
-              // search for matching team names
-              if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[i].toUpperCase().replace(/ /g, '')) {
-                for (let index in this.teams) {
-                  if (this.teams[index].name.toUpperCase().replace(/ /g, '') === userTeam.toUpperCase().replace(/ /g, '')) {
-                    this.teams[index].population++
+              for (let i in this.teamNames) {
+                // search for matching team names
+                if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[i].toUpperCase().replace(/ /g, '')) {
+                  for (let index in this.teams) {
+                    if (this.teams[index].name.toUpperCase().replace(/ /g, '') === userTeam.toUpperCase().replace(/ /g, '')) {
+                      this.teams[index].population++
 
-                    if (verified) {
-                      this.teams[index].verified++
-                      this.verified++
-                    } else {
-                      this.teams[index].pending++
-                      this.pending++
+                      if (verified) {
+                        this.teams[index].verified++
+                        this.verified++
+                      } else {
+                        this.teams[index].pending++
+                        this.pending++
+                      }
                     }
                   }
                 }
@@ -212,22 +230,31 @@ export default {
             }
           })
         })
+      }).then(() => {
+        if (this.dropDown && this.refreshTeam) {
+          this.dropDown = ''
+          this.showTeamMemebrs(this.refreshTeam)
+        }
       })
     },
 
     showTeamMemebrs (teamName) {
+      this.pendingUsers = ''
+      this.verifiedUsers = ''
+      this.members = []
+
       if (teamName !== this.dropDown) {
         this.dropDown = teamName
-        this.members = []
 
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
             this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
-              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '')) {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.getUserType() === 'student') {
                 this.members.push({
                   name: result.getName(),
                   status: result.verified(),
-                  id: result._id
+                  id: result._id,
+                  teamName: result.getSubTeam()
                 })
               }
             })
@@ -239,8 +266,99 @@ export default {
       }
     },
 
+    showPending(teamName) {
+      this.dropDown = ''
+      this.verifiedUsers = ''
+      this.members = []
+
+      if (teamName !== this.pendingUsers) {
+        this.pendingUsers = teamName
+
+        this.users = db.collection('users').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && !result.verified() && result.getUserType() === 'student') {
+                this.members.push({
+                  name: result.getName(),
+                  status: result.verified(),
+                  id: result._id,
+                  teamName: result.getSubTeam()
+                })
+              }
+            })
+          })
+        })
+      } else {
+        this.pendingUsers = ''
+        this.members = []
+      }
+    },
+
+    showVerified(teamName) {
+      this.dropDown = ''
+      this.pendingUsers = ''
+      this.members = []
+
+      if (teamName !== this.verifiedUsers) {
+        this.verifiedUsers = teamName
+
+        this.users = db.collection('users').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.verified() && result.getUserType() === 'student') {
+                this.members.push({
+                  name: result.getName(),
+                  status: result.verified(),
+                  id: result._id,
+                  teamName: result.getSubTeam()
+                })
+              }
+            })
+          })
+        })
+      } else {
+        this.verifiedUsers = ''
+        this.members = []
+      }
+    },
+
+    verify(id) {
+      let encryptionKey,
+      verifiedUser
+
+      this.users = db.collection('users').get().then((querySnapshot) => {
+        querySnapshot.forEach((item) => {
+
+          this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
+            if (id === result._id) {
+              encryptionKey = this.$Decrypt(item.data().data).key
+              result.setVerificationStatus(true)
+              this.refreshTeam = result.getSubTeam()
+
+              verifiedUser = {data: this.$Encrypt(JSON.stringify(result), encryptionKey).token}
+
+              this.$Upload('users', `${id}`,verifiedUser).then(() => {
+                this.loadTeamNames()
+              })
+            }
+          })
+        })
+      })
+    },
+
+    attendanceHistory() {
+
+    },
+
+    generalMessage() {
+
+    },
+
     inspectStudent(id) {
-      alert(id)
+      this.$store.dispatch('setValue', {name: 'inspectSudent', newVal: id})
+      sessionStorage.setItem('inspectStudent', '')
+      sessionStorage.setItem('inspectStudent', id)
+      this.$router.push('student-manager/student-inspector')
     }
   },
 

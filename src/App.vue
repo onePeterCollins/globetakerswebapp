@@ -90,7 +90,7 @@ export default {
     animate: '',
     homeLink: '/',
     users: [],
-    admin: [],
+    admins: [],
     showLogoutButton: false,
     loggedIn: sessionStorage.getItem('loginState'),
     persistence: localStorage.getItem('loginState'),
@@ -99,7 +99,7 @@ export default {
 
   firestore: {
     users: db.collection('users'),
-    admin: db.collection('admin')
+    admins: db.collection('admins')
   },
 
   computed: {
