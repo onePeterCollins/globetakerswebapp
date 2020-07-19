@@ -78,6 +78,15 @@
                       </v-col>
                     </v-row>
                   </v-list-item-title>
+
+                  <v-list-item-title>
+                    <v-row>
+                      <v-col align="left">
+                        <p class="g-rose--text"><b class="g-deepblue--text">Team Lead: </b> {{team.teamLead}}</p>
+                        <p class="g-rose--text"><b class="g-deepblue--text">Team Lead's rank: </b> {{team.teamLeadsRank}}</p>
+                      </v-col>
+                    </v-row>
+                  </v-list-item-title>
                 </v-list-item-content>
               </v-list-item>
             </v-row>
@@ -175,17 +184,21 @@ export default {
             userTeam = result.getSubTeam()
 
             if (this.teamNames.length === 0) {
-              this.teamNames.push(userTeam)
+              this.teamNames.push(
+                {name: userTeam, teamLead: result.getTeamLeadsName(), teamLeadsRank: result.getTeamLeadsRank()}
+              )
             }
 
             for (let team in this.teamNames) {
-              if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[team].toUpperCase().replace(/ /g, '')) {
+              if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[team].name.toUpperCase().replace(/ /g, '')) {
                 matchFound = true
               }
             }
 
             if (!matchFound) {
-              this.teamNames.push(userTeam)
+              this.teamNames.push(
+                {name: userTeam, teamLead: result.getTeamLeadsName(), teamLeadsRank: result.getTeamLeadsRank()}
+              )
             }
           })
         })
@@ -197,7 +210,7 @@ export default {
       verified
 
       for (let i in this.teamNames) {
-        this.teams.push({sn: (i+1), name: this.teamNames[i], population: 0, verified: 0, pending: 0})
+        this.teams.push({sn: (i+1), name: this.teamNames[i].name, population: 0, verified: 0, pending: 0, teamLead: this.teamNames[i].teamLead, teamLeadsRank: this.teamNames[i].teamLeadsRank})
       }
 
       this.users = db.collection('users').get().then((querySnapshot) => {
@@ -211,7 +224,7 @@ export default {
 
               for (let i in this.teamNames) {
                 // search for matching team names
-                if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[i].toUpperCase().replace(/ /g, '')) {
+                if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[i].name.toUpperCase().replace(/ /g, '')) {
                   for (let index in this.teams) {
                     if (this.teams[index].name.toUpperCase().replace(/ /g, '') === userTeam.toUpperCase().replace(/ /g, '')) {
                       this.teams[index].population++

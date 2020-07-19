@@ -13,6 +13,7 @@
             <v-col class="g-white">
               <b class="g-deepblue--text">Name: </b>
               <span class="g-rose--text">{{$User.getName()}}</span>
+              <span v-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editStringValue('username')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -34,6 +35,7 @@
             <v-col class="pl-lg-11 pl-9 g-white">
               <b class="g-deepblue--text">Longrich Code: </b>
               <span class="g-rose--text">{{$User.getLongrichCode()}}</span>
+              <span v-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editStringValue('longrichCode')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -57,6 +59,7 @@
               <br/>
               <b class="g-deepblue--text">Team lead: </b>
               <span class="g-rose--text">{{$User.getTeamLeadsName()}}</span>
+              <span v-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3 mb-lg-5" @click="editStringValue('teamLeadsName')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -76,6 +79,7 @@
 
               <b class="g-deepblue--text">Team leaders rank: </b>
               <span class="g-rose--text">{{$User.getTeamLeadsRank()}}</span>
+              <span v-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3  mb-lg-5" @click="editStringValue('teamLeadsRank')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -95,6 +99,7 @@
 
               <b class="g-deepblue--text">Subteam Name: </b>
               <span class="g-rose--text">{{$User.getSubTeam()}}</span>
+              <span v-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3 mb-lg-5" @click="editStringValue('subTeamName')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -117,6 +122,7 @@
               <b class="g-deepblue--text">Email: </b>
               <span class="g-rose--text">{{$User.getEmail()}}</span>
               <span v-if="$User.getEmail().length === 0 && this.$User._id" class="red--text">Pending</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editStringValue('email')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -139,6 +145,7 @@
               <b class="g-deepblue--text">Country: </b>
               <span class="g-rose--text">{{$User.getCountry()}}</span>
               <span v-if="$User.getCountry().length === 0 && this.$User._id" class="red--text">Pending</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editStringValue('country')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -161,6 +168,7 @@
               <b class="g-deepblue--text">Verification Status: </b>
               <span v-if="$User.verified() && this.$User._id" class="green--text">Verified</span>
               <span v-else-if="!$User.verified() && this.$User._id" class="red--text">Pending</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('verification')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -178,18 +186,44 @@
             </v-col>
           </v-row>
 
+<!-- ######################################################################################################################## -->
           <v-row class="ml-lg-4 ml-3 mb-3">
             <v-col class="g-white">
-              <b class="g-deepblue--text">Online Status: </b>
-              <span v-if="$User.getOnlineStatus() && this.$User._id" class="green--text">Online</span>
-              <span v-else-if="!$User.getOnlineStatus() && this.$User._id" class="red--text">Offline</span>
+              <b class="g-deepblue--text">Is Tutor: </b>
+              <span v-if="$User.getUserType() === 'tutor' && this.$User._id" class="green--text">Yes</span>
+              <span v-else-if="$User.getUserType() === 'student' && this.$User._id" class="red--text">No</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
+
+              <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('tutor')">
+                <v-icon class="mr-3">mdi-pen</v-icon>
+                <span>Edit</span>
+              </v-btn>
+
+              <v-row v-else-if="mobile && this.$User._id">
+                <v-col>
+                  <v-btn @click="editBooleanValue('tutor')">
+                    <v-icon class="mr-3">mdi-pen</v-icon>
+                    <span>Edit</span>
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-col>
           </v-row>
 
           <v-row class="mr-lg-4 mr-3 mb-3">
             <v-col class="pl-lg-11 pl-9 g-white">
+              <b class="g-deepblue--text">Online Status: </b>
+              <span v-if="$User.getOnlineStatus() && this.$User._id" class="green--text">Online</span>
+              <span v-else-if="!$User.getOnlineStatus() && this.$User._id" class="red--text">Offline</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
+            </v-col>
+          </v-row>
+
+          <v-row class="ml-lg-5 ml-3 mb-3">
+            <v-col class="g-white">
               <b class="g-deepblue--text">Login History: </b>
               <span v-if="$User.getLoginHistory().length === 0 && this.$User._id">None yet</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-col class="g-white max-height-50">
                 <v-card v-for="(item, sn) in $User.getLoginHistory()" :key="sn" class="mb-2">
@@ -203,10 +237,11 @@
             </v-col>
           </v-row>
 
-          <v-row class="ml-lg-5 ml-3 mb-3">
-            <v-col class="g-white">
+          <v-row class="mr-lg-4 mr-3 mb-3">
+            <v-col class="pl-lg-11 pl-9 g-white">
               <b class="g-deepblue--text">Questions: </b>
               <span v-if="$User.getQuestions().length === 0 && this.$User._id">None yet</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-col class="g-white max-height-50">
                 <v-card v-for="(item, sn) in $User.getQuestions()" :key="sn" class="mb-2">
@@ -217,10 +252,11 @@
             </v-col>
           </v-row>
 
-          <v-row class="mr-lg-4 mr-3 mb-3">
-            <v-col class="pl-lg-11 pl-9 g-white">
+          <v-row class="ml-lg-5 ml-3 mb-3">
+            <v-col class="g-white">
               <b class="g-deepblue--text">Violations: </b>
               <span v-if="$User.getViolations().length === 0 && this.$User._id">None yet</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-col class="g-white max-height-50">
                 <v-card v-for="(item, sn) in $User.getViolations()" :key="sn" class="mb-2">
@@ -231,11 +267,12 @@
             </v-col>
           </v-row>
 
-          <v-row class="ml-lg-5 ml-3 mb-3">
-            <v-col class="g-white">
+          <v-row class="mr-lg-4 mr-3 mb-3">
+            <v-col class="pl-lg-11 pl-9 g-white">
               <b class="g-deepblue--text">Date Of Birth: </b>
               <span class="g-rose--text">{{$User.getDateOfBirth()}}</span>
               <span v-if="$User.getDateOfBirth().length === 0 && this.$User._id" class="red--text">Pending</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editDateValue('dateOfBirth')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -253,17 +290,19 @@
             </v-col>
           </v-row>
 
-          <v-row class="mr-lg-4 mr-3 mb-3">
-            <v-col class="pl-lg-11 pl-9 g-white">
+          <v-row class="ml-lg-5 ml-3 mb-3">
+            <v-col class="g-white">
               <b class="g-deepblue--text">Registration Date: </b>
-              <span class="g-rose--text">{{$User.getRegistrationDate()}}</span>
+              <span v-if="$User.getRegistrationDate() && this.$User._id !== ''" class="g-rose--text">{{$User.getRegistrationDate()}}</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
             </v-col>
           </v-row>
 
-          <v-row class="ml-lg-5 ml-3 mb-3">
-            <v-col class="g-white">
+          <v-row class="mr-lg-4 mr-3 mb-3">
+            <v-col class="pl-lg-11 pl-9 g-white">
               <b class="g-deepblue--text">Complaints: </b>
               <span v-if="$User.getComplaints().length === 0 && this.$User._id">None yet</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-col class="g-white max-height-50">
                 <v-card v-for="(item, sn) in $User.getComplaints()" :key="sn" class="mb-2">
@@ -274,11 +313,12 @@
             </v-col>
           </v-row>
 
-          <v-row class="mr-lg-4 mr-3 mb-3">
-            <v-col class="pl-lg-11 pl-9 g-white">
+          <v-row class="ml-lg-5 ml-3 mb-3">
+            <v-col class="g-white">
               <b class="g-deepblue--text">Blocked: </b>
               <span v-if="$User.blocked() && this.$User._id" class="red--text">Blocked</span>
               <span v-else-if="!$User.blocked() && this.$User._id" class="green--text">Not blocked</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('blocked')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -296,11 +336,12 @@
             </v-col>
           </v-row>
 
-          <v-row class="ml-lg-5 ml-3 mb-3">
-            <v-col class="g-white">
+          <v-row class="mr-lg-4 mr-3 mb-3">
+            <v-col class="pl-lg-11 pl-9 g-white">
               <b class="g-deepblue--text">Disabled: </b>
               <span v-if="$User.disabled() && this.$User._id" class="red--text">Disabled</span>
               <span v-else-if="!$User.disabled() && this.$User._id" class="green--text">Not Disabled</span>
+              <span v-else-if="this.$User._id === ''">Loading...</span>
 
               <v-btn v-if="!mobile && this.$User._id" class="ml-lg-5 ml-3" @click="editBooleanValue('disabled')">
                 <v-icon class="mr-3">mdi-pen</v-icon>
@@ -330,7 +371,7 @@
                 </v-col>
 
                 <v-col align="right">
-                  <v-btn class="green accent-3">Save</v-btn>
+                  <v-btn class="green accent-3" @click="uploadEditedProfile()">Save</v-btn>
                 </v-col>
               </v-row>
             </v-card>
@@ -364,7 +405,7 @@
                 </v-col>
 
                 <v-col align="right">
-                  <v-btn class="green accent-3">Save</v-btn>
+                  <v-btn class="green accent-3" @click="uploadEditedProfile()">Save</v-btn>
                 </v-col>
               </v-row>
             </v-card>
@@ -385,7 +426,7 @@
                 </v-col>
 
                 <v-col align="right">
-                  <v-btn class="green accent-3">Save</v-btn>
+                  <v-btn class="green accent-3" @click="uploadEditedProfile()">Save</v-btn>
                 </v-col>
               </v-row>
             </v-card>
@@ -478,6 +519,10 @@ export default {
           this.$User.setVerificationStatus(this.newValue)
         break
 
+        case this.editField === 'Tutor Status':
+          !this.newValue ? this.$User.setUserType(0) : this.$User.setUserType(1)
+        break
+
         case this.editField === 'Blocked Status':
           this.newValue ? this.$User.block() : this.$User.unblock()
         break
@@ -554,6 +599,11 @@ export default {
           this.editField = 'Verification Status'
         break
 
+        case field === 'tutor':
+          this.editBoolean = true
+          this.editField = 'Tutor Status'
+        break
+
         case field === 'blocked':
           this.editBoolean = true
           this.editField = 'Blocked Status'
@@ -585,7 +635,26 @@ export default {
     },
 
     uploadEditedProfile() {
+      this.editField = ''
+      this.newValue = ''
+      this.editString = false
+      this.editBoolean = false
+      this.editDate = false
 
+      let editedProfile = {data: this.$Encrypt(JSON.stringify(this.$User), this.encryptionKey).token},
+      key
+
+      for(let i in this.users) {
+        key = this.$Decrypt(this.users[i].data).key
+
+        if (key === this.encryptionKey) {
+          this.$Upload('users', `${this.$User._id}`, editedProfile).then(() => {
+            this.loadUserData()
+          })
+        }
+      }
+
+      
     }
   },
 
