@@ -42,7 +42,7 @@
 
           <v-row class="front-form-container">
             <v-col class="front-form">
-              <g-student-login-form />
+              <g-student-login-form @showRegistrationForm="showRegistrationForm()" />
             </v-col>
           </v-row>
         </v-col>
@@ -88,6 +88,10 @@ export default {
   methods: {
     formFlip() {
       this.flipForm === 'flip-form' ? this.flipForm = "" : this.flipForm = 'flip-form'
+    },
+
+    showRegistrationForm() {
+      this.flipForm = 'flip-form'
     }
   },
 

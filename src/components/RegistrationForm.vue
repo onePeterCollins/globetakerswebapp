@@ -156,16 +156,17 @@ export default {
       if (!this.errorFields) {
         let matchFound, userData, userKey, encryptedData, encryptedToken, encryptedKey
 
+        // if (no network) then alert the user
+        if (this.users.length === 0) {
+          this.networkMessage = {error: 'Poor network'}
+          return
+        }
+
         // Continue registration, set registration date
         this.$User.setRegistrationDate(`${this.date} ${this.time} ${this.timeZone}`)
 
         // Compare data on 'fullname' and 'longrich code' fields to what exists on database
         for (let item in this.users) {
-          // if (no network) then alert the user
-          if (this.users.length === 0) {
-            this.networkMessage = {error: 'Bad network'}
-          }
-
           // decrypt existing user data and check for a match
           userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
           userKey = this.$Decrypt(this.users[item].data).key
@@ -195,6 +196,7 @@ export default {
 
                 // send to session storage
                 sessionStorage.clear()
+                sessionStorage.setItem('userId', this.$User._id)
                 sessionStorage.setItem('userToken', encryptedKey)
                 sessionStorage.setItem('loginState', 'true')
 
@@ -234,29 +236,48 @@ export default {
             // set user id
             this.$User.setId(`${this.username.replace(/ /g, "")}${this.generateId()}`)
 
-            // add login history
-            this.$User.addLoginHistory(this.loginHistory)
+            let duplicateId
 
-            // set online status
-            this.$User.setOnlineStatus(true)
+            // test this ################################################################################################
+            for(let i in this.users) {
+              this.$Download(JSON.parse(this.$Decrypt(this.users[i].data).token)).then((result) => {
+                alert(i + ': ' + result._id)
 
-            // encrypt user data
-            encryptedData = this.$Encrypt(JSON.stringify(this.$User))
-            token = {data: encryptedData.token}
-            key = encryptedData.key
+                if (result._id === this.$User._id) {
+                  duplicateId = true
+                  this.register()
+                  return
+                }
+              })
+            }
 
-            this.$Upload('users', `${this.$User._id}`, token).then(() => {
-              // set the global user object in the store
-              this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
-              
-              // send to session storage
-              sessionStorage.clear()
-              sessionStorage.setItem('userToken', key)
-              sessionStorage.setItem('loginState', 'true')
+            // test this ################################################################################################
+            if (!duplicateId) {
+              // add login history
+              this.$User.addLoginHistory(this.loginHistory)
 
-              // update network message and redirect to 'awaiting verification' page
-              this.networkMessage = {success: 'Registered successfully'}
-            })
+              // set online status
+              this.$User.setOnlineStatus(true)
+
+              // encrypt user data
+              encryptedData = this.$Encrypt(JSON.stringify(this.$User))
+              token = {data: encryptedData.token}
+              key = encryptedData.key
+
+              this.$Upload('users', `${this.$User._id}`, token).then(() => {
+                // set the global user object in the store
+                this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+                
+                // send to session storage
+                sessionStorage.clear()
+                sessionStorage.setItem('userId', this.$User._id)
+                sessionStorage.setItem('userToken', key)
+                sessionStorage.setItem('loginState', 'true')
+
+                // update network message and redirect to 'awaiting verification' page
+                this.networkMessage = {success: 'Registered successfully'}
+              })
+            }
           }
         }
       }

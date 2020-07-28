@@ -38,7 +38,7 @@ export default {
       //cancel persistence
       this.$User.setPersistence(false)
 
-      // set online status
+      // set offline status
       this.$User.setOnlineStatus(false)
 
       //encrypt the modified user object

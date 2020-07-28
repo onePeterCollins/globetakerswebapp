@@ -56,6 +56,13 @@
         </v-col>
       </v-row>
 
+      <v-row v-if="networkMessage" class="mb-5">
+        <v-col v-if='networkMessage.error' class="col-12">
+          <span><b>To register click </b></span>
+          <span><b class="pink--text register-link" @click="showRegistrationForm()">here</b></span>
+        </v-col>
+      </v-row>
+
       <v-scale-transition>
         <v-row v-if="$keys[5]" justify="center">
           <v-btn @click='login()' class="g-cream g-darkblue--text">Login</v-btn>
@@ -139,8 +146,14 @@ export default {
           }
         })
 
-        window.recaptchaVerifier.render()
-        this.recaptchaVerifierRendered = true
+        // if (no network) then alert the user
+        if (this.users.length === 0) {
+          this.networkMessage = {error: 'Poor network'}
+          return
+        } else {
+          window.recaptchaVerifier.render()
+          this.recaptchaVerifierRendered = true
+        }
       }
 
       // Check for error fields
@@ -151,11 +164,6 @@ export default {
 
         // Compare data on all fields to what exists on database
         for (let item in this.users) {
-          // if (no network) then alert the user
-          if (this.users.length === 0) {
-            this.networkMessage = {error: 'Bad network'}
-          }
-
           // decrypt existing user data and check for a match
           userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
           userKey = this.$Decrypt(this.users[item].data).key
@@ -189,10 +197,12 @@ export default {
                 // send to local or session storage
                 if (this.$User._persist) {
                   localStorage.clear()
+                  localStorage.setItem('userId', this.$User._id)
                   localStorage.setItem('userToken', encryptedKey)
                   localStorage.setItem('loginState', 'true')
                 } else {
                   sessionStorage.clear()
+                  sessionStorage.setItem('userId', this.$User._id)
                   sessionStorage.setItem('userToken', encryptedKey)
                   sessionStorage.setItem('loginState', 'true')
                 }
@@ -231,6 +241,10 @@ export default {
 
     remember(token) {
       this.$User.setPersistence(token)
+    },
+
+    showRegistrationForm() {
+      this.$emit('showRegistrationForm')
     }
   },
 
@@ -249,5 +263,10 @@ export default {
   margin-right: auto;
   border-radius: 0.5rem;
   box-shadow: -0.5px 1.5px 0.25rem 0.5px rgba(0,0,0,0.25)
+}
+
+.register-link {
+  cursor: pointer;
+  text-decoration: underline;
 }
 </style>

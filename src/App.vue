@@ -94,6 +94,7 @@ export default {
     showLogoutButton: false,
     loggedIn: sessionStorage.getItem('loginState'),
     persistence: localStorage.getItem('loginState'),
+    userId: '',
     adminToken: sessionStorage.getItem('adminToken')
   }),
 
@@ -106,7 +107,12 @@ export default {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     user() {return this.$store.getters.getUserData},
     persistUser() {return this.user ? this.user._persist : false},
-    cookieDate() {return this.$store.getters.getState.cookieDate()}
+    cookieDate() {return this.$store.getters.getState.cookieDate()},
+    date() {return this.$store.getters.getState.dateString()},
+    time() {return this.$store.getters.getState.timeString()},
+    timeZone() {return this.$store.getters.getState.timeZone()},
+    device() {return this.$store.getters.getLocalData.device},
+    loginHistory() {return {date: this.date, time: this.time, timeZone: this.timeZone, platform: this.device.platform, userAgent: this.device.userAgent}}
   },
 
   watch: {
@@ -136,7 +142,7 @@ export default {
       : this.showNav = false
     },
 
-    hideaApp() {
+    showApp() {
       let html = document.getElementsByTagName('html')[0]
 
       if(this.getComputedStyles(html, 'visibility') === 'hidden') {
@@ -168,56 +174,81 @@ export default {
       userData
 
       if (this.loggedIn === 'true' && sessionToken) {
+        this.userId = sessionStorage.getItem('userId')
+
         this.users = db.collection('users').get().then((querySnapshot) => {
 
           querySnapshot.forEach((item) => {
             if (!matchFound) {
               if (this.$GetDataWithToken(item.data(), sessionToken)) {
-                matchFound = true
 
                 userData = this.$Decrypt(item.data().data)
 
                 this.$Download(JSON.parse(userData.token)).then((result) => {
-                  this.$User = result
+                  if(result._id === this.userId) {
+                    matchFound = true
+                    this.$User = result
 
-                  // set online status
-                  this.$User.setOnlineStatus(true)
-                  
-                  //send user object to store
-                  this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+                    // set online status
+                    this.$User.setOnlineStatus(true)
+                    
+                    //send user object to store
+                    this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
-                  if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
-                    this.$router.push('student-dashboard')
-                  } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
-                    this.$router.push('trainer-dashboard')
-                  }
+                    if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
+                      this.$router.push('student-dashboard')
+                    } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
+                      this.$router.push('trainer-dashboard')
+                    }
+                  }                  
                 })
               }
             }
           })
         })
       } else if (this.persistence === 'true' && persistentToken) {
+        let encryptedData, encryptedToken
+
+        this.userId = localStorage.getItem('userId')
+
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
             if (!matchFound) {
               if (this.$GetDataWithToken(item.data(), persistentToken)) {
-                matchFound = true
 
                 userData = this.$Decrypt(item.data().data)
 
                 this.$User = this.$Download(JSON.parse(userData.token)).then((result) => {
-                  this.$User = result
+                  if (result._id === this.userId) {
+                    matchFound = true
+                    this.$User = result
 
-                  // set online status
-                  this.$User.setOnlineStatus(true)
+                    // add login history
+                    this.$User.addLoginHistory(this.loginHistory)
 
-                  //send user object to store
-                  this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+                    // set online status
+                    this.$User.setOnlineStatus(true)
 
-                  if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
-                    this.$router.push('student-dashboard')
-                  } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
-                    this.$router.push('trainer-dashboard')
+                    // encrypt the updated data
+                    encryptedData = this.$Encrypt(JSON.stringify(userData), persistentToken)
+                    encryptedToken = {data: encryptedData.token}
+
+                    // upload the new online status
+                    this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
+                      // set the global user object in the store
+                      this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+                      // send to session storage
+                      sessionStorage.setItem('userId', this.$User._id)
+                      sessionStorage.setItem('userToken', persistentToken)
+                      sessionStorage.setItem('loginState', 'true')
+                      
+                      if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
+                        this.$router.push('student-dashboard')
+                      } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
+                        this.$router.push('trainer-dashboard')
+                      }
+                    })
                   }
                 })
               }
@@ -229,6 +260,37 @@ export default {
 
     logout() {
       this.$store.dispatch('setValue', {name: 'loggingOut', newVal: true})
+    },
+
+    programmaticLogout() {
+      let encryptedData, encryptedToken, persistentToken = localStorage.getItem('userToken')
+
+      //modify the user object to reflect logged out state
+      this.$User = this.user
+
+      // set offline status
+      this.$User.setOnlineStatus(false)
+
+      //encrypt the modified user object
+      encryptedData = this.$User._persist ? this.$Encrypt(JSON.stringify(), persistentToken) : this.$Encrypt(JSON.stringify(this.$User))
+      encryptedToken = {data: encryptedData.token}
+
+      // upload the encrypted object with offline status
+      this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
+        //delete user object from the store
+        this.$store.dispatch('setValue', {name: 'user', newVal: {}})
+
+        //redirect to home route
+        this.$router.push('/')
+      })
+    },
+
+    offlineNotification () {
+      alert('You are currently offline')
+    },
+
+    onlineNotification () {
+      alert('You are currently online')
     }
   },
 
@@ -296,7 +358,23 @@ export default {
 
     // make interface visible when the key is no longer pressed
     window.addEventListener('keyup' , () => {
-      setTimeout(ROOT.hideaApp, 2000)
+      setTimeout(ROOT.showApp, 2000)
+    })
+
+    window.addEventListener('pagehide' , () => {
+      ROOT.programmaticLogout()
+    })
+
+    window.addEventListener('pageshow' , () => {
+      ROOT.loadUser()
+    })
+
+    window.addEventListener('offline' , () => {
+      ROOT.offlineNotification()
+    })
+
+    window.addEventListener('online' , () => {
+      ROOT.onlineNotification()
     })
   }
 };
