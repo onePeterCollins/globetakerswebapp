@@ -362,10 +362,12 @@ export default {
     })
 
     window.addEventListener('pagehide' , () => {
+      console.log('Page Hidden')
       ROOT.programmaticLogout()
     })
 
     window.addEventListener('pageshow' , () => {
+      alert('Page Displayed')
       ROOT.loadUser()
     })
 

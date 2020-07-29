@@ -9,10 +9,15 @@ export default function rankValidator (rank, errorHandler) {
             item = item.toUpperCase()
         }
 
+        //if second character is an alphabet, capitialize it
+        if (index === 1 && item.toUpperCase() !== item.toLowerCase()) {
+            item = item.toUpperCase()
+        }
+
         // warn if rank is less than 2 characters long
         if (index < 1) {
             error = true
-            errorMessage = `${emoji.emojify(':warning:')} code must be 2 characters long`
+            errorMessage = `${emoji.emojify(':warning:')} code must be at least 2 characters long`
         }
 
         // warn if the first character of the rank is not an alphabet
@@ -22,7 +27,7 @@ export default function rankValidator (rank, errorHandler) {
         }
 
         // warn if the second character of the rank is a symbol
-        if (index === 1 && item.toUpperCase() === item.toLowerCase()) {
+        if (index >= 0 && item.toUpperCase() === item.toLowerCase()) {
             let isNumber
 
             for (let i=0; i<10; i++) {
@@ -37,19 +42,14 @@ export default function rankValidator (rank, errorHandler) {
             }
         }
 
-        // warn if second character of the rank is an alphabet
-        if (index === 1 && item.toUpperCase() !== item.toLowerCase()) {
-            error = true
-            errorMessage = `${emoji.emojify(':warning:')} invalid Longrich code`
-        }
-
         // delete white space
         if (item === ' ') {
-            item = ''
+            error = true
+            errorMessage = `${emoji.emojify(':warning:')} no spaces allowed in team lead's rank`
         }
 
         // revert to original hint if no error is found
-        if (index === 1 && errorMessage === `${emoji.emojify(':warning:')} code must be 2 characters long`) {
+        if (index === 1 && errorMessage === `${emoji.emojify(':warning:')} code must be at least 2 characters long`) {
             error = false
         }
 

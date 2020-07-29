@@ -1,4 +1,5 @@
 import nameValidator from './NameValidation'
+import emailValidator from './EmailValidation'
 import longrichCodeValidator from './LongrichCodeValidation'
 import rankValidator from './RankValidation'
 import subTeamValidator from './SubTeamValidation'
@@ -10,14 +11,24 @@ function newEntry (instance, field, value) {
             instance.$User.setName(instance.username)
             break;
 
+        case 'email':
+            instance.email = emailValidator(value, instance.emailHint)
+            instance.$User.setEmail(instance.email)
+            break;
+
+        case 'country':
+            instance.country = countryValidator(value, instance.countryHint)
+            instance.$User.setCountry(instance.country)
+            break;
+
         case 'longrichCode':
             instance.longrichCode = longrichCodeValidator(value, instance.longrichCodeHint)
             instance.$User.setLongrichCode(instance.longrichCode)
             break;
 
-        case 'teamLeadsRank':
-            instance.teamLeadsRank = rankValidator(value, instance.teamLeadsRankHint)
-            instance.$User.setTeamLeadsRank(instance.teamLeadsRank)
+        case 'subTeam':
+            instance.subTeam = subTeamValidator(value, instance.subTeamHint)
+            instance.$User.setSubTeam(instance.subTeam)
             break;
 
         case 'teamLeadsName':
@@ -25,9 +36,9 @@ function newEntry (instance, field, value) {
             instance.$User.setTeamLeadsName(instance.teamLeadsName)
             break;
 
-        case 'subTeam':
-            instance.subTeam = subTeamValidator(value, instance.subTeamHint)
-            instance.$User.setSubTeam(instance.subTeam)
+        case 'teamLeadsRank':
+            instance.teamLeadsRank = rankValidator(value, instance.teamLeadsRankHint)
+            instance.$User.setTeamLeadsRank(instance.teamLeadsRank)
             break;
     }
 }

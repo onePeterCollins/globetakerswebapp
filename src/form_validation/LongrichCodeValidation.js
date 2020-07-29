@@ -53,15 +53,16 @@ export default function longrichCodeValidator (code, errorHandler) {
             }
         }
 
-        // delete white space
-        if (item === ' ') {
-            item = ''
-        }
-
         // warn if code exceeds 10 characters
         if (index > 9) {
             error = true
             errorMessage = `${emoji.emojify(':warning:')} invalid Longrich code`
+        }
+
+        // warn if white space is found
+        if (item === ' ') {
+            error = true
+            errorMessage = `${emoji.emojify(':warning:')} no spaces allowed in Longrich code`
         }
 
         // revert to original hint if no error is found

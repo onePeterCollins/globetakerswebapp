@@ -24,6 +24,11 @@ const routes = [
     name: 'Contact',
     component: () => import('../views/Contact.vue')
   },
+  {
+    path: '/test',
+    name: 'Test',
+    component: () => import('../components/ProfileSetup.vue')
+  },
 
   // students
   {
