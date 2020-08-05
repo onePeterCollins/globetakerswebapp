@@ -32,6 +32,7 @@ export default class User {
         this._typeof = 'user'
         this._persist = false
         this._id = ''
+        this._activeStatus = ''
     }
 
     // getters
@@ -322,5 +323,12 @@ export default class User {
      */
     setId (newId) {
         this._id = newId
+    }
+
+    /**
+     * @param {String} newActiveStatus
+     */
+    setActiveStatus (newActiveStatus) {
+        this._activeStatus = newActiveStatus
     }
 }

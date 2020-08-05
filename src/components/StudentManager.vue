@@ -159,11 +159,16 @@ export default {
   }),
 
   computed: {
-    mobile()  {return this.$store.getters.getLocalData.device.mobile()}
+    mobile()  {return this.$store.getters.getLocalData.device.mobile()},
+    userPopulation() {return this.users.length}
   },
 
   firestore: {
     users: db.collection('users')
+  },
+
+  watch: {
+    userPopulation() {this.loadTeamNames()}
   },
 
   methods: {

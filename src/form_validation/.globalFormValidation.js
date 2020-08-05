@@ -1,3 +1,4 @@
+import countryValidator from './CountryValidation'
 import nameValidator from './NameValidation'
 import emailValidator from './EmailValidation'
 import longrichCodeValidator from './LongrichCodeValidation'
@@ -47,11 +48,13 @@ function scanEntries (instance) {
     let error = false, errorMessages = [],
 
     fields = [
+        {name: "'country'",   data: instance.country,   errorMessage: instance.errorMessages.country,   default: 'Country of resdence'},
+        {name: "'email'",   data: instance.email,   errorMessage: instance.errorMessages.email,   default: 'youremail@domain.com Max 30 characters'},
         {name: "'full name'",   data: instance.username,   errorMessage: instance.errorMessages.username,   default: 'Name and surname max 30 characters'},
         {name: "'Longrich code'",   data: instance.longrichCode,   errorMessage: instance.errorMessages.longrichCode,   default: 'Your Longrich code'},
-        {name: "'team leaders rank'",   data: instance.teamLeadsRank,   errorMessage: instance.errorMessages.teamLeadsRank,   default: 'Example: D5, D6, D7 ...'},
-        {name: "'team leaders name'",   data: instance.teamLeadsName,   errorMessage: instance.errorMessages.teamLeadsName,   default: 'Fullname of your team leader'},
         {name: "'sub-team name'",   data: instance.subTeam,   errorMessage: instance.errorMessages.subTeam,   default: 'The name of your sub-team'},
+        {name: "'team leaders name'",   data: instance.teamLeadsName,   errorMessage: instance.errorMessages.teamLeadsName,   default: 'Fullname of your team leader'},
+        {name: "'team leaders rank'",   data: instance.teamLeadsRank,   errorMessage: instance.errorMessages.teamLeadsRank,   default: 'Example: D5, D6, D7 ...'},
       ]
 
     for (let i in fields) {

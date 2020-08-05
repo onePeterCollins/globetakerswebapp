@@ -23,7 +23,12 @@ let state = {
     }
   },
 
-  network: {},
+  network: {
+    online: true,
+    showNetworkMessage: false,
+    networkMessage: ''
+  },
+  
   analytics: {},
   days: ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'],
 

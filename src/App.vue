@@ -66,6 +66,7 @@
     </v-app-bar>
 
     <g-logout-dialog />
+    <g-network-message />
 
     <v-content id="GT-content">
       <router-view/>
@@ -91,6 +92,8 @@ export default {
     homeLink: '/',
     users: [],
     admins: [],
+    activeDump: [],
+    activeToken: '',
     showLogoutButton: false,
     loggedIn: sessionStorage.getItem('loginState'),
     persistence: localStorage.getItem('loginState'),
@@ -100,7 +103,9 @@ export default {
 
   firestore: {
     users: db.collection('users'),
-    admins: db.collection('admins')
+    admins: db.collection('admins'),
+    activeDump: db.collection('activeDump'),
+    activeToken: db.collection('activeDump').doc('token')
   },
 
   computed: {
@@ -112,7 +117,8 @@ export default {
     time() {return this.$store.getters.getState.timeString()},
     timeZone() {return this.$store.getters.getState.timeZone()},
     device() {return this.$store.getters.getLocalData.device},
-    loginHistory() {return {date: this.date, time: this.time, timeZone: this.timeZone, platform: this.device.platform, userAgent: this.device.userAgent}}
+    loginHistory() {return {date: this.date, time: this.time, timeZone: this.timeZone, platform: this.device.platform, userAgent: this.device.userAgent}},
+    network() {return this.$store.getters.getNetworkData.online}  
   },
 
   watch: {
@@ -125,6 +131,30 @@ export default {
           this.showLogoutButton = false
           this.homeLink = '/'
         }
+      }
+    },
+
+    network() {
+      if(this.network) {
+        // notify user of network presence
+        this.$store.dispatch('setValue', {name: 'network', newVal: 'yayy! you are back online', child: ['networkMessage']})
+        this.$store.dispatch('setValue', {name: 'network', newVal: true, child: ['showNetworkMessage']})
+      } else {
+        // notify user of offline state
+        this.$store.dispatch('setValue', {name: 'network', newVal: 'you are currently offline', child: ['networkMessage']})
+        this.$store.dispatch('setValue', {name: 'network', newVal: true, child: ['showNetworkMessage']})
+      }
+    },
+
+    activeDump() {
+      if (this.$User._id) {
+        this.updateActiveStatus()
+      }
+    },
+
+    activeToken() {
+      if (this.$User._id) {
+        this.updateActiveStatus()
       }
     }
   },
@@ -206,7 +236,9 @@ export default {
             }
           })
         })
-      } else if (this.persistence === 'true' && persistentToken) {
+      }
+
+      if (this.persistence === 'true' && persistentToken) {
         let encryptedData, encryptedToken
 
         this.userId = localStorage.getItem('userId')
@@ -230,7 +262,7 @@ export default {
                     this.$User.setOnlineStatus(true)
 
                     // encrypt the updated data
-                    encryptedData = this.$Encrypt(JSON.stringify(userData), persistentToken)
+                    encryptedData = this.$Encrypt(JSON.stringify(this.$User), persistentToken)
                     encryptedToken = {data: encryptedData.token}
 
                     // upload the new online status
@@ -262,35 +294,28 @@ export default {
       this.$store.dispatch('setValue', {name: 'loggingOut', newVal: true})
     },
 
-    programmaticLogout() {
-      let encryptedData, encryptedToken, persistentToken = localStorage.getItem('userToken')
-
-      //modify the user object to reflect logged out state
-      this.$User = this.user
-
-      // set offline status
-      this.$User.setOnlineStatus(false)
-
-      //encrypt the modified user object
-      encryptedData = this.$User._persist ? this.$Encrypt(JSON.stringify(), persistentToken) : this.$Encrypt(JSON.stringify(this.$User))
-      encryptedToken = {data: encryptedData.token}
-
-      // upload the encrypted object with offline status
-      this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
-        //delete user object from the store
-        this.$store.dispatch('setValue', {name: 'user', newVal: {}})
-
-        //redirect to home route
-        this.$router.push('/')
-      })
-    },
-
     offlineNotification () {
-      alert('You are currently offline')
+      this.$store.dispatch('setValue', {name: 'network', newVal: false, child: ['online']})
     },
 
     onlineNotification () {
-      alert('You are currently online')
+      this.$store.dispatch('setValue', {name: 'network', newVal: true, child: ['online']})
+    },
+
+    updateActiveStatus() {
+      let sessionToken = sessionStorage.getItem('userToken'),
+      persistentToken = localStorage.getItem('userToken'),
+      encryptedData,
+      encryptedToken
+
+      // update active status
+      this.$User.setActiveStatus(this.activeToken.data)
+
+      encryptedData = persistentToken ? this.$Encrypt(JSON.stringify(this.$User), persistentToken) : this.$Encrypt(JSON.stringify(this.$User), sessionToken)
+      encryptedToken = {data: encryptedData.token}
+
+      // upload the new active status
+      this.$Upload('users', `${this.$User._id}`, encryptedToken)
     }
   },
 
@@ -339,36 +364,9 @@ export default {
       return;
     })
 
-    // hide the app when some keys are pressed on mobile
-    // if(this.mobile) {
-    //   window.addEventListener('keydown' , (e) => {
-    //     let html = document.getElementsByTagName('html')
-
-    //     switch (e.keyCode) {
-    //       case 25:
-    //         html[0].style.visibility = 'hidden';
-    //         break;
-
-    //       case 26:
-    //         html[0].style.visibility = 'hidden';
-    //         break;
-    //     }
-    //   })
-    // }
-
     // make interface visible when the key is no longer pressed
     window.addEventListener('keyup' , () => {
       setTimeout(ROOT.showApp, 2000)
-    })
-
-    window.addEventListener('pagehide' , () => {
-      console.log('Page Hidden')
-      ROOT.programmaticLogout()
-    })
-
-    window.addEventListener('pageshow' , () => {
-      alert('Page Displayed')
-      ROOT.loadUser()
     })
 
     window.addEventListener('offline' , () => {

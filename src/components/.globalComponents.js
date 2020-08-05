@@ -10,6 +10,7 @@ import AwaitingVerification from "./AwaitingVerification.vue"
 import ContactForm from "./ContactForm.vue"
 import LogoutDialog from "./LogoutDialog.vue"
 import Navigation from "./Navigation.vue"
+import NetworkMessage from "./NetworkMessage.vue"
 import ProfileSetup from "./ProfileSetup.vue"
 import RegForm from "./RegistrationForm.vue"
 import SocialMediaLinksBottom from "./SocialMediaLinksBottom.vue"
@@ -26,6 +27,7 @@ export default {
         Vue.component(ContactForm.name, ContactForm)
         Vue.component(LogoutDialog.name, LogoutDialog)
         Vue.component(Navigation.name, Navigation)
+        Vue.component(NetworkMessage.name, NetworkMessage)
         Vue.component(ProfileSetup.name, ProfileSetup)
         Vue.component(RegForm.name, RegForm)
         Vue.component(SocialMediaLinksBottom.name, SocialMediaLinksBottom)

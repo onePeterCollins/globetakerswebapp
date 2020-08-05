@@ -37,6 +37,8 @@ export default {
       if (this.user) {
         if (this.user._isOnline) {
           this.loadDashbord()
+        } else {
+          this.$router.push('not-found')
         }
       }
     }
@@ -46,7 +48,7 @@ export default {
     loadDashbord() {
       this.$Download(this.user).then((result) => {
         if (!result) {
-          this.$router.push('/not-found')
+          this.$router.push('not-found')
         } else {
           this.$User = result
           this.showContent = true
@@ -59,7 +61,11 @@ export default {
     if (this.user) {
       if (this.user._isOnline) {
         this.loadDashbord()
+      } else {
+        this.$router.push('/')
       }
+    } else {
+      this.$router.push('/')
     }
   },
 

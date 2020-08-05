@@ -8,11 +8,11 @@
 
     <br/>
 
-    <v-card v-if="!$User._id" class="col-lg-10 col-11 px-0 py-0 center g-deepblue--text" align="center">
+    <v-card v-if="$User._id" class="col-lg-10 col-11 px-0 py-0 center g-deepblue--text" align="center">
       <v-card-title class="g-blue" align="center">
         <v-row>
         <v-col align="center">
-          <h3>Hi {{$User.getFirstName}}</h3>
+          <h3>Hi {{$User.getFirstName()}}</h3>
           <p>Please provide the <br/>
               following information</p>
         </v-col>
@@ -33,14 +33,14 @@
 
             <transition name="slideYneg">
               <v-row v-if="$keys[3]">
-                <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-mapbox" :hint="errorMessages.country" label='Country of residence' v-model="country" />
+                <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-mapbox" :hint="errorMessages.country" label='Country of residence' v-model="country" :value="$User.getCountry()" @input="update('country', country)"/>
               </v-row>
             </transition>
 
             <transition name="slideYneg">
               <v-row v-if="$keys[4]" justify="center" class="mb-5">
                 <v-col class="col-12 g-rose--text pb-0">
-                  <b>Date of birth</b>
+                  <b>Enter your date of birth</b>
                 </v-col>
                 <v-date-picker dark :reactive="true" :show-current="true" type='date' v-model="newDate" />
               </v-row>
@@ -63,8 +63,8 @@
 
             <transition name="slideYneg">
               <v-row v-if="$keys[5]" justify="center">
-                <p v-if="email.length > 0 && country.length > 0 && newDate.length > 0" class="g-deepblue warning--text">Ensure that the information you have provided is correct before you proceed.</p>
-                <v-btn class="g-white">Submit</v-btn>
+                <p v-if="email.length > 0 && country.length > 0 && newDate.length > 0" class="g-deepblue warning--text">Confirm that the information you have provided is correct before you proceed.</p>
+                <v-btn class="g-white" @click='submit()'>Submit</v-btn>
               </v-row>
             </transition>
           </v-form>
@@ -123,6 +123,10 @@ export default {
     user() {
       this.$User = this.user
       this.$forceUpdate()
+    },
+
+    newDate() {
+      this.update('date', this.newDate)
     }
   },
 
@@ -138,11 +142,54 @@ export default {
 
       if (this.errorFields) {
         this.errorFields = validator.scanEntries(this)
+
+        if (this.newDate === '') {
+          this.errorMessages.generalErrorMessage.push("'Date of birth' field is empty")
+        }
       }
     },
 
     submit() {
+      // Check for error fields
+      this.errorFields = validator.scanEntries(this)
       
+      if (this.newDate === '') {
+        this.errorFields = true
+        this.errorMessages.generalErrorMessage.push("'Date of birth' field is empty")
+      }
+
+      if (!this.errorFields) {
+        let encryptedData, encryptedToken, persistentToken = localStorage.getItem('userToken')
+
+        // set profile upload status
+        this.$User.setProfile(true)
+
+        // encrypt the updated data
+        persistentToken ? encryptedData = this.$Encrypt(JSON.stringify(this.$User), persistentToken) : encryptedData = this.$Encrypt(JSON.stringify(this.$User))
+        encryptedToken = {data: encryptedData.token}
+
+        // upload the new online status
+        this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
+          // set the global user object in the store
+          this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+          this.networkMessage = {success: 'Done'}
+
+          window.location.reload()
+        })
+      }
+    },
+
+    emailHint(errorMessage) {
+      !errorMessage
+      ? this.errorMessages.email = 'youremail@domain.com Max 30 characters'
+      : this.errorMessages.email = errorMessage
+    },
+
+    countryHint(errorMessage) {
+      !errorMessage
+      ? this.errorMessages.country = 'Country of resdence'
+      : this.errorMessages.country = errorMessage
     }
   },
 

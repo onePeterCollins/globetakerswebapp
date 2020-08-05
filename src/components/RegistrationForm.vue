@@ -233,16 +233,14 @@ export default {
           }
 
           if (this.verificationCode.length !== 0) {
+            let duplicateId
+
             // set user id
             this.$User.setId(`${this.username.replace(/ /g, "")}${this.generateId()}`)
-
-            let duplicateId
 
             // test this ################################################################################################
             for(let i in this.users) {
               this.$Download(JSON.parse(this.$Decrypt(this.users[i].data).token)).then((result) => {
-                alert(i + ': ' + result._id)
-
                 if (result._id === this.$User._id) {
                   duplicateId = true
                   this.register()
