@@ -60,7 +60,8 @@ export default {
         {sn: 1, title: 'Home', route: this.homeLink, icon: 'mdi-home'},
         {sn: 2, title: 'About', route: '/about', icon: 'mdi-help'},
         {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone'},
-        {sn: 4, title: 'Terms', route: '/terms', icon: 'mdi-information'},
+        {sn: 4, title: 'notifications', route: '/notifications', icon: 'mdi-message'},
+        {sn: 5, title: 'Terms', route: '/terms', icon: 'mdi-file'},
       ]
 
       return value

@@ -126,6 +126,7 @@ export default {
     },
 
     newDate() {
+      this.$User.setDateOfBirth(this.newDate)
       this.update('date', this.newDate)
     }
   },

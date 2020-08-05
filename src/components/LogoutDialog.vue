@@ -1,19 +1,19 @@
 <template>
   <div v-if='loggingOut' class="logout-dialog">
-    <v-dialog persistent v-model="loggingOut">
-        <v-card>
-            <v-card-title class="alert">Logging out</v-card-title>
-            <v-card-text>Are you sure you want to logout?</v-card-text>
-            <v-row>
-              <v-col align="center">
-                <v-btn @click="cancelLogout()">No</v-btn>
-              </v-col>
+    <v-dialog persistent v-model="loggingOut" :width="dialogWidth" class="px-0">
+      <v-card class="px-3 py-3">
+        <v-card-title class="alert">Logging out</v-card-title>
+        <v-card-text>Are you sure you want to logout?</v-card-text>
+          <v-row>
+            <v-col align="center">
+              <v-btn @click="cancelLogout()">No</v-btn>
+            </v-col>
 
-              <v-col align="center">
-                <v-btn @click="logout()">Yes</v-btn>
-              </v-col>
-            </v-row>
-        </v-card>
+            <v-col align="center">
+              <v-btn @click="logout()">Yes</v-btn>
+            </v-col>
+          </v-row>
+      </v-card>
     </v-dialog>
   </div>
 </template>
@@ -25,6 +25,19 @@ export default {
   computed: {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     user() {return this.$store.getters.getUserData},
+    dialogWidth() {
+      let value
+
+      if (window.innerWidth >= 1264) {
+        value = '30vw'
+      } else if (window.innerWidth < 1264 &&  window.innerWidth >= 960) {
+        value = '50vw'
+      } else {
+        value = '90vw'
+      }
+
+      return value
+    },
     loggingOut() {return this.$store.getters.getState.loggingOut}
   },
 

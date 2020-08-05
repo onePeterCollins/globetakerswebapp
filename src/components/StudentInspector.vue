@@ -359,7 +359,7 @@
           </v-row>
 
           <v-dialog persistent v-model="editString" :width="dialogWidth">
-            <v-card class="px-3 py-3 ">
+            <v-card class="px-3 py-3">
               <h3 class="px-3 py-3 g-deepblue--text">Edit {{editField}}</h3>
 
               <v-text-field prepend-icon="mdi-pen" :label="inputLabel" :hint="inputHint" height="30" v-model="newValue"/>
@@ -377,7 +377,7 @@
           </v-dialog>
 
           <v-dialog persistent v-model="editBoolean" :width="dialogWidth">
-            <v-card class="px-3 py-3 ">
+            <v-card class="px-3 py-3">
               <h3 class="px-3 py-3 g-deepblue--text">Edit {{editField}}</h3>
 
               <v-row>
@@ -411,7 +411,7 @@
           </v-dialog>
 
           <v-dialog persistent v-model="editDate" :width="dialogWidth">
-            <v-card class="px-3 py-3 ">
+            <v-card class="px-3 py-3">
               <h3 class="px-3 py-3 g-deepblue--text">Edit {{editField}}</h3>
 
               <v-row justify="center">

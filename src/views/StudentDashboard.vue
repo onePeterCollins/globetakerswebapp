@@ -37,6 +37,7 @@ export default {
       if (this.user) {
         if (this.user._isOnline) {
           this.loadDashbord()
+          this.$forceUpdate()
         } else {
           this.$router.push('not-found')
         }

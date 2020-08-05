@@ -45,8 +45,14 @@
           <span>contact</span>
         </v-btn>
 
+        <v-btn v-if="showLogoutButton" link to="/notifications">
+          <v-icon small class="mr-1">mdi-message</v-icon>
+
+          <span>notifications</span>
+        </v-btn>
+
         <v-btn link to="/terms">
-          <v-icon small class="mr-1">mdi-information</v-icon>
+          <v-icon small class="mr-1">mdi-file</v-icon>
 
           <span>terms</span>
         </v-btn>
