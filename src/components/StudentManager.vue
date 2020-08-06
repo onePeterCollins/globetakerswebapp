@@ -167,10 +167,6 @@ export default {
     users: db.collection('users')
   },
 
-  watch: {
-    userPopulation() {this.loadTeamNames()}
-  },
-
   methods: {
     loadTeamNames() {
       let userTeam

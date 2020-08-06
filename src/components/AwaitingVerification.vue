@@ -41,7 +41,7 @@
           <h3>Follow us on social media;</h3>
 
           <v-btn class="mr-3">
-            <a class="no-underline" href="facebook.com/pg/globetakersteam/posts/?ref=page_internal&mt_nav=0" target="_blank">
+            <a class="no-underline" href="https://facebook.com/pg/globetakersteam/posts/?ref=page_internal&mt_nav=0" target="_blank">
               <v-icon class="blue--text lighten-4">mdi-facebook</v-icon>
             </a>
           </v-btn>
