@@ -176,7 +176,7 @@ export default {
 
           this.networkMessage = {success: 'Done'}
 
-          window.location.reload()
+          this.$router.push('home')
         })
       }
     },
