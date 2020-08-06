@@ -13,9 +13,13 @@
       </v-row>
 
       <v-list dense>
-        <v-list-item v-for="(link, sn) in navLinks" :key="sn" link :to="link.route" >
-          <v-list-item-action>
-            <v-icon>{{link.icon}}</v-icon>
+        <v-list-item v-for="link in navLinks" :key="link.sn" link :to="link.route" >
+          <v-list-item-action >
+            <v-icon v-if="!link.alertCount">{{link.icon}}</v-icon>
+            
+            <v-badge v-if="link.alertCount" :content="link.alertCount">
+              <v-icon>{{link.icon}}</v-icon>
+            </v-badge>
           </v-list-item-action>
 
           <v-list-item-content>
@@ -23,13 +27,13 @@
           </v-list-item-content>
         </v-list-item>
 
-        <v-list-item v-if="loggedIn" @click="logout()">
+        <v-list-item v-for="btn in navButtons" :key="btn.sn" @click="btn.action">
           <v-list-item-action >
-            <v-icon>mdi-lock</v-icon>
+            <v-icon>{{btn.icon}}</v-icon>
           </v-list-item-action>
 
           <v-list-item-content>
-            <v-list-item-title>Logout</v-list-item-title>
+            <v-list-item-title>{{btn.title}}</v-list-item-title>
           </v-list-item-content>
         </v-list-item>
       </v-list>
@@ -54,17 +58,39 @@ export default {
     user() {return this.$store.getters.getUserData},
 
     navLinks() {
-      let value
+      let value, loggedIn = this.loggedIn
 
       value = [
-        {sn: 1, title: 'Home', route: this.homeLink, icon: 'mdi-home'},
-        {sn: 2, title: 'About', route: '/about', icon: 'mdi-help'},
-        {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone'},
-        {sn: 4, title: 'notifications', route: '/notifications', icon: 'mdi-message'},
-        {sn: 5, title: 'Terms', route: '/terms', icon: 'mdi-file'},
+        {sn: 1, title: 'Home', route: this.homeLink, icon: 'mdi-home', if: true},
+        {sn: 2, title: 'About', route: '/about', icon: 'mdi-help', if: true},
+        {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone', if: true},
+        {sn: 4, title: 'notifications', route: '/notifications', icon: 'mdi-message', if: loggedIn, alertCount: 0},
+        {sn: 5, title: 'Terms', route: '/terms', icon: 'mdi-file', if: true}
       ]
 
-      return value
+      function vIf (item) {
+        if (item.if) {
+          return item
+        }
+      }
+
+      return value.filter(vIf)
+    },
+
+    navButtons() {
+      let value, loggedIn = this.loggedIn, logout = this.logout
+
+      value = [
+        {sn: 6, title: 'Logout', icon: 'mdi-lock', action: logout, if: loggedIn}
+      ]
+
+      function vIf (item) {
+        if (item.if) {
+          return item
+        }
+      }
+
+      return value.filter(vIf)
     }
   },
 

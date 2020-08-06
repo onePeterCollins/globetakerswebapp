@@ -24,11 +24,6 @@ const routes = [
     name: 'Contact',
     component: () => import('../views/Contact.vue')
   },
-  {
-    path: '/test',
-    name: 'Test',
-    component: () => import('../components/ProfileSetup.vue')
-  },
 
   // students
   {
@@ -41,6 +36,16 @@ const routes = [
     name: 'Learning-option',
     component: () => import('../views/LearningOption.vue')
   },
+  {
+    path: '/student-dashboard/interactive-forum',
+    name: 'Interactive-forum',
+    component: () => import('../views/InteractiveForum.vue')
+  },
+  // {
+  //   path: '/student-dashboard/interactive-forum',
+  //   name: 'Test',
+  //   component: () => import('../views/InteractiveForum.vue')
+  // },
   {
     path: '/student-dashboard/Lectures',
     name: 'Lectures',

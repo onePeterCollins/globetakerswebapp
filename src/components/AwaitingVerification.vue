@@ -40,12 +40,16 @@
         <v-col class="px-10" align="center">
           <h3>Follow us on social media;</h3>
 
-          <v-btn class="mr-3" href="https://facebook.com" target="_blank">
-            <v-icon class="blue--text lighten-4">mdi-facebook</v-icon>
+          <v-btn class="mr-3">
+            <a class="no-underline" href="facebook.com/pg/globetakersteam/posts/?ref=page_internal&mt_nav=0" target="_blank">
+              <v-icon class="blue--text lighten-4">mdi-facebook</v-icon>
+            </a>
           </v-btn>
 
-          <v-btn light class="mr-3" href="https://youtube.com" target="_blank">
-            <v-icon class="red--text lighten-1">mdi-youtube</v-icon>
+          <v-btn class="mr-3">
+            <a class="no-underline" href="https://youtube.com/channel/UClm_UAtPM-B3CxX7TqvGVZw" target="_blank">
+              <v-icon class="red--text lighten-1">mdi-youtube</v-icon>
+            </a>
           </v-btn>
         </v-col>
       </v-row>

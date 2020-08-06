@@ -13,16 +13,18 @@
     >      
       <v-toolbar-items>
         <v-avatar class="mt-1 mr-3">
-          <v-img
-          :src="require('./assets/images/logo.jpg')"
-          contain
-          width="50"
-          height="50"
-          transition="scale-transition" />
+          <a href="/">
+            <v-img
+            :src="require('./assets/images/logo.jpg')"
+            contain
+            width="50"
+            height="50"
+            transition="scale-transition" />
+          </a>
         </v-avatar>
       </v-toolbar-items>
       
-      <v-toolbar-title class="display-1 app-toolbar-title">GBSi</v-toolbar-title>
+      <v-toolbar-title class="display-1 app-toolbar-title"><a class="white--text no-underline" href="/">GBSi</a></v-toolbar-title>
 
       <v-spacer />
 
@@ -78,7 +80,7 @@
       <router-view/>
     </v-content>
 
-    <v-footer class="gray z5" fixed>
+    <v-footer class="curved gray z5" fixed>
       <v-row justify="center">
           <p>&copy; Globe Takers 2020 all rights reserved.</p>
       </v-row>
@@ -333,7 +335,7 @@ export default {
     let ROOT = this
 
     window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection
-    // window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
+    window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
     window.addEventListener('print', (e) => { alert ('action prohibited'); e.preventDefault() }) // prevent printing
 
     // hide the app when some keys are pressed
@@ -393,7 +395,7 @@ export default {
 html {overflow-Y: auto !important;}
 
 header.v-sheet {border-radius: 1.5rem 1.5rem 0px 0px;}
-footer.v-sheet {border-radius: 0px 0px 1.5rem 1.5rem;
+footer.curved {border-radius: 0px 0px 1.5rem 1.5rem;
   box-shadow: 0.5px -0.5px 2.5px 1px rgba(0, 0, 0, 0.5)}
 
 #top-conceal {width: 100vw;
@@ -406,6 +408,9 @@ footer.v-sheet {border-radius: 0px 0px 1.5rem 1.5rem;
   bottom: 0px;
   background: black}
 
+.no-underline {
+  text-decoration: none;
+}
   @media screen and (min-width: 1264px) {
     #top-conceal, #bottom-conceal {
       background: white;
