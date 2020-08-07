@@ -15,6 +15,8 @@
           <v-row>
             <v-col class="col-12 px-0">
               <v-card class="col-12 col-lg-10">
+                <h4>Meta data</h4>
+
                 <v-row>
                   <v-col class="px-1 px-lg-12">
                     <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-text" label="Title"  height="30" />
@@ -26,6 +28,33 @@
                     <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-text" label="Sub head"  height="30" />
                   </v-col>
                 </v-row>
+
+                <v-row>
+                  <v-col class="px-1 px-lg-12">
+                    <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Sender"  height="30" />
+                  </v-col>
+                </v-row>
+
+                <v-row>
+                  <v-col class="col-12 col-lg-6 px-1 px-lg-12" align="left">
+                    <p>
+                      <v-icon class="mr-2">mdi-account-group</v-icon>
+                      Audience: {{notification.getAudience()}}
+                    </p>
+                  </v-col>
+
+                  <v-col class="col-12 col-lg-6">
+                    <v-btn class="mx-2 mb-3" @click="setAudience(0)">
+                      <v-icon class="mr-2">mdi-account-group</v-icon>
+                      Students
+                    </v-btn>
+
+                    <v-btn class="mx-2 mb-3" @click="setAudience(2)">
+                      <v-icon class="mr-2">mdi-account-group</v-icon>
+                      General
+                    </v-btn>
+                  </v-col>
+                </v-row>
               </v-card>
             </v-col>
           </v-row>
@@ -35,6 +64,8 @@
           <v-row>
             <v-col class="col-12 px-0">
               <v-card class="col-12 col-lg-10">
+                <h4>Content</h4>
+
                 <v-row>
                   <v-col>
                     <!-- add widgets for inserting text, images and buttons here -->
@@ -155,12 +186,16 @@
 </template>
 
 <script>
+import Notification from '../classes/Notification'
+
 export default {
   name: 'g-messenger',
 
   data: () => ({
     title: '',
     subHead: '',
+    sender: '',
+    audience: '',
     content: [
       {
         type: 'paragraph',
@@ -201,7 +236,9 @@ export default {
         href: '',
         title: ''
       }
-    }
+    },
+
+    notification: new Notification()
   }),
 
   computed: {
@@ -209,6 +246,10 @@ export default {
   },
 
   methods: {
+    setAudience(index) {
+      this.notification.setAudienceIndex(index)
+    },
+
     addItem(item) {
       this.content.push(item)
     },
@@ -216,6 +257,10 @@ export default {
     removeItem(index) {
       this.content.splice(index, 1)
     }
+  },
+
+  mounted() {
+    this.notification.setAudienceIndex(0)
   }
 }
 </script>
