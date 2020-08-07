@@ -365,7 +365,7 @@ export default {
     },
 
     generalMessage() {
-
+      this.$router.push('student-manager/messenger')
     },
 
     inspectStudent(id) {

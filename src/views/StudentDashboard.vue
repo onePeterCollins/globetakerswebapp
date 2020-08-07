@@ -57,7 +57,6 @@ export default {
 
     profileUploaded() {
       if (this.profileUploaded) {
-        alert('here')
         this.loadDashbord()
       }
     }

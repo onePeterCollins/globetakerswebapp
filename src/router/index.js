@@ -46,11 +46,6 @@ const routes = [
     name: 'Interactive-forum',
     component: () => import('../views/InteractiveForum.vue')
   },
-  // {
-  //   path: '/student-dashboard/interactive-forum',
-  //   name: 'Test',
-  //   component: () => import('../views/InteractiveForum.vue')
-  // },
   {
     path: '/student-dashboard/Lectures',
     name: 'Lectures',
@@ -104,6 +99,11 @@ const routes = [
     path: '/proprietor/student-manager/student-inspector',
     name: 'student-inspector',
     component: () => import('../components/StudentInspector.vue')
+  },
+  {
+    path: '/proprietor/student-manager/messenger',
+    name: 'Messenger',
+    component: () => import('../views/Messenger.vue')
   },
   {
     path: '/proprietor/security',

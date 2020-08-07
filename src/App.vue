@@ -164,20 +164,7 @@ export default {
       if (this.$User._id) {
         this.updateActiveStatus()
       }
-    },
-
-    // $route() {
-    //   let ROOT = this
-
-    //   if (this.refreshUser) {
-    //     this.$store.dispatch('setValue', {name: 'refreshUser', newVal: false})
-    //     setTimeout(pushRoute(), 3000)
-    //   }
-      
-    //   function pushRoute () {
-    //     ROOT.$router.push('student-dashboard')
-    //   }
-    // }
+    }
   },
 
   methods: {

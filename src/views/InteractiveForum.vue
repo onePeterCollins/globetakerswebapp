@@ -18,7 +18,7 @@
     <v-footer fixed class="pb-3 mb-12">
         <v-row justify="space-between">
             <v-col class="col-2 px-0" align="center">
-              <v-icon class="mb-12">mdi-help</v-icon>
+              <v-icon class="mb-12">mdi-forum-outline</v-icon>
             </v-col>
 
             <textarea rows="3" cols="20" class="px-3 mt-2 deepblue-border" placeholder="type your question"></textarea>
