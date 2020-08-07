@@ -58,7 +58,7 @@ export default {
     user() {return this.$store.getters.getUserData},
 
     navLinks() {
-      let value, loggedIn = this.loggedIn
+      let value, loggedIn = this.loggedIn && this.user.getProfile()
 
       value = [
         {sn: 1, title: 'Home', route: this.homeLink, icon: 'mdi-home', if: true},

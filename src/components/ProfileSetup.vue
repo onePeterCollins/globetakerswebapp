@@ -8,16 +8,11 @@
 
     <br/>
 
-    <v-card v-if="$User._id" class="col-lg-10 col-11 px-0 py-0 center g-deepblue--text" align="center">
-      <v-card-title class="g-blue" align="center">
-        <v-row>
-        <v-col align="center">
-          <h3>Hi {{$User.getFirstName()}}</h3>
-          <p>Please provide the <br/>
-              following information</p>
-        </v-col>
-        </v-row>
-      </v-card-title>
+    <v-card v-if="$User._id" class="col-lg-10 col-11 px-0 py-0 pb-lg-10 center g-deepblue--text" align="center">
+      <v-col class="g-blue" align="center">
+        <h4 class="g-deepblue--text">Hi {{$User.getFirstName()}}</h4>
+        <h3 class="g-deepblue--text">Please provide the following information</h3>
+      </v-col>
 
       <br/>
 
@@ -72,9 +67,9 @@
       </v-row>
     </v-card>
 
-    <br/>
-    <br/>
-    <br/>
+    <br v-if="mobile"/>
+    <br v-if="mobile"/>
+    <br v-if="mobile"/>
     <br/>
     <br/>
     <br/>
@@ -84,7 +79,6 @@
 
 <script>
 import validator from '../form_validation/.globalFormValidation'
-import {db} from '../firebase'
 
 export default {
   name: 'g-profile-setup',
@@ -98,7 +92,6 @@ export default {
     email: '',
     country: '',
     newDate: '',
-    users: [],
     errorMessages: {
       email: 'youremail@domain.com Max 30 characters',
       country: 'Country of resdence',
@@ -113,10 +106,6 @@ export default {
   computed: {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
     user() {return this.$store.getters.getUserData}
-  },
-
-  firestore: {
-    users: db.collection('users')
   },
 
   watch: {
@@ -156,7 +145,13 @@ export default {
       
       if (this.newDate === '') {
         this.errorFields = true
-        this.errorMessages.generalErrorMessage.push("'Date of birth' field is empty")
+        
+        if (!this.errorMessages.generalErrorMessage) {
+          this.errorMessages.generalErrorMessage = []
+          this.errorMessages.generalErrorMessage.push("'Date of birth' field is empty")
+        } else {
+          this.errorMessages.generalErrorMessage.push("'Date of birth' field is empty")
+        }
       }
 
       if (!this.errorFields) {
@@ -175,8 +170,6 @@ export default {
           this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
           this.networkMessage = {success: 'Done'}
-
-          this.$router.push('home')
         })
       }
     },

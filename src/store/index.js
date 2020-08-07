@@ -64,6 +64,7 @@ let state = {
   },
 
   loggingOut: false,
+  refreshUser: false,
   adminAccess: false,
   inspectStudent: ''
 }

@@ -29,7 +29,18 @@ export default {
   computed: {
     mobile() {return this.$store.getters.getLocalData.device.mobile()},
     user() {return this.$store.getters.getUserData},
-    isOnline() {return this.user ? this.user._isOnline : false}
+    isOnline() {return this.user ? this.user._isOnline : false},
+    profileUploaded() {
+      let value
+
+      if (this.user) {
+        if (this.user.getProfile) {
+          value = this.user.getProfile()
+        }
+      }
+
+      return value
+    }
   },
 
   watch: {
@@ -39,8 +50,15 @@ export default {
           this.loadDashbord()
           this.$forceUpdate()
         } else {
-          this.$router.push('not-found')
+          this.$router.push('/')
         }
+      }
+    },
+
+    profileUploaded() {
+      if (this.profileUploaded) {
+        alert('here')
+        this.loadDashbord()
       }
     }
   },
@@ -49,9 +67,11 @@ export default {
     loadDashbord() {
       this.$Download(this.user).then((result) => {
         if (!result) {
-          this.$router.push('not-found')
+          this.$router.push('/')
         } else {
           this.$User = result
+          this.showContent = false
+          this.$forceUpdate()
           this.showContent = true
         }
       })

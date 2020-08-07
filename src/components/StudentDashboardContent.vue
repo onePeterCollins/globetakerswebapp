@@ -1,7 +1,7 @@
 <template>
   <div class="g-dashboard-content">
     <v-row>
-      <v-col align="center" class="col-12">
+      <v-col align="center" class="col-12 yellow">
         <h4 class="dosis">Welcome, {{$User.getFirstName()}}</h4>
       </v-col>
 
@@ -9,6 +9,10 @@
         <h3>What will you like to do?</h3>
       </v-col>
     </v-row>
+
+    <br/>
+    <br v-if="!mobile"/>
+    <br v-if="!mobile"/>
 
     <v-row>
       <v-col class=col-12>
@@ -99,7 +103,8 @@
 
     <br/>
     <br/>
-    <br/>
+    <br v-if="!mobile"/>
+    <br v-if="!mobile"/>
     <br v-if="!mobile"/>
   </div>
 </template>

@@ -16,17 +16,17 @@
     </v-row>
 
     <v-footer fixed class="pb-3 mb-12">
-        <v-row>
-            <v-col class="col-2">
-            <v-icon class="mb-12">mdi-help</v-icon>
+        <v-row justify="space-between">
+            <v-col class="col-2 px-0" align="center">
+              <v-icon class="mb-12">mdi-help</v-icon>
             </v-col>
 
-            <textarea rows="3" cols="25" class="px-3 mt-2" placeholder="type your question"></textarea>
+            <textarea rows="3" cols="20" class="px-3 mt-2 deepblue-border" placeholder="type your question"></textarea>
 
-            <v-col class="col-2">
-            <v-btn fab small elevation="3" direction="top">
+            <v-col class="col-2 px-0" align="center">
+              <v-btn fab small elevation="0">
                 <v-icon>mdi-send</v-icon>
-            </v-btn>
+              </v-btn>
             </v-col>
         </v-row>
     </v-footer>
@@ -40,5 +40,7 @@ export default {
 </script>
 
 <style>
-
+  .deepblue-border {
+    border: 1px solid rgb(9, 50, 67);
+  }
 </style>

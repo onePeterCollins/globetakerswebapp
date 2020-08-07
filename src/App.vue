@@ -47,7 +47,7 @@
           <span>contact</span>
         </v-btn>
 
-        <v-btn v-if="showLogoutButton" link to="/notifications">
+        <v-btn v-if="showLogoutButton && this.user.getProfile()" link to="/notifications">
           <v-icon small class="mr-1">mdi-message</v-icon>
 
           <span>notifications</span>
@@ -126,7 +126,7 @@ export default {
     timeZone() {return this.$store.getters.getState.timeZone()},
     device() {return this.$store.getters.getLocalData.device},
     loginHistory() {return {date: this.date, time: this.time, timeZone: this.timeZone, platform: this.device.platform, userAgent: this.device.userAgent}},
-    network() {return this.$store.getters.getNetworkData.online}  
+    network() {return this.$store.getters.getNetworkData.online}
   },
 
   watch: {
@@ -164,7 +164,20 @@ export default {
       if (this.$User._id) {
         this.updateActiveStatus()
       }
-    }
+    },
+
+    // $route() {
+    //   let ROOT = this
+
+    //   if (this.refreshUser) {
+    //     this.$store.dispatch('setValue', {name: 'refreshUser', newVal: false})
+    //     setTimeout(pushRoute(), 3000)
+    //   }
+      
+    //   function pushRoute () {
+    //     ROOT.$router.push('student-dashboard')
+    //   }
+    // }
   },
 
   methods: {
@@ -244,9 +257,7 @@ export default {
             }
           })
         })
-      }
-
-      if (this.persistence === 'true' && persistentToken) {
+      } else if (this.persistence === 'true' && persistentToken) {
         let encryptedData, encryptedToken
 
         this.userId = localStorage.getItem('userId')
@@ -335,7 +346,7 @@ export default {
     let ROOT = this
 
     window.addEventListener('selectstart', (e) => { e.preventDefault() }) // prevent selection
-    window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
+    // window.addEventListener('contextmenu', (e) => { e.preventDefault() }) // prevent context menu display
     window.addEventListener('print', (e) => { alert ('action prohibited'); e.preventDefault() }) // prevent printing
 
     // hide the app when some keys are pressed
