@@ -17,6 +17,7 @@ export default class Notification {
         this._content = []
         this._views = 0
         this._typeof = 'notification'
+        this._id = ''
     }
 
     // getters
