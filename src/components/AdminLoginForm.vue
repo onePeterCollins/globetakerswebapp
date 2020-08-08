@@ -3,7 +3,7 @@
     <v-form v-if="$keys[1]" class="col-lg-4 col-11 reg-form g-white">
       <transition name="slideYneg">
         <v-row v-if="$keys[1]" justify="center">
-          <h2 class="form-title">-- LOGIN --</h2>
+          <h2 class="form-title g-deepblue--text">-- LOGIN --</h2>
         </v-row>
       </transition>
 
@@ -50,7 +50,7 @@
 
       <v-scale-transition>
         <v-row v-if="$keys[6]" justify="center">
-          <v-btn @click="login()" link to='/admin-dashboard' class="g-cream g-darkblue--text">Login</v-btn>
+          <v-btn @click="login()" link to='/admin-dashboard' class="white g-darkblue--text">Login</v-btn>
         </v-row>
       </v-scale-transition>
     </v-form>

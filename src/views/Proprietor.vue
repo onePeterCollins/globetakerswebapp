@@ -1,8 +1,8 @@
 <template>
   <div class="proprietor-login">
-    <v-row class="yellow">
+    <v-row class="g-cream">
       <v-col align="center">
-        <h1>Admin Login</h1>
+        <h2 class="g-deepblue--text dosis">Admin Login</h2>
       </v-col>
     </v-row>
 

@@ -4,7 +4,7 @@
       
       <transition name="slideYneg">
         <v-row v-if="$keys[1]" justify="center">
-          <h2 class="form-title">-- LOGIN --</h2>
+          <h2 class="form-title g-deepblue--text">-- LOGIN --</h2>
         </v-row>
       </transition>
       
@@ -65,7 +65,7 @@
 
       <v-scale-transition>
         <v-row v-if="$keys[5]" justify="center">
-          <v-btn @click='login()' class="g-cream g-darkblue--text">Login</v-btn>
+          <v-btn @click='login()' class="white g-darkblue--text">Login</v-btn>
         </v-row>
       </v-scale-transition>
     </v-form>

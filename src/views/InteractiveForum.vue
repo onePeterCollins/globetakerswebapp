@@ -10,18 +10,18 @@
     </v-row>
 
     <v-row>
-      <v-col align="center" fixed bottom class="col-12 px-5">
-        <h4 class="v-deepblue--text">Questions</h4>
+      <v-col align="center" fixed bottom class="col-12 px-5 g-cream">
+        <h4 class="v-deepblue--text dosis">Questions</h4>
       </v-col>
     </v-row>
 
-    <v-footer fixed class="pb-3 mb-12">
+    <v-footer fixed class="pb-3 mb-6">
         <v-row justify="space-between">
             <v-col class="col-2 px-0" align="center">
               <v-icon class="mb-12">mdi-forum-outline</v-icon>
             </v-col>
 
-            <textarea rows="3" cols="20" class="px-3 mt-2 deepblue-border" placeholder="type your question"></textarea>
+            <v-textarea rows="3" class="px-0" label="type your question"></v-textarea>
 
             <v-col class="col-2 px-0" align="center">
               <v-btn fab small elevation="0">

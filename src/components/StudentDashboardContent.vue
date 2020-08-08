@@ -1,12 +1,14 @@
 <template>
   <div class="g-dashboard-content">
-    <v-row>
-      <v-col align="center" class="col-12 yellow">
-        <h4 class="dosis">Welcome, {{$User.getFirstName()}}</h4>
-      </v-col>
-
+    <v-row class="g-cream">
       <v-col align="center" class="col-12">
-        <h3>What will you like to do?</h3>
+        <h2 class="g-deepblue--text dosis">Welcome, {{$User.getFirstName()}}</h2>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col align="center" class="col-12">
+        <h3 class="g-deepblue--text">What will you like to do?</h3>
       </v-col>
     </v-row>
 

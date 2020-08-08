@@ -1,13 +1,13 @@
 <template>
-  <div class="home">
+  <div class="home social-media-sketch-pattern">
     <v-row>
-      <v-col v-if="!mobile" class="col-11 ml-5">
-        <h2 class="g-darkblue--text">Globe Takers Business School <span class="g-blue--text">International</span></h2>
+      <v-col v-if="!mobile" class="col-5 ml-5 white">
+        <h2 class="g-deepblue--text">Globe Takers Business School International</h2>
       </v-col>
 
-      <v-col v-else-if="mobile" align="center">
-        <h2 class="g-darkblue--text">Globe Takers Business School</h2>
-        <h3 class="g-blue--text">International</h3>
+      <v-col v-else-if="mobile" class="white" align="center">
+        <h2 class="g-deepblue--text">Globe Takers Business School</h2>
+        <h3 class="g-deepblue--text">International</h3>
       </v-col>
     </v-row>
 
@@ -17,20 +17,28 @@
         contain
         width="400"
         height="400"
-        class="faint-4"
+        class="faint-7"
         transition="scale-transition" />
 
       
 
       <v-col class="col-lg-4 mt-10 mt-lg-0">
-        <h3 v-if="!mobile" class="pl-10">
+        <h3 v-if="!mobile" class="white g-rose--text pl-10 py-4">
           To {{this.registerOrLogin}} click
-          <a @click="formFlip()">here</a>
+          <v-btn class="ml-3 g-darkblue--text" @click="formFlip()">
+            <v-icon v-if="this.registerOrLogin !== 'register'" class="mr-2">mdi-lock</v-icon>
+            <v-icon  v-if="this.registerOrLogin === 'register'" class="mr-2">mdi-account-edit</v-icon>
+            here
+          </v-btn>
         </h3>
 
-        <h3 v-else-if="mobile" align="center">
+        <h3 v-else-if="mobile" class="white g-rose--text" align="center">
           To {{this.registerOrLogin}} click
-          <a @click="formFlip()">here</a>
+          <v-btn class="ml-3 g-darkblue--text" @click="formFlip()">
+            <v-icon v-if="this.registerOrLogin !== 'register'" class="mr-2">mdi-lock</v-icon>
+            <v-icon  v-if="this.registerOrLogin === 'register'" class="mr-2">mdi-account-edit</v-icon>
+            here
+          </v-btn>
         </h3>
 
         <v-col :class="this.flipForm + ' flipper'">

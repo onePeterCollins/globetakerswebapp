@@ -1,8 +1,8 @@
 <template>
-  <div class="awaiting-verification g-white">
-    <v-row>
-      <v-col align="center" class="yellow">
-        <h4 class="dosis g-deepblue--text">Welcome, {{$User.getFirstName()}}</h4>
+  <div class="awaiting-verification social-media-sketch-pattern">
+    <v-row class="g-cream">
+      <v-col align="center">
+        <h2 class="g-deepblue--text dosis">Welcome, {{$User.getFirstName()}}</h2>
       </v-col>
     </v-row>
 

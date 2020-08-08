@@ -1,14 +1,14 @@
 <template>
-  <div class="notifications">
-    <v-row class="yellow">
+  <div class="notifications social-media-sketch-pattern">
+    <v-row class="g-cream">
       <v-col align="center">
-        <h3>Notifications</h3>
+        <h2 class="g-deepblue--text dosis">Notifications</h2>
       </v-col>
     </v-row>
 
     <v-row>
-      <v-col>
-        <v-card>
+      <v-col align="center">
+        <v-card class="col-11 col-lg-10">
           <v-row>
             <v-col>
               <v-card-title>

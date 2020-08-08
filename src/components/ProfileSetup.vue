@@ -1,8 +1,8 @@
 <template>
-  <div class="about g-white">
-    <v-row class="yellow">
+  <div class="about social-media-sketch-pattern">
+    <v-row class="g-cream">
       <v-col align="center">
-        <h2>Profile Setup</h2>
+        <h2 class="g-deepblue--text dosis">Profile Setup</h2>
       </v-col>
     </v-row>
 
@@ -10,7 +10,7 @@
 
     <v-card v-if="$User._id" class="col-lg-10 col-11 px-0 py-0 pb-lg-10 center g-deepblue--text" align="center">
       <v-col class="g-blue" align="center">
-        <h4 class="g-deepblue--text">Hi {{$User.getFirstName()}}</h4>
+        <h4 class="g-deepblue--text">Hi {{$User.getFirstName()}},</h4>
         <h3 class="g-deepblue--text">Please provide the following information</h3>
       </v-col>
 

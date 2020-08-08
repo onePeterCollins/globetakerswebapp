@@ -1,8 +1,8 @@
 <template>
-  <div class="messenger">
-    <v-row>
-      <v-col class="yellow g-deepblue--text" align="center">
-        <h3>Compose Message</h3>
+  <div class="messenger social-media-sketch-pattern">
+    <v-row class="g-cream">
+      <v-col align="center">
+        <h2 class="g-deepblue--text dosis">Compose Message</h2>
       </v-col>
     </v-row>
 
@@ -11,11 +11,11 @@
 
     <v-row>
       <v-col align="center">
-        <v-form class="col-11 col-lg-10">
+        <v-form class="col-11 col-lg-10 g-white">
           <v-row>
             <v-col class="col-12 px-0">
               <v-card class="col-12 col-lg-10">
-                <h4>Meta data</h4>
+                <h3 class="form-title g-deepblue--text">Meta data</h3>
 
                 <v-row>
                   <v-col class="px-1 px-lg-12">
@@ -39,17 +39,28 @@
                   <v-col class="col-12 col-lg-6 px-1 px-lg-12" align="left">
                     <p>
                       <v-icon class="mr-2">mdi-account-group</v-icon>
-                      Audience: {{notification.getAudience()}}
+                      Audience: 
+                      <b class="g-rose--text">{{notification.getAudience()}}</b>
                     </p>
                   </v-col>
 
                   <v-col class="col-12 col-lg-6">
-                    <v-btn class="mx-2 mb-3" @click="setAudience(0)">
+                    <v-btn v-if="notification.getAudience() !== 'students'" class="mx-2 mb-3 g-deepblue--text" @click="setAudience(0)">
                       <v-icon class="mr-2">mdi-account-group</v-icon>
                       Students
                     </v-btn>
 
-                    <v-btn class="mx-2 mb-3" @click="setAudience(2)">
+                    <v-btn v-if="notification.getAudience() === 'students'" class="mx-2 mb-3 g-rose--text" @click="setAudience(0)">
+                      <v-icon class="mr-2">mdi-account-group</v-icon>
+                      Students
+                    </v-btn>
+
+                    <v-btn v-if="notification.getAudience() !== 'general'" class="mx-2 mb-3 g-deepblue--text" @click="setAudience(2)">
+                      <v-icon class="mr-2">mdi-account-group</v-icon>
+                      General
+                    </v-btn>
+
+                    <v-btn v-if="notification.getAudience() === 'general'" class="mx-2 mb-3 g-rose--text" @click="setAudience(2)">
                       <v-icon class="mr-2">mdi-account-group</v-icon>
                       General
                     </v-btn>
@@ -64,7 +75,7 @@
           <v-row>
             <v-col class="col-12 px-0">
               <v-card class="col-12 col-lg-10">
-                <h4>Content</h4>
+                <h3 class="form-title g-deepblue--text">Content</h3>
 
                 <v-row>
                   <v-col>
@@ -168,8 +179,15 @@
           </v-row>
 
           <v-row>
-            <v-col align="center">
-              <v-btn>
+            <v-col align="right">
+              <v-btn class="g-darkblue--text">
+                <v-icon>mdi-preview</v-icon>
+                preview
+              </v-btn>
+            </v-col>
+
+            <v-col align="left">
+              <v-btn class="g-darkblue--text">
                 Send
                 <v-icon class="pl-5">mdi-send</v-icon>
               </v-btn>

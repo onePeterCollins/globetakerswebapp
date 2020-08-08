@@ -25,6 +25,11 @@ const routes = [
     component: () => import('../views/Contact.vue')
   },
   {
+    path: '/terms',
+    name: 'Terms',
+    component: () => import('../views/Terms.vue')
+  },
+  {
     path: '/notifications',
     name: 'Notifications',
     component: () => import('../views/Notifications.vue')

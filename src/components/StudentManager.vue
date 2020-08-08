@@ -1,37 +1,83 @@
 <template>
   <div class="student-manager">
-    <v-row class="yellow">
+    <v-row class="g-cream">
       <v-col align="center">
-        <h1 class="g-deepblue--text">Student Manager</h1>
+        <h2 class="g-deepblue--text dosis">Student Manager</h2>
       </v-col>
     </v-row>
 
     <br/>
 
     <v-row justify="center">
-      <v-col class="col-lg-3 px-lg-0 px-8 mx-2">
-        <p><b class="g-deepblue--text">Total students: </b> {{totalStudents}}</p>
-        <p><b class="green--text">Verified: </b> {{verified}}</p>
-        <p><b class="red--text">Pending: </b> {{pending}}</p>
-      </v-col>
-
-      <v-col align="center" class="col-lg-3 col-11 px-lg-0 px-8 mx-2 my-3 my-lg-0 g-deepblue--shadow">
-        <p class="g-darkblue--text dosis">Attendance History</p>
-        <v-btn class="g-white" @click="attendanceHistory()">view history</v-btn> 
-      </v-col>
-      
-      <v-col align="center" class="col-lg-3 col-11 mx-2 my-3 my-lg-0 g-deepblue--shadow">
-        <v-row justify="center">
-          <v-col class="col-5">
-            <h3 class="g-darkblue--text dosis">Message all students</h3>
-          </v-col>
-
-          <v-col class="col-5">
-            <v-btn class="g-white" @click="generalMessage()">compose</v-btn>
+      <v-card class="col-lg-3 col-11 px-lg-5 px-8 pb-0 mx-2 my-3">
+        <v-row>
+          <v-col>
+            <span><b class="g-deepblue--text">Total students: </b> {{totalStudents}}</span><br/>
+            <span><b class="green--text">Verified: </b> {{verified}}</span><br/>
+            <span><b class="red--text">Pending: </b> {{pending}}</span>
           </v-col>
         </v-row>
+      </v-card>
+
+      <v-card align="center" class="col-lg-3 col-11 px-0 pb-0 mx-2 my-3">
+        <h3 class="g-darkblue--text dosis">Attendance History</h3>
+        <br/>
+
+        <v-card-text class="px-3 pb-0 mb-0 g-deepblue">
+          <v-row>
+            <v-col>
+              <v-btn class="g-deepblue--text" @click="attendanceHistory()">
+                <v-icon>mdi-history</v-icon>
+                view history
+              </v-btn> 
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+      
+      <v-card align="center" class="col-lg-3 col-11 px-0 pb-0 mx-2 my-3">
+        <h3 class="g-deepblue--text dosis">Message all students</h3>
+        <br/>
         
-      </v-col>
+        <v-card-text class="px-3 pb-0 mb-0 g-deepblue">
+          <v-row>
+            <v-col>
+              <v-btn class="g-deepblue--text" @click="generalMessage()">
+                <v-icon>mdi-message</v-icon>
+                compose
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
+    </v-row>
+
+    <v-row justify="center">
+      <v-card class="col-11 col-lg-4 px-0 pb-0 mx-0 my-5">
+        <v-row>
+          <v-col class="col-lg-8 px-10">
+            <v-text-field height="30" persistent-hint hint="Enter student name" label="Search" />
+          </v-col>
+          
+          <v-col v-if="!mobile" class="col-lg-4">
+            <v-btn class="g-deepblue--text">
+              <v-icon>mdi-magnify</v-icon>
+              Search
+            </v-btn>
+          </v-col>
+        </v-row>
+
+        <v-card-text v-if="mobile" class="px-3 pb-0 mb-0 g-deepblue">
+          <v-row justify="center">
+            <v-col class="" align="center">
+              <v-btn class="g-deepblue--text">
+                <v-icon>mdi-magnify</v-icon>
+                Search
+              </v-btn>
+            </v-col>
+          </v-row>
+        </v-card-text>
+      </v-card>
     </v-row>
 
     <br/>

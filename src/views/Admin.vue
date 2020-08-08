@@ -1,8 +1,8 @@
 <template>
   <div class="Admin-panel">
-    <v-row class="yellow">
+    <v-row class="g-cream">
       <v-col align="center">
-        <h1>Admin Control Panel</h1>
+        <h2 class="g-deepblue--text dosis">Admin Control Panel</h2>
       </v-col>
     </v-row>
 
@@ -11,7 +11,7 @@
     <br/>
     <br/>
 
-    <v-row justify="start">
+    <v-row justify="center" justify-lg="start">
       <v-col v-for="(link, sn) in navLinks" :key="sn" align="center" class="col-lg-6 px-lg-10 col-11">
         <v-list-item link :to="link.route" class="g-white">
           <v-list-item-action>
