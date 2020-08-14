@@ -1,9 +1,9 @@
-// This class object specifies all the details of the different kinds of users on the platform
+// This class object specifies all the details and content of notifications on the platform
 
 /**
  * @author  Peter Collins
  * @author  /github.com/onepetercollins
- * @alias   User
+ * @alias   Notification
  */
 
 export default class Notification {

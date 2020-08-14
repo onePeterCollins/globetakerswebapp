@@ -4,6 +4,8 @@ import emailValidator from './EmailValidation'
 import longrichCodeValidator from './LongrichCodeValidation'
 import rankValidator from './RankValidation'
 import subTeamValidator from './SubTeamValidation'
+import messageValidator from './MessageValidation'
+
 
 function newEntry (instance, field, value) {
     switch(field) {
@@ -41,6 +43,16 @@ function newEntry (instance, field, value) {
             instance.teamLeadsRank = rankValidator(value, instance.teamLeadsRankHint)
             instance.$User.setTeamLeadsRank(instance.teamLeadsRank)
             break;
+
+        case 'subject':
+            instance.subject = subTeamValidator(value, instance.subjectHint)
+            instance.contactMessage.setSubject(instance.subject)
+            break;
+
+        case 'message':
+            instance.message = messageValidator(value, instance.messageHint)
+            instance.contactMessage.setMessage(instance.message)
+            break;
     }
 }
 
@@ -49,12 +61,14 @@ function scanEntries (instance) {
 
     fields = [
         {name: "'country'",   data: instance.country,   errorMessage: instance.errorMessages.country,   default: 'Country of resdence'},
-        {name: "'email'",   data: instance.email,   errorMessage: instance.errorMessages.email,   default: 'youremail@domain.com Max 30 characters'},
+        {name: "'email'",   data: instance.email,   errorMessage: instance.errorMessages.email,   default: 'youremail@domain.com max 30 characters'},
         {name: "'full name'",   data: instance.username,   errorMessage: instance.errorMessages.username,   default: 'Name and surname max 30 characters'},
         {name: "'Longrich code'",   data: instance.longrichCode,   errorMessage: instance.errorMessages.longrichCode,   default: 'Your Longrich code'},
         {name: "'sub-team name'",   data: instance.subTeam,   errorMessage: instance.errorMessages.subTeam,   default: 'The name of your sub-team'},
         {name: "'team leaders name'",   data: instance.teamLeadsName,   errorMessage: instance.errorMessages.teamLeadsName,   default: 'Fullname of your team leader'},
         {name: "'team leaders rank'",   data: instance.teamLeadsRank,   errorMessage: instance.errorMessages.teamLeadsRank,   default: 'Example: D5, D6, D7 ...'},
+        {name: "'subject'",   data: instance.subject,   errorMessage: instance.errorMessages.subject,   default: 'Enter subject max 30 characters'},
+        {name: "'message'",   data: instance.message,   errorMessage: instance.errorMessages.message,   default: 'Write your message max 200 characters'}
       ]
 
     for (let i in fields) {

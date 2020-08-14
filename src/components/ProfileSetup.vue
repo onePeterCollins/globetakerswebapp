@@ -93,7 +93,7 @@ export default {
     country: '',
     newDate: '',
     errorMessages: {
-      email: 'youremail@domain.com Max 30 characters',
+      email: 'youremail@domain.com max 30 characters',
       country: 'Country of resdence',
 
       generalErrorMessage: null
@@ -176,7 +176,7 @@ export default {
 
     emailHint(errorMessage) {
       !errorMessage
-      ? this.errorMessages.email = 'youremail@domain.com Max 30 characters'
+      ? this.errorMessages.email = 'youremail@domain.com max 30 characters'
       : this.errorMessages.email = errorMessage
     },
 
