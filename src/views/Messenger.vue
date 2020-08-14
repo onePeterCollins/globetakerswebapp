@@ -157,24 +157,24 @@
                       </v-row>
                     </v-col>
 
-                    <v-textarea v-if="item.type === 'paragraph'" class="mx-1 mx-lg-5" prepend-icon="mdi-text" rows="3" label="Type paragraph text" v-model="content[sn].content" />
-                    <v-textarea v-if="item.type === 'bold'" class="mx-1 mx-lg-5" rows="3" prepend-icon="mdi-text" label="Type bold text" v-model="content[sn].content" />
-                    <v-textarea v-if="item.type === 'italic'" class="mx-1 mx-lg-5" rows="3" prepend-icon="mdi-text" label="Type italic text" v-model="content[sn].content" />
+                    <v-textarea v-if="item.type === 'paragraph'" class="mx-1 mx-lg-5" prepend-icon="mdi-text" rows="3" label="Type paragraph text" v-model="item.content" />
+                    <v-textarea v-if="item.type === 'bold'" class="mx-1 mx-lg-5" rows="3" prepend-icon="mdi-text" label="Type bold text" v-model="item.content" />
+                    <v-textarea v-if="item.type === 'italic'" class="mx-1 mx-lg-5" rows="3" prepend-icon="mdi-text" label="Type italic text" v-model="item.content" />
 
                     <v-col v-if="item.type === 'image'">
-                      <v-file-input class="mx-1 mx-lg-5" label="Attach image" show-size v-model="content[sn].content"/>
-                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image title" height="30" v-model="content[sn].title" />
-                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image description" height="30" v-model="content[sn].alt" />
+                      <v-file-input class="mx-1 mx-lg-5" label="Attach image" show-size v-model="item.file" @change="processImg(item.file, sn)"/>
+                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image title" height="30" v-model="item.title" />
+                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image description" height="30" v-model="item.alt" />
                     </v-col>
 
                     <v-col v-if="item.type === 'link'">
-                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter link address" persistent-hint hint="https://address.com" height="30" v-model="content[sn].href" />
-                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter link text" height="30" v-model="content[sn].title" />
+                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter link address" persistent-hint hint="https://address.com" height="30" v-model="item.href" />
+                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter link text" height="30" v-model="item.title" />
                     </v-col>
 
                     <v-col v-if="item.type === 'button'">
-                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter button address" persistent-hint hint="https://address.com" height="30" v-model="content[sn].href" />
-                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter button text" height="30" v-model="content[sn].title" />
+                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter button address" persistent-hint hint="https://address.com" height="30" v-model="item.href" />
+                      <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter button text" height="30" v-model="item.title" />
                     </v-col>
                   </v-col>
                 </v-row>
@@ -193,22 +193,36 @@
           <v-row>
             <v-col align="center">
               <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
-              <p v-if='networkMessage.processing' class='g-deepblue white--text'>
-                <v-progress-circular />
+              <p v-if='networkMessage.processing' class='g-deepblue--text'>
+                <v-progress-circular indeterminate />
+
                 Sending...
               </p>
             </v-col>
           </v-row>
 
           <v-row>
-            <v-col align="right">
+            <v-col align="center">
+              <h3 v-if='errorMessage'><h2>{{emoji.emojify(':warning:')}}</h2> {{`${ errorMessage}`}}</h3>
+            </v-col>
+          </v-row>
+
+          <v-row>
+            <v-col align="center">
+              <v-btn class="g-darkblue--text" @click="clear()">
+                <v-icon>mdi-cancel</v-icon>
+                clear
+              </v-btn>
+            </v-col>
+
+            <v-col align="center">
               <v-btn class="g-darkblue--text" @click="preview()">
                 <v-icon>mdi-preview</v-icon>
                 preview
               </v-btn>
             </v-col>
 
-            <v-col align="left">
+            <v-col align="center">
               <v-btn class="g-darkblue--text" @click="send()">
                 Send
                 <v-icon class="pl-5">mdi-send</v-icon>
@@ -243,6 +257,8 @@ export default {
       processing: null,
       success: null
     },
+
+    errorMessage: null,
 
     content: [
       {
@@ -286,12 +302,12 @@ export default {
       }
     },
 
-    notification: new Notification()
+    notification: new Notification(),
+    cachedNotification: null
   }),
 
   computed: {
-    date() {return this.$store.getters.getState.dateString()},
-
+    date() {return this.$store.getters.getState.dateString()}
   },
 
   methods: {
@@ -300,37 +316,108 @@ export default {
     },
 
     addItem(item) {
-      this.content.push(item)
+      let value = JSON.parse(JSON.stringify(item))
+      this.content.push(value)
     },
 
     removeItem(index) {
       this.content.splice(index, 1)
     },
 
-    send() {
-      let notification
+    processImg(img, sn) {
+      let reader = new FileReader()
 
-      this.processing = true
-
-      if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
-        // display recaptcha challenge
-        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verify-message', {
-          'callback': (response) => {
-            this.verificationCode = response
-            this.send()
-          },
-          'expired-callback': () => {
-            // Response expired. Ask user to solve reCAPTCHA again.
-            window.location.reload()
-          }
-        })
-
-        window.recaptchaVerifier.render()
-        this.recaptchaVerifierRendered = true
+      reader.onload = () => {
+        this.content[sn].content = reader.result
       }
-      
 
-      if (this.recaptchaVerifierRendered && this.verificationCode !== '') {
+      reader.readAsDataURL(img)
+    },
+
+    checkHeader() {
+      if (this.title === '') {
+        this.errorMessage = 'Message title has not been set'
+        return 0
+      } else if (this.sender === '') {
+        this.errorMessage = 'Sender name has not been set'
+        return 0
+      } else {
+        return true
+      }
+    },
+
+    send() {
+      if (this.checkHeader()) {
+        let notification
+
+        this.processing = true
+
+        if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
+          // display recaptcha challenge
+          window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verify-message', {
+            'callback': (response) => {
+              this.verificationCode = response
+              this.send()
+            },
+            'expired-callback': () => {
+              // Response expired. Ask user to solve reCAPTCHA again.
+              window.location.reload()
+            }
+          })
+
+          window.recaptchaVerifier.render()
+          this.recaptchaVerifierRendered = true
+        }
+        
+
+        if (this.recaptchaVerifierRendered && this.verificationCode !== '') {
+          // set title
+          this.notification.setTitle(this.title)
+
+          // set subhead
+          this.notification.setSubHead(this.subHead)
+
+          // set sender
+          this.notification.setSender(this.sender)
+
+          // set notification content
+          this.notification.setContent(this.content)
+
+          // set notification ID
+          this.notification._id = `${this.notification.getTitle() + this.generateId()}`
+
+          // set notification date
+          this.notification.setDate(this.date)
+
+          // encrypt notification
+          notification = {data: this.$Encrypt(JSON.stringify(this.notification)).token}
+
+          // upload notification
+          this.$Upload(`notify${this.notification.getAudience()}`, `${this.notification._id}`, notification).then(() => {
+            this.networkMessage.success = 'Message sent'
+            window.location.reload()
+          })
+
+          // clear notification
+          this.clear()
+        }
+      }
+    },
+
+    generateId() {
+      let charCode,
+      value = ''
+
+      for (let i=0; i<12; i++) {
+        charCode = Math.floor(Math.random() * 10)
+        value += charCode.toString()
+      }
+
+      return value
+    },
+
+    preview() {
+      if (this.checkHeader()) {
         // set title
         this.notification.setTitle(this.title)
 
@@ -349,36 +436,37 @@ export default {
         // set notification date
         this.notification.setDate(this.date)
 
-        // encrypt notification
-        notification = {data: this.$Encrypt(JSON.stringify(this.notification)).token}
+        this.$store.dispatch('setValue', {name: 'viewMessage', newVal: this.notification})
 
-        // upload notification
-        this.$Upload(`notify${this.notification.getAudience()}`, `${this.notification._id}`, notification).then(() => {
-          this.networkMessage.success = 'Message sent'
-          window.location.reload()
-        })
+        //save notification in session storage
+        sessionStorage.setItem('viewMessage', JSON.stringify(this.notification))
+
+        this.$router.push('/view-notification')
       }
     },
 
-    generateId() {
-      let charCode,
-      value = ''
-
-      for (let i=0; i<12; i++) {
-        charCode = Math.floor(Math.random() * 10)
-        value += charCode.toString()
-      }
-
-      return value
-    },
-
-    preview() {
-
+    clear() {
+      this.title = ''
+      this.subHead = ''
+      this.sender = ''
+      this.content.length = 0
+      this.content.push(JSON.parse(JSON.stringify(this.contentType.paragraph)))
+      sessionStorage.setItem('viewMessage', '')
     }
   },
 
   mounted() {
     this.notification.setAudienceIndex(0)
+
+    if (sessionStorage.getItem('viewMessage')) {
+      this.cachedNotification = Object.assign(this.notification, JSON.parse(sessionStorage.getItem('viewMessage')))
+
+      this.title = this.cachedNotification.getTitle()
+      this.subHead = this.cachedNotification.getSubHead()
+      this.sender = this.cachedNotification.getSender()
+      this.notification.setAudienceIndex(this.cachedNotification._audienceIndex)
+      this.content = this.cachedNotification.getContent()
+    }
   }
 }
 </script>

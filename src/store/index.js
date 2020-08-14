@@ -66,7 +66,8 @@ let state = {
   loggingOut: false,
   refreshUser: false,
   adminAccess: false,
-  inspectStudent: ''
+  inspectStudent: '',
+  viewMessage: {}
 }
 
 let mutations = {

@@ -14,6 +14,7 @@ export default class Notification {
         this._sender = ''
         this._audienceClass = ['students', 'tutors', 'general']
         this._audienceIndex = 2
+        this._audienceTeam = ''
         this._content = []
         this._views = 0
         this._typeof = 'notification'
@@ -39,6 +40,10 @@ export default class Notification {
 
     getAudience() {
         return this._audienceClass[this._audienceIndex]
+    }
+
+    getAudienceTeam() {
+        return this._audienceTeam
     }
 
     getContent() {
@@ -84,6 +89,13 @@ export default class Notification {
      */
     setAudienceIndex(index) {
         this._audienceIndex = index
+    }
+
+    /**
+     * @param {String} newTeam
+     */
+    setAudienceTeam(newTeam) {
+        this._audienceTeam = newTeam
     }
 
     /**

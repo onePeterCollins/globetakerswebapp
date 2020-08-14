@@ -20,7 +20,7 @@
       </v-card>
 
       <v-card align="center" class="col-lg-3 col-11 px-0 pb-0 mx-2 my-3">
-        <h3 class="g-darkblue--text dosis">Attendance History</h3>
+        <h3 class="g-deepblue--text dosis">Attendance History</h3>
         <br/>
 
         <v-card-text class="px-3 pb-0 mb-0 g-deepblue">
