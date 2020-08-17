@@ -307,7 +307,18 @@ export default {
   }),
 
   computed: {
-    date() {return this.$store.getters.getState.dateString()}
+    date() {return this.$store.getters.getState.dateString()},
+    serialNumber() {
+      let value, date = new Date(), year, month, day
+
+      year = date.getUTCFullYear()
+      month = date.getUTCMonth()
+      day = date.getUTCDate()
+
+      value = parseInt(`${year}${month}${day}`)
+
+      return value
+    }
   },
 
   methods: {
@@ -388,6 +399,9 @@ export default {
 
           // set notification date
           this.notification.setDate(this.date)
+
+          // set serial number (for sorting)
+          this.notification.setSn(this.serialNumber)
 
           // encrypt notification
           notification = {data: this.$Encrypt(JSON.stringify(this.notification)).token}

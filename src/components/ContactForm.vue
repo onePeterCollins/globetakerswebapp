@@ -51,8 +51,17 @@
 
     <br />
 
+    <v-row v-if="errorMessages.generalErrorMessage" class="mb-5">
+      <v-col v-for="(errorMessage, sn) in errorMessages.generalErrorMessage" :key="sn" class="g-deepblue g-cream--text col-12 px-2 mb-2">
+        {{errorMessages.generalErrorMessage[sn]}}
+      </v-col>
+    </v-row>
+
+    <br />
+
     <v-row>
       <v-col align="center">
+        <p v-if='networkMessage.error'><span class='red'>{{emoji.emojify(':x:')}}</span> {{`${ networkMessage.error}`}}</p>
         <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
         <p v-if='networkMessage.processing' class='g-deepblue--text'>
           <v-progress-circular indeterminate />
@@ -64,7 +73,7 @@
 
     <transition name="slideYneg">
       <v-row v-if="$keys[6]" justify="center">
-        <v-btn class="white g-darkblue--text">Submit</v-btn>
+        <v-btn class="white g-darkblue--text" @click="send()">Submit</v-btn>
       </v-row>
     </transition>
   </v-form>
@@ -74,6 +83,7 @@
 import validator from '../form_validation/.globalFormValidation'
 import ContactMessage from '../classes/ContactMessage'
 import firebase from 'firebase'
+import {db} from '../firebase'
 
 export default {
   name: 'g-contact-form',
@@ -97,13 +107,32 @@ export default {
 
     errorFields: null,
     networkMessage: {
+      error: null,
       processing: null,
       success: null
-    }
+    },
+
+    msgs: []
   }),
 
   computed: {
-    user() {return this.$store.getters.getUserData}
+    date() {return this.$store.getters.getState.dateString()},
+    user() {return this.$store.getters.getUserData},
+    serialNumber() {
+      let value, date = new Date(), year, month, day
+
+      year = date.getUTCFullYear()
+      month = date.getUTCMonth()
+      day = date.getUTCDate()
+
+      value = parseInt(`${year}${month}${day}`)
+
+      return value
+    }
+  },
+
+  firestore: {
+    msgs: db.collection('inbox')
   },
 
   watch: {
@@ -142,8 +171,14 @@ export default {
           }
         })
 
-        window.recaptchaVerifier.render()
-        this.recaptchaVerifierRendered = true
+        // if (no network) then alert the user
+        if (this.msgs.length === 0) {
+          this.networkMessage.error = 'Poor network'
+          return
+        } else {
+          window.recaptchaVerifier.render()
+          this.recaptchaVerifierRendered = true
+        }
       }
 
       // Check for error fields
@@ -159,16 +194,23 @@ export default {
         this.contactMessage.setEmail(this.$User.getEmail())
 
         // set message id
-        this.contactMessage.setId(`${this.subject}${this.generateId()}`)
+        this.contactMessage._id = `${this.subject}${this.generateId()}`
+
+        // set message date
+        this.contactMessage.setDate(this.date)
+
+        // set serial number (for sorting)
+        this.notification.setSn(this.serialNumber)
 
         // encrypt message
         message = {data: this.$Encrypt(JSON.stringify(this.contactMessage)).token}
 
         // upload message
-        this.$Upload('inbox', `${this.contactMessage._id}`, message).then(() => {
-          this.networkMessage.success = 'Message sent'
-          this.networkMessage.processing = false
-        })
+        this.$Upload('inbox', `${this.contactMessage._id}`, message)
+
+        this.networkMessage.success = 'Message sent'
+        this.networkMessage.processing = false
+        this.clear()
       }
     },
 
@@ -198,7 +240,7 @@ export default {
 
     subjectHint(errorMessage) {
       !errorMessage
-      ? this.errorMessages.subject = 'enter subject max 30 characters'
+      ? this.errorMessages.subject = 'Enter subject max 30 characters'
       : this.errorMessages.subject = errorMessage
     },
 
@@ -209,6 +251,10 @@ export default {
     },
 
     clear() {
+      this.username = ''
+      this.email = ''
+      this.subject = ''
+      this.message = ''
       this.contactMessage = new ContactMessage()
     }
   },

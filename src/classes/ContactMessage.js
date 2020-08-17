@@ -14,6 +14,7 @@ export default class ContactMessage {
         this._message = ''
         this._date = ''
         this._typeof = 'contact-message'
+        this._sn = 0
         this._id = ''
     }
 
@@ -36,6 +37,10 @@ export default class ContactMessage {
 
     getDate() {
         return this._date
+    }
+
+    getSn() {
+        return this._sn
     }
 
     // setters
@@ -73,5 +78,12 @@ export default class ContactMessage {
      */
     setDate(newDate) {
         this._date = newDate
+    }
+
+    /**
+     * @param {Number} newSn
+     */
+    setSn(newSn) {
+        this._sn = newSn
     }
 }

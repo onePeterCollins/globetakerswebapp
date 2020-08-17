@@ -18,6 +18,7 @@ export default class Notification {
         this._content = []
         this._views = 0
         this._typeof = 'notification'
+        this._sn = 0
         this._id = ''
     }
 
@@ -52,6 +53,10 @@ export default class Notification {
     
     getViews() {
         return this._views
+    }
+
+    getSn() {
+        return this._sn
     }
 
     // setters
@@ -110,5 +115,12 @@ export default class Notification {
      */
     addView() {
         this._views += 1
+    }
+
+    /**
+     * @param {Number} newSn
+     */
+    setSn(newSn) {
+        this._sn = newSn
     }
 }
