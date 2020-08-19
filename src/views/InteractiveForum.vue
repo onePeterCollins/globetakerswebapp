@@ -1,11 +1,12 @@
 <template>
   <div class="interactive-forum">
-    <v-row class="my-0 py-0">
+    <v-row class="mt-0 mb-10 py-0">
       <v-col class="col-12 my-0 py-0">
-        <video width="100%" height="100%" controls autoplay>
-          <source src="../assets/videos/Tutorial.mp4" type="video/mp4" />
-          Sorry, your browser does not support the video tag
-        </video>
+        <iframe id="youtubeplayer" type="text/html" width="100%" height="130%"
+          :src="src"
+          frameborder="0">
+        </iframe>
+
       </v-col>
     </v-row>
 
@@ -35,7 +36,20 @@
 
 <script>
 export default {
-  name: 'g-interactive-forum'
+  name: 'g-interactive-forum',
+
+  data: () => ({
+    
+  }),
+
+  computed: {
+    src() {return `https://www.youtube.com/embed/${this.link}?autoplay=0&origin=${window.location.href}`},
+    link() {return '4MIo5jv-WiI'}
+  },
+  
+  mounted() {
+    
+  }
 }
 </script>
 

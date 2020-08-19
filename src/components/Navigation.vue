@@ -120,6 +120,14 @@ export default {
       }
     },
 
+    $route() {
+      if (this.user) {
+        if (this.user._isOnline) {
+          this.countAlerts()
+        }
+      }
+    },
+
     loggedIn() {
       if (this.loggedIn) {
         this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainers-dashboard'

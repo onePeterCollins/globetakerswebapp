@@ -148,6 +148,14 @@ export default {
       }
     },
 
+    $route() {
+      if (this.user) {
+        if (this.user._isOnline) {
+          this.countAlerts()
+        }
+      }
+    },
+
     network() {
       if(this.network) {
         // notify user of network presence
