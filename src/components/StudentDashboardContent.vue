@@ -22,45 +22,6 @@
           <v-col class="col-lg-6 col-12">
             <transition name="slideYneg">
               <v-card v-show="$keys[0]" class="col-10 col-lg-8 mb-10 center gray">
-                <v-row class="g-blue">
-                  <v-col align="left">
-                    <v-row>
-                      <v-col class="col-2" align="right">
-                        <v-icon>mdi-book</v-icon>
-                      </v-col>
-                      
-                      <v-col class="col-8" align="center">
-                        <h4 class="g-deepblue--text">Take Beginner Course</h4>
-                      </v-col>
-                    </v-row>
-                  </v-col>
-                </v-row>
-
-                <v-row justify="center">
-                  <v-col class="col-lg-11 col-12" align="center">
-                    <ul class="px-0">
-                      <span><i class="g-blue--text darken-5">Get to know the basics;</i></span>
-
-                      <v-col align="left" class="px-5 g-deepblue--text">
-                        <li>Mindset paradigm shift (PT 1)</li>
-                        <li>Mindset paradigm shift (PT 2)</li>
-                        <li>Basic orientation uplines need to give downlines</li>
-                      </v-col>
-                    </ul>
-                  </v-col>
-                  <v-col class="col-12" align="center">
-                    <v-scale-transition>
-                      <v-btn v-show="$keys[2]" class="success" link to="student-dashboard/learning-option">Continue</v-btn>
-                    </v-scale-transition>
-                  </v-col>
-                </v-row>
-              </v-card>
-            </transition>
-          </v-col>
-
-          <v-col class="col-lg-6 col-12">
-            <transition name="slideYneg">
-              <v-card v-show="$keys[1]" class="col-10 col-lg-8 mb-10 center gray">
                 <v-row class="g-rose">
                   <v-col align="left">
                     <v-row>
@@ -89,7 +50,47 @@
                   </v-col>
                   <v-col class="col-12" align="center">
                     <v-scale-transition>
-                      <v-btn v-show="$keys[3]" class="success" link to="student-dashboard/interactive-forum">Continue</v-btn>
+                      <v-btn v-show="$keys[2]" class="success" link to="student-dashboard/interactive-forum">Continue</v-btn>
+                    </v-scale-transition>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </transition>
+          </v-col>
+
+
+          <v-col class="col-lg-6 col-12">
+            <transition name="slideYneg">
+              <v-card v-show="$keys[1]" class="col-10 col-lg-8 mb-10 center gray">
+                <v-row class="g-blue">
+                  <v-col align="left">
+                    <v-row>
+                      <v-col class="col-2" align="right">
+                        <v-icon>mdi-book</v-icon>
+                      </v-col>
+                      
+                      <v-col class="col-8" align="center">
+                        <h4 class="g-deepblue--text">Take Beginner Course</h4>
+                      </v-col>
+                    </v-row>
+                  </v-col>
+                </v-row>
+
+                <v-row justify="center">
+                  <v-col class="col-lg-11 col-12" align="center">
+                    <ul class="px-0">
+                      <span><i class="g-blue--text darken-5">Get to know the basics;</i></span>
+
+                      <v-col align="left" class="px-5 g-deepblue--text">
+                        <li>Mindset paradigm shift (PT 1)</li>
+                        <li>Mindset paradigm shift (PT 2)</li>
+                        <li>Basic orientation uplines need to give downlines</li>
+                      </v-col>
+                    </ul>
+                  </v-col>
+                  <v-col class="col-12" align="center">
+                    <v-scale-transition>
+                      <v-btn v-show="$keys[3]" class="success" link to="student-dashboard/learning-option">Continue</v-btn>
                     </v-scale-transition>
                   </v-col>
                 </v-row>
@@ -98,7 +99,6 @@
           </v-col>
         </v-row>
       </v-col> 
-      
 
       <br/>
     </v-row>

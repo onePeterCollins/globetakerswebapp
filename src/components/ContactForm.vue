@@ -1,5 +1,5 @@
 <template>
-  <v-form class="col-lg-5 col-11 contact-form center cyan lighten-5">
+  <v-form v-if="display" class="col-lg-5 col-11 contact-form center cyan lighten-5">
     <v-row justify="center">
         <h2 class="form-title g-deepblue--text">-- CONTACT US--</h2>
     </v-row>
@@ -89,6 +89,7 @@ export default {
   name: 'g-contact-form',
 
   data: () => ({
+    display: false,
     username: '',
     email: '',
     subject: '',
@@ -136,6 +137,22 @@ export default {
   },
 
   watch: {
+    user() {
+      if (this.user._id) {
+        this.$User = this.user
+
+        this.username = this.$User.getName()
+        
+        if (this.$User.getProfile()) {
+          this.email = this.$User.getEmail()
+        }
+
+        this.$forceUpdate()
+        this.display = false
+        this.display = true
+      }
+    },
+    
     networkMessage () {
       if (this.networkMessage) {
         if (this.networkMessage.success) {
@@ -206,11 +223,11 @@ export default {
         message = {data: this.$Encrypt(JSON.stringify(this.contactMessage)).token}
 
         // upload message
-        this.$Upload('inbox', `${this.contactMessage._id}`, message)
-
-        this.networkMessage.success = 'Message sent'
-        this.networkMessage.processing = false
-        this.clear()
+        this.$Upload('inbox', `${this.contactMessage._id}`, message).then(() => {
+          this.networkMessage.success = 'Message sent'
+          this.networkMessage.processing = false
+          this.clear()
+        })
       }
     },
 
@@ -262,7 +279,18 @@ export default {
   mounted() {
     if (this.user._id) {
       this.$User = this.user
+
+      this.username = this.$User.getName()
+
+      if (this.$User.getProfile()) {
+        this.email = this.$User.getEmail()
+      }
+      
       this.$forceUpdate()
+      this.display = false
+      this.display = true
+    } else {
+      this.display = true
     }
   },
 

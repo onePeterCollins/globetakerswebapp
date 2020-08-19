@@ -220,11 +220,11 @@ export default class User {
     }
 
     /**
-     * @param {String} newNotificationTitle
+     * @param {String} newNotificationDetails
      */
-    addSeenNotification (newNotificationTitle) {
-        this._notifications.push(newNotificationTitle)
-        this._seenNotifications += 1
+    addSeenNotification (newNotificationDetails) {
+        this._notifications.push(newNotificationDetails)
+        this._seenNotifications = this._notifications.length
     }
 
     /**

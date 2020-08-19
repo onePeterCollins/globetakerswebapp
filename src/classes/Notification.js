@@ -19,6 +19,7 @@ export default class Notification {
         this._views = 0
         this._typeof = 'notification'
         this._sn = 0
+        this._unread = true
         this._id = ''
     }
 

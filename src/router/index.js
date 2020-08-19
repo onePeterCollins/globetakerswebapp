@@ -39,6 +39,11 @@ const routes = [
     name: 'ViewNotification',
     component: () => import('../views/MessageViewer.vue')
   },
+  {
+    path: '/notifications/view-notification',
+    name: 'ViewUserNotification',
+    component: () => import('../views/MessageViewer.vue')
+  },
 
   // students
   {

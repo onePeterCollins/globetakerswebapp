@@ -48,7 +48,11 @@
         </v-btn>
 
         <v-btn v-if="showLogoutButton && this.user.getProfile()" link to="/notifications">
-          <v-icon small class="mr-1">mdi-message</v-icon>
+          <v-badge v-if="alertCounter" :content="alertCounter">
+            <v-icon small class="mr-1">mdi-message</v-icon>
+          </v-badge>
+
+          <v-icon v-if="!alertCounter" small class="mr-1">mdi-message</v-icon>
 
           <span>notifications</span>
         </v-btn>
@@ -100,6 +104,7 @@ export default {
     homeLink: '/',
     users: [],
     admins: [],
+    alertCounter: 0,
     activeDump: [],
     activeToken: '',
     showLogoutButton: false,
@@ -134,6 +139,7 @@ export default {
       if (this.user) {
         if (this.user._isOnline) {
           this.showLogoutButton = true
+          this.countAlerts()
           this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainer-dashboard'
         } else {
           this.showLogoutButton = false
@@ -322,6 +328,42 @@ export default {
 
       // upload the new active status
       this.$Upload('users', `${this.$User._id}`, encryptedToken)
+    },
+
+    countAlerts() {
+      this.$User = this.user
+
+      let alerts = []
+
+      if (this.$User.getUserType() === 'student') {
+        db.collection('notifystudents').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            alerts.push(item)
+          })
+        }).then(() => {
+          db.collection('notifygeneral').get().then((querySnapshot) => {
+            querySnapshot.forEach((item) => {
+              alerts.push(item)
+            })
+          }).then(() => {
+            this.alertCounter = alerts.length - this.$User.getNotifications().length
+          })
+        })
+      } else if (this.$User.getUserType() === 'tutor') {
+        db.collection('notifytutors').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            alerts.push(item)
+          })
+        }).then(() => {
+          db.collection('notifygeneral').get().then((querySnapshot) => {
+            querySnapshot.forEach((item) => {
+              alerts.push(item)
+            })
+          }).then(() => {
+            this.alertCounter = alerts.length - this.$User.getNotifications().length
+          })
+        })
+      }
     }
   },
 

@@ -94,7 +94,7 @@
 /* SHAPE */
 
 .round {
-    border-radius: 50% !important;
+    border-radius: 50vmax !important;
 }
 
 .wide {

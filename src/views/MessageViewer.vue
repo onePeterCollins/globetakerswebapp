@@ -104,6 +104,7 @@ export default {
 
   computed: {
     mobile()  {return this.$store.getters.getLocalData.device.mobile()},
+    user() {return this.$store.getters.getUserData},
     notification() {
       let value = new Notification()
 
@@ -130,6 +131,34 @@ export default {
 
   mounted() {
     this.notification._id ? this.display = true : this.display = false
+
+    if (this.notification._unread) {
+      let encryptedData, encryptedToken
+
+      if (this.user._id) {
+        let notificationDetails = {title: this.notification.getTitle(), id: this.notification._id}
+        this.$User = this.user
+
+        // add notification title and id to the list of viewed notifications
+        this.$User.addSeenNotification(notificationDetails)
+
+        // check users login persistence
+        if (this.$User._persist) {
+          // Encrypt and upload new user object
+          encryptedData = this.$Encrypt(JSON.stringify(this.$User), localStorage.getItem('userToken'))
+        } else {
+          // Encrypt and upload new user object
+          encryptedData = this.$Encrypt(JSON.stringify(this.$User), sessionStorage.getItem('userToken'))
+        }
+
+        encryptedToken = {data: encryptedData.token}
+
+        this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
+          // set the global user object in the store
+          this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+        })
+      }
+    }
   }
 }
 </script>

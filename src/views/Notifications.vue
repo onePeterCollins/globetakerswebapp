@@ -8,36 +8,34 @@
 
     <v-row>
       <v-col align="center">
-        <v-card v-for="(item, sn) in userNotifications" :key="sn" class="col-11 col-lg-10" @click="openNotification()">
+        <v-card v-for="(item, sn) in userNotifications" :key="sn" class="col-11 col-lg-10 mb-5" @click="openNotification(item)">
           <v-row>
             <v-col>
               <v-card-title>
-                <v-row>
-                  <v-col class="col-10" align="left">
+                <v-row v-if="item._unread">
+                  <v-col class="col-10 pl-lg-12 g-deepblue--text" align="left">
                     <v-badge content="unread">
                       <h3>{{item.getTitle()}}</h3>
                     </v-badge>
                   </v-col>
                 </v-row>
 
-                <v-row>
-                  <v-col class="col-10" align="left">
+                <v-row v-if="!item._unread">
+                  <v-col class="col-10 pl-lg-12 grey--text" align="left">
                     <h3>{{item.getTitle()}}</h3>
                   </v-col>
                 </v-row>
 
                 <v-row>
-                  <v-col class="col-12 my-0 py-0" align="left">
+                  <v-col class="col-12 my-0 py-0 px-lg-12 px-8 g-deepblue--text" align="right">
                     <small>{{item.getDate()}}</small>
                   </v-col>
 
-                  <v-col class="col-12 my-0 py-0" align="left">
-                    <small>{{item.getSender()}}</small>
+                  <v-col class="col-12 my-0 py-0 px-lg-12 px-4 g-deepblue--text" align="right">
+                    <small class="px-2 round mx-2 gray">from: {{item.getSender()}}</small>
+                    <small class="px-2 round ml-2 gray">to: {{item.getAudience()}}</small>
                   </v-col>
 
-                  <v-col class="col-12 my-0 py-0" align="left">
-                    <small>{{item.getAudience()}}</small>
-                  </v-col>
                 </v-row>
               </v-card-title>
             </v-col>
@@ -45,6 +43,12 @@
         </v-card>
       </v-col>
     </v-row>
+
+    <br/>
+    <br/>
+    <br/>
+    <br/>
+    <br/>
   </div>
 </template>
 
@@ -108,15 +112,19 @@ export default {
           })
         })
       } else if (this.$User.getUserType() === 'tutor') {
-        for (let item in this.tutorNotifications) {
-          this.userNotifications.push(this.tutorNotifications[item])
-        }
-
-        for (let item in this.generalNotifications) {
-          this.userNotifications.push(this.generalNotifications[item])
-        }
-
-        this.sortNotifications()
+        db.collection('notifytutors').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            this.userNotifications.push(item.data())
+          })
+        }).then(() => {
+          db.collection('notifygeneral').get().then((querySnapshot) => {
+            querySnapshot.forEach((item) => {
+              this.userNotifications.push(item.data())
+            })
+          }).then(() => {
+            this.sortNotifications()
+          })
+        })
       }
     },
 
@@ -148,15 +156,84 @@ export default {
         }
       }
 
-      this.userNotifications = notifications
+      this.userNotifications = this.filterNotifications(notifications)
       this.$forceUpdate()
       this.display = false
       this.display = true
     },
 
+    filterNotifications(notifications) {
+      let filteredNotifications = [], ROOT = this
+
+      // filter unread notifications from a sorted array
+      function filterUnread(array, callback) {
+        for (let i in array) {
+          let unread = true
+
+          for (let item in ROOT.$User.getNotifications()) {
+            if (array[i].getTitle().replace(/ /g, "") === ROOT.$User.getNotifications()[item].title.replace(/ /g, "") && array[i]._id === ROOT.$User.getNotifications()[item]._id) {
+              unread = false
+            }
+          }
+
+          if (unread) {
+            if (array[i].getAudienceTeam() !== '') {
+              filterBySubTeam(array, filteredNotifications)
+            } else {
+              filteredNotifications.push(array[i])
+            }
+          }
+        }
+
+        callback(notifications)
+      }
+
+      // filter read notifications from a sorted array (callback after filtering unread)
+      function filterRead(array) {
+        for (let i in array) {
+          let read = false
+
+          for (let item in ROOT.$User.getNotifications()) {
+            if (array[i].getTitle().replace(/ /g, "") === ROOT.$User.getNotifications()[item].title.replace(/ /g, "") && array[i]._id === ROOT.$User.getNotifications()[item].id) {
+              read = true
+            }
+          }
+
+          if (read) {
+            array[i]._unread = false
+
+            if (array[i].getAudienceTeam() !== '') {
+              filteredNotifications.push(array[i])
+            }
+          }
+        }
+      }
+
+      function filterBySubTeam(array, outputArray) {
+        for (let i in array) {
+          if (ROOT.$User.getSubTeam().replace(/ /g, "").toUpperCase() === array[i].getAudienceTeam().replace(/ /g, "").toUpperCase()) {
+            outputArray.push(array[i])
+          }
+        }
+      }
+
+      filterUnread(notifications, filterRead)
+
+      return filteredNotifications
+    },
+
     openNotification(item) {
+      // assign item to a variable
       this.notification = item
+
+      // send notification object to the store
       this.$store.dispatch('setValue', {name: 'viewMessage', newVal: this.notification})
+
+      // save notification in session storage
+      sessionStorage.setItem('viewMessage', JSON.stringify(this.notification))
+
+      // open notification viewer
+      this.$router.push('notifications/view-notification')
     }
   },
 

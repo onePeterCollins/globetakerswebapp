@@ -42,6 +42,8 @@
 </template>
 
 <script>
+import {db} from '../firebase'
+
 export default {
   name: 'g-navigation',
 
@@ -50,7 +52,8 @@ export default {
   data: () => ({
     slide: null,
     loggedIn: false,
-    homeLink: '/'
+    homeLink: '/',
+    alertCounter: 0
   }),
 
   computed: {
@@ -58,13 +61,13 @@ export default {
     user() {return this.$store.getters.getUserData},
 
     navLinks() {
-      let value, loggedIn = this.loggedIn && this.user.getProfile()
+      let value, loggedIn = this.loggedIn && this.user.getProfile(), alertCounter = this.alertCounter
 
       value = [
         {sn: 1, title: 'Home', route: this.homeLink, icon: 'mdi-home', if: true},
         {sn: 2, title: 'About', route: '/about', icon: 'mdi-help', if: true},
         {sn: 3, title: 'Contact', route: '/contact', icon: 'mdi-phone', if: true},
-        {sn: 4, title: 'notifications', route: '/notifications', icon: 'mdi-message', if: loggedIn, alertCount: 0},
+        {sn: 4, title: 'notifications', route: '/notifications', icon: 'mdi-message', if: loggedIn, alertCount: alertCounter},
         {sn: 5, title: 'Terms', route: '/terms', icon: 'mdi-file', if: true}
       ]
 
@@ -109,8 +112,10 @@ export default {
       if (this.user) {
         if (this.user._isOnline) {
           this.loggedIn = true
+          this.countAlerts()
         } else {
           this.loggedIn = false
+          this.countAlerts()
         }
       }
     },
@@ -127,6 +132,42 @@ export default {
   methods: {
     logout() {
       this.$store.dispatch('setValue', {name: 'loggingOut', newVal: true})
+    },
+
+    countAlerts() {
+      this.$User = this.user
+
+      let alerts = []
+
+      if (this.$User.getUserType() === 'student') {
+        db.collection('notifystudents').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            alerts.push(item)
+          })
+        }).then(() => {
+          db.collection('notifygeneral').get().then((querySnapshot) => {
+            querySnapshot.forEach((item) => {
+              alerts.push(item)
+            })
+          }).then(() => {
+            this.alertCounter = alerts.length - this.$User.getNotifications().length
+          })
+        })
+      } else if (this.$User.getUserType() === 'tutor') {
+        db.collection('notifytutors').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            alerts.push(item)
+          })
+        }).then(() => {
+          db.collection('notifygeneral').get().then((querySnapshot) => {
+            querySnapshot.forEach((item) => {
+              alerts.push(item)
+            })
+          }).then(() => {
+            this.alertCounter = alerts.length - this.$User.getNotifications().length
+          })
+        })
+      }
     }
   }
 }
