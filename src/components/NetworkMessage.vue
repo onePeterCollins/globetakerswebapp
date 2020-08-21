@@ -1,5 +1,5 @@
 <template>
-  <div v-if="showNetworkMessage" class="network-message">
+  <div v-if="showNetworkMessage" :width="dialogWidth" class="network-message">
     <v-dialog persistent v-model="showNetworkMessage">
       <v-card>
         <v-card-title class="yellow--text darken-4 g-deepblue">Network Alert</v-card-title>
@@ -23,7 +23,20 @@ export default {
 
   computed: {
     networkMessage() {return this.$store.getters.getNetworkData.networkMessage},
-    showNetworkMessage() {return this.$store.getters.getNetworkData.showNetworkMessage}
+    showNetworkMessage() {return this.$store.getters.getNetworkData.showNetworkMessage},
+    dialogWidth() {
+      let value
+
+      if (window.innerWidth >= 1264) {
+        value = '30vw'
+      } else if (window.innerWidth < 1264 &&  window.innerWidth >= 960) {
+        value = '50vw'
+      } else {
+        value = '90vw'
+      }
+
+      return value
+    }
   },
 
   methods: {

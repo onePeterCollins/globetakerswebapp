@@ -8,11 +8,13 @@
 import AdminLoginForm from "./AdminLoginForm.vue"
 import AwaitingVerification from "./AwaitingVerification.vue"
 import ContactForm from "./ContactForm.vue"
+import InteractiveForumForm from "./InteractiveForumForm.vue"
 import LogoutDialog from "./LogoutDialog.vue"
 import Navigation from "./Navigation.vue"
 import NetworkMessage from "./NetworkMessage.vue"
 import ProfileSetup from "./ProfileSetup.vue"
 import RegForm from "./RegistrationForm.vue"
+import SessionMonitor from "./SessionMonitor.vue"
 import SocialMediaLinksBottom from "./SocialMediaLinksBottom.vue"
 import StudentCounter from "./StudentCounter.vue"
 import StudentDashboardContent from "./StudentDashboardContent.vue"
@@ -25,11 +27,13 @@ export default {
         Vue.component(AdminLoginForm.name, AdminLoginForm)
         Vue.component(AwaitingVerification.name, AwaitingVerification)
         Vue.component(ContactForm.name, ContactForm)
+        Vue.component(InteractiveForumForm.name, InteractiveForumForm)
         Vue.component(LogoutDialog.name, LogoutDialog)
         Vue.component(Navigation.name, Navigation)
         Vue.component(NetworkMessage.name, NetworkMessage)
         Vue.component(ProfileSetup.name, ProfileSetup)
         Vue.component(RegForm.name, RegForm)
+        Vue.component(SessionMonitor.name, SessionMonitor)
         Vue.component(SocialMediaLinksBottom.name, SocialMediaLinksBottom)
         Vue.component(StudentCounter.name, StudentCounter)
         Vue.component(StudentDashboardContent.name, StudentDashboardContent)

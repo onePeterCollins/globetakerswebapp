@@ -111,6 +111,16 @@ const routes = [
     component: () => import('../components/StudentManager.vue')
   },
   {
+    path: '/proprietor/forum-manager',
+    name: 'forum-manager',
+    component: () => import('../views/InteractiveForumManager.vue')
+  },
+  {
+    path: '/proprietor/session-monitor',
+    name: 'session-monitor',
+    component: () => import('../components/SessionMonitor.vue')
+  },
+  {
     path: '/proprietor/student-manager/student-inspector',
     name: 'student-inspector',
     component: () => import('../components/StudentInspector.vue')
