@@ -12,7 +12,7 @@
 
     <v-row>
       <v-col align="center" fixed bottom class="col-12 px-5 g-cream">
-        <h4 class="v-deepblue--text dosis">Questions</h4>
+        <h4 class="g-deepblue--text dosis">Questions</h4>
       </v-col>
     </v-row>
 
@@ -44,7 +44,7 @@ export default {
 
   computed: {
     src() {return `https://www.youtube.com/embed/${this.link}?autoplay=0&origin=${window.location.href}`},
-    link() {return '4MIo5jv-WiI'}
+    link() {return 'Ll0MTsMP_Gk'}
   },
   
   mounted() {

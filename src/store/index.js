@@ -67,7 +67,8 @@ let state = {
   refreshUser: false,
   adminAccess: false,
   inspectStudent: '',
-  viewMessage: {}
+  viewMessage: {},
+  forumId: ''
 }
 
 let mutations = {

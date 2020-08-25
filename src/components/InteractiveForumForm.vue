@@ -94,7 +94,7 @@ export default {
           break;
 
         case 'url':
-          this.InteractiveSession.setURL(value)
+          this.InteractiveSession.setURL(this.stripUrl(value))
           break;
 
         case 'host':
@@ -129,8 +129,11 @@ export default {
       }
 
       if (this.verificationCode !== '' && this.title !== '' && this.url !== '' && this.host !== '') {
+        let interactiveSessionId
+
         // set session ID
         this.InteractiveSession._id = this.generateId()
+        interactiveSessionId = this.InteractiveSession._id
 
         // set date
         this.InteractiveSession.setDate()
@@ -138,12 +141,13 @@ export default {
         // activate the session
         this.InteractiveSession.setState(true)
 
-        // encrypt the interactive session object
-        let encryptedData = this.$Encrypt(JSON.stringify(this.InteractiveSession)),
-        encryptedToken = {data: encryptedData.token}
+        // upload the interactive session (NO encryption)
+        this.$Upload('forum', `${this.InteractiveSession._title}${this.InteractiveSession._id}`, JSON.parse(JSON.stringify(this.InteractiveSession))).then(() => {
+          // save forum id in the store and session storage
+          this.$store.dispatch('setValue', {name: 'forumId', newVal: interactiveSessionId})
+          sessionStorage.setItem('forumId', '')
+          sessionStorage.setItem('forumId', interactiveSessionId)
 
-        // upload the interactive session
-        this.$Upload('forum', `${this.InteractiveSession._id}`, encryptedToken).then(() => {
           // route to the monitoring screen
           this.$router.push('session-monitor')
         })
@@ -161,6 +165,25 @@ export default {
 
       return value
     },
+
+    stripUrl(url) {
+      let urlString = url.split('').reverse(), strippedUrl = '', stop = false
+
+      urlString.forEach((item, index, array) => {
+
+        //break the loop at the backslash
+        if (item === '/' && array[index + 1] === 'e') {
+          stop = true
+        }
+
+        //
+        if (!stop) {
+          strippedUrl += item
+        }
+      })
+
+      return strippedUrl.split('').reverse().join('')
+    }
   },
 
   hasAnim: true

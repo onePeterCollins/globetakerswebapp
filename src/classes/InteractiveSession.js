@@ -91,7 +91,7 @@ export default class InteractiveSession {
      * @param {Boolean} newState
      */
     setState (newState) {
-        this._state = newState
+        this._active = newState
     }
 
     /**
