@@ -155,7 +155,7 @@ export default {
       }
 
       if (!this.errorFields) {
-        let encryptedData, encryptedToken, persistentToken = localStorage.getItem('userToken')
+        let encryptedData, encryptedToken, encryptedKey, persistentToken = localStorage.getItem('userToken')
 
         // set profile upload status
         this.$User.setProfile(true)
@@ -163,11 +163,21 @@ export default {
         // encrypt the updated data
         persistentToken ? encryptedData = this.$Encrypt(JSON.stringify(this.$User), persistentToken) : encryptedData = this.$Encrypt(JSON.stringify(this.$User))
         encryptedToken = {data: encryptedData.token}
+        encryptedKey = encryptedData.key
 
         // upload the new online status
         this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
           // set the global user object in the store
           this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+          if (this.$User._persist) {
+            // update user token in local storage
+            localStorage.setItem('userToken', encryptedKey)
+          } else {
+            // update user token in session storage
+            sessionStorage.setItem('userToken', encryptedKey)
+          }
+          
 
           this.networkMessage = {success: 'Done'}
         })

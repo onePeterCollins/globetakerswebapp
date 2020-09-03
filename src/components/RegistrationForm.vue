@@ -272,6 +272,9 @@ export default {
                 sessionStorage.setItem('userToken', key)
                 sessionStorage.setItem('loginState', 'true')
 
+                //clear local storage
+                localStorage.clear()
+
                 // update network message and redirect to 'awaiting verification' page
                 this.networkMessage = {success: 'Registered successfully'}
               })

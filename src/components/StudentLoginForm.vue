@@ -165,14 +165,16 @@ export default {
         // Compare data on all fields to what exists on database
         for (let item in this.users) {
           // decrypt existing user data and check for a match
+
           userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
           userKey = this.$Decrypt(this.users[item].data).key
 
           // if(matchFound) add login history, update user details to store, and upload
           if (userData._name.toUpperCase() === this.$User.getName().toUpperCase() && userData._longrichCode === this.$User.getLongrichCode()) {
+            let index = item, encryptionKey
             matchFound = true
 
-            this.$Download(userData).then((response) => {
+            this.$Download(JSON.parse(this.$Decrypt(this.users[index].data).token)).then((response) => {
               this.$User = response
 
               //set persistence
@@ -185,7 +187,7 @@ export default {
               this.$User.setOnlineStatus(true)
 
               // encrypt the updated data
-              encryptedData = this.$User._persist ? this.$Encrypt(JSON.stringify(userData), userKey) : this.$Encrypt(JSON.stringify(userData))
+              encryptedData = this.persistUser ? this.$Encrypt(JSON.stringify(this.$User), encryptionKey) : this.$Encrypt(JSON.stringify(this.$User))
               encryptedToken = {data: encryptedData.token}
               encryptedKey = encryptedData.key
 

@@ -8,15 +8,11 @@ export default {
         Vue.mixin ({
             mounted () {
                 this.$Download = async function (payload) {
-                    let mergedObject
+                    let mergedObject = new User()
 
                     // download user object from network and merge it with local user object methods
                     if (payload._typeof === 'user') {
-                        mergedObject = new User()
-
-                        for (let item in payload) {
-                            mergedObject[item] = payload[item]
-                        }
+                        Object.assign(mergedObject, payload)
 
                         return mergedObject
                     }

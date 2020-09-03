@@ -11,6 +11,7 @@ export default class InteractiveSession {
         this._title = ''
         this._url = ''
         this._host = ''
+        this._source = ''
         this._conversation = []
         this._participants = []
         this._active = false
@@ -31,12 +32,16 @@ export default class InteractiveSession {
         return this._host
     }
 
+    getSource() {
+        return this._source
+    }
+
     getConversation() {
         return this._conversation
     }
 
-    getParticiapnts() {
-        return this._particiapnts
+    getParticipants() {
+        return this._participants
     }
 
     getState() {
@@ -71,6 +76,13 @@ export default class InteractiveSession {
      */
     setHost (newHost) {
         this._host = newHost
+    }
+
+    /**
+     * @param {String} newSource
+     */
+    setSource (newSource) {
+        this._source = newSource
     }
 
     /**

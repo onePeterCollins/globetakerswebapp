@@ -57,6 +57,11 @@ const routes = [
     component: () => import('../views/LearningOption.vue')
   },
   {
+    path: '/student-dashboard/active-forums',
+    name: 'Active-forums',
+    component: () => import('../components/InteractiveSessionMenu.vue')
+  },
+  {
     path: '/student-dashboard/interactive-forum',
     name: 'Interactive-forum',
     component: () => import('../views/InteractiveForum.vue')

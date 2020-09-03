@@ -168,17 +168,17 @@ export default {
       }
     },
 
-    activeDump() {
-      if (this.$User._id) {
-        this.updateActiveStatus()
-      }
-    },
+    // activeDump() {
+    //   if (this.$User._id) {
+    //     this.updateActiveStatus()
+    //   }
+    // },
 
-    activeToken() {
-      if (this.$User._id) {
-        this.updateActiveStatus()
-      }
-    }
+    // activeToken() {
+    //   if (this.$User._id) {
+    //     this.updateActiveStatus()
+    //   }
+    // }
   },
 
   methods: {
@@ -224,8 +224,51 @@ export default {
       persistentToken = localStorage.getItem('userToken'),
       matchFound,
       userData
+      
+      if (this.persistence === 'true' && persistentToken) {
+        // let encryptedData, encryptedToken
 
-      if (this.loggedIn === 'true' && sessionToken) {
+        this.userId = localStorage.getItem('userId')
+
+        this.users = db.collection('users').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            if (!matchFound) {
+              if (this.$GetDataWithToken(item.data(), persistentToken)) {
+
+                userData = this.$Decrypt(item.data().data)
+
+                this.$Download(JSON.parse(userData.token)).then((result) => {
+                  if (result._id === this.userId) {
+                    matchFound = true
+                    this.$User = result
+
+                    // set the global user object in the store
+                    this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
+
+                    // send to session storage
+                    sessionStorage.clear()
+                    sessionStorage.setItem('userId', this.$User._id)
+                    sessionStorage.setItem('userToken', persistentToken)
+                    sessionStorage.setItem('loginState', 'true')
+
+                    // send to local storage
+                    localStorage.clear()
+                    localStorage.setItem('userId', this.$User._id)
+                    localStorage.setItem('userToken', persistentToken)
+                    localStorage.setItem('loginState', 'true')
+                    
+                    if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
+                      this.$router.push('student-dashboard')
+                    } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
+                      this.$router.push('trainer-dashboard')
+                    }
+                  }
+                })
+              }
+            }
+          })
+        })
+      } else if (this.loggedIn === 'true' && sessionToken) {
         this.userId = sessionStorage.getItem('userId')
 
         this.users = db.collection('users').get().then((querySnapshot) => {
@@ -258,55 +301,6 @@ export default {
             }
           })
         })
-      } else if (this.persistence === 'true' && persistentToken) {
-        let encryptedData, encryptedToken
-
-        this.userId = localStorage.getItem('userId')
-
-        this.users = db.collection('users').get().then((querySnapshot) => {
-          querySnapshot.forEach((item) => {
-            if (!matchFound) {
-              if (this.$GetDataWithToken(item.data(), persistentToken)) {
-
-                userData = this.$Decrypt(item.data().data)
-
-                this.$User = this.$Download(JSON.parse(userData.token)).then((result) => {
-                  if (result._id === this.userId) {
-                    matchFound = true
-                    this.$User = result
-
-                    // add login history
-                    this.$User.addLoginHistory(this.loginHistory)
-
-                    // set online status
-                    this.$User.setOnlineStatus(true)
-
-                    // encrypt the updated data
-                    encryptedData = this.$Encrypt(JSON.stringify(this.$User), persistentToken)
-                    encryptedToken = {data: encryptedData.token}
-
-                    // upload the new online status
-                    this.$Upload('users', `${this.$User._id}`, encryptedToken).then(() => {
-                      // set the global user object in the store
-                      this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
-
-                      // send to session storage
-                      sessionStorage.setItem('userId', this.$User._id)
-                      sessionStorage.setItem('userToken', persistentToken)
-                      sessionStorage.setItem('loginState', 'true')
-                      
-                      if (this.$User._typeIndex === 0 && window.location.pathname === '/') {
-                        this.$router.push('student-dashboard')
-                      } else if (this.$User._typeIndex === 1 && window.location.pathname === '/') {
-                        this.$router.push('trainer-dashboard')
-                      }
-                    })
-                  }
-                })
-              }
-            }
-          })
-        })
       }
     },
 
@@ -323,19 +317,19 @@ export default {
     },
 
     updateActiveStatus() {
-      let sessionToken = sessionStorage.getItem('userToken'),
-      persistentToken = localStorage.getItem('userToken'),
-      encryptedData,
-      encryptedToken
+      // let sessionToken = sessionStorage.getItem('userToken'),
+      // persistentToken = localStorage.getItem('userToken'),
+      // encryptedData,
+      // encryptedToken
 
-      // update active status
-      this.$User.setActiveStatus(this.activeToken.data)
+      // // update active status
+      // this.$User.setActiveStatus(this.activeToken.data)
 
-      encryptedData = persistentToken ? this.$Encrypt(JSON.stringify(this.$User), persistentToken) : this.$Encrypt(JSON.stringify(this.$User), sessionToken)
-      encryptedToken = {data: encryptedData.token}
+      // encryptedData = persistentToken ? this.$Encrypt(JSON.stringify(this.$User), persistentToken) : this.$Encrypt(JSON.stringify(this.$User), sessionToken)
+      // encryptedToken = {data: encryptedData.token}
 
-      // upload the new active status
-      this.$Upload('users', `${this.$User._id}`, encryptedToken)
+      // // upload the new active status
+      // this.$Upload('users', `${this.$User._id}`, encryptedToken)
     },
 
     countAlerts() {

@@ -9,6 +9,7 @@ import AdminLoginForm from "./AdminLoginForm.vue"
 import AwaitingVerification from "./AwaitingVerification.vue"
 import ContactForm from "./ContactForm.vue"
 import InteractiveForumForm from "./InteractiveForumForm.vue"
+import InteractiveSessionMenu from "./InteractiveSessionMenu.vue"
 import LogoutDialog from "./LogoutDialog.vue"
 import Navigation from "./Navigation.vue"
 import NetworkMessage from "./NetworkMessage.vue"
@@ -28,6 +29,7 @@ export default {
         Vue.component(AwaitingVerification.name, AwaitingVerification)
         Vue.component(ContactForm.name, ContactForm)
         Vue.component(InteractiveForumForm.name, InteractiveForumForm)
+        Vue.component(InteractiveSessionMenu.name, InteractiveSessionMenu)
         Vue.component(LogoutDialog.name, LogoutDialog)
         Vue.component(Navigation.name, Navigation)
         Vue.component(NetworkMessage.name, NetworkMessage)

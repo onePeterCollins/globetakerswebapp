@@ -50,7 +50,7 @@
                   </v-col>
                   <v-col class="col-12" align="center">
                     <v-scale-transition>
-                      <v-btn v-show="$keys[2]" class="success" link to="student-dashboard/interactive-forum">Continue</v-btn>
+                      <v-btn v-show="$keys[2]" class="success" link to="student-dashboard/active-forums">Continue</v-btn>
                     </v-scale-transition>
                   </v-col>
                 </v-row>
