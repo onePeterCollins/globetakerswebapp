@@ -209,7 +209,7 @@ export default {
         this.$Upload('forum', `${this.InteractiveSession._title}${this.InteractiveSession._id}`, JSON.parse(JSON.stringify(this.InteractiveSession))).then(() => {
           // save forum id in the store and session storage
           this.$store.dispatch('setValue', {name: 'forumId', newVal: interactiveSessionId})
-          sessionStorage.setItem('forumId', '')
+          sessionStorage.removeItem('forumId')
           sessionStorage.setItem('forumId', interactiveSessionId)
 
           // route to the monitoring screen

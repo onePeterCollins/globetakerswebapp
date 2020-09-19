@@ -89,12 +89,12 @@ const routes = [
     component: () => import('../views/TrainerDashboard.vue')
   },
   {
-    path: '/lesson-option',
+    path: '/trainer-dashboard/lesson-option',
     name: 'Lesson-option',
     component: () => import('../views/TeachingOption.vue')
   },
   {
-    path: '/upload-lesson',
+    path: '/trainer-dashboard/upload-lesson',
     name: 'Upload-lesson',
     component: () => import('../views/UploadLesson.vue')
   },
@@ -116,6 +116,11 @@ const routes = [
     component: () => import('../components/StudentManager.vue')
   },
   {
+    path: '/proprietor/trainers-manager',
+    name: 'trainers-manager',
+    component: () => import('../components/TrainersManager.vue')
+  },
+  {
     path: '/proprietor/forum-manager',
     name: 'forum-manager',
     component: () => import('../views/InteractiveForumManager.vue')
@@ -131,9 +136,19 @@ const routes = [
     component: () => import('../components/StudentInspector.vue')
   },
   {
+    path: '/proprietor/trainers-manager/trainer-inspector',
+    name: 'trainer-inspector',
+    component: () => import('../components/TrainerInspector.vue')
+  },
+  {
     path: '/proprietor/student-manager/messenger',
-    name: 'Messenger',
-    component: () => import('../views/Messenger.vue')
+    name: 'StudentMessenger',
+    component: () => import('../views/StudentMessenger.vue')
+  },
+  {
+    path: '/proprietor/trainers-manager/messenger',
+    name: 'TrainerMessenger',
+    component: () => import('../views/TrainerMessenger.vue')
   },
   {
     path: '/proprietor/security',

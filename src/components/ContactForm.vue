@@ -71,11 +71,11 @@
       </v-col>
     </v-row>
 
-    <transition name="slideYneg">
+    <v-scale-transition>
       <v-row v-if="$keys[6]" justify="center">
         <v-btn class="white g-darkblue--text" @click="send()">Submit</v-btn>
       </v-row>
-    </transition>
+    </v-scale-transition>
   </v-form>
 </template>
 

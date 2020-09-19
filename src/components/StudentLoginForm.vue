@@ -160,14 +160,13 @@ export default {
       this.errorFields = validator.scanEntries(this)
 
       if (!this.errorFields && this.verificationCode.length !== 0) {
-        let matchFound, userData, userKey, encryptedData, encryptedToken, encryptedKey
+        let matchFound, userData, encryptedData, encryptedToken, encryptedKey
 
         // Compare data on all fields to what exists on database
         for (let item in this.users) {
           // decrypt existing user data and check for a match
 
           userData = JSON.parse(this.$Decrypt(this.users[item].data).token)
-          userKey = this.$Decrypt(this.users[item].data).key
 
           // if(matchFound) add login history, update user details to store, and upload
           if (userData._name.toUpperCase() === this.$User.getName().toUpperCase() && userData._longrichCode === this.$User.getLongrichCode()) {

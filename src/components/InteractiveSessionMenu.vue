@@ -46,8 +46,13 @@ export default {
 
   data: () => ({
     liveSessions: [],
-    activeSessions: []
+    activeSessions: [],
+    sessionId: ''
   }),
+
+  computed: {
+    user() {return this.$store.getters.getUserData}
+  },
 
   firestore: {
     liveSessions: db.collection('forum')
@@ -59,17 +64,48 @@ export default {
         let session = new InteractiveSession()
 
         Object.assign(session, item)
-
-        this.activeSessions.push(session)
+        
+        if (session._active) {
+          this.activeSessions.push(session)
+        }
       })
     }
   },
 
   methods: {
     enterClass(id) {
-      this.$store.dispatch('setValue', {name: 'forumId', newVal: id})
-      sessionStorage.setItem('forumId', id)
-      this.$router.push('interactive-forum')
+      this.sessionId = id
+
+      for (let item in this.activeSessions) {
+        if (this.activeSessions[item]._id === id) {
+          this.addParticipant(this.activeSessions[item], `${this.user.getName()}${this.user._id}`)
+        }
+      }
+    },
+
+    addParticipant(session, username) {
+      let matchFound, ROOT = this
+
+      for (let item in session.getParticipants()) {
+        if (session.getParticipants()[item] === username) {
+          matchFound = true
+        }
+      }
+
+      if (!matchFound) {
+
+        session.addParticipant(username)
+
+        this.$Upload('forum', `${session._title}${session._id}`,JSON.parse(JSON.stringify(session))).then(() => {
+          this.$store.dispatch('setValue', {name: 'forumId', newVal: ROOT.sessionId})
+          sessionStorage.setItem('forumId', ROOT.sessionId)
+          this.$router.push('interactive-forum')
+        })
+      } else {
+        this.$store.dispatch('setValue', {name: 'forumId', newVal: ROOT.sessionId})
+        sessionStorage.setItem('forumId', ROOT.sessionId)
+        this.$router.push('interactive-forum')
+      }
     }
   }
 }

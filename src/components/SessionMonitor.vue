@@ -34,10 +34,8 @@
           style="border:none;overflow:hidden" scrolling="no" frameborder="0" allowTransparency="true" allowFullScreen="true">
         </iframe>
 
-        <iframe v-if="stream && stream.getSource() === 'instagram'" id="instagramplayer" type="text/html" width="100%" height="100%"
-          :src="instagramSrc"
-          frameborder="0">
-        </iframe>
+        <!-- SnapWidget -->
+        <div v-if="stream && stream.getSource() === 'instagram'" class="snapwidget-rpf" data-widget-id="868482"></div>
       </v-col>
 
       <v-col class="col-12 col-lg-6 g-deepblue pt-0" align="center">
@@ -47,8 +45,8 @@
           </v-col>
         </v-row>
 
-        <v-row v-if="stream">
-          <v-col v-for="(item, sn) in stream.getConversation()" :key="sn" class="overflow-scroll-y px-5 chat-panel col-12">
+        <v-row v-if="stream" id="convo" class="overflow-y-scroll chat-panel">
+          <v-col v-for="(item, sn) in conversation" :key="sn" class="col-12 px-5">
             <v-card v-if="item.type === 'question'" class="col-8 px-1 py-0 my-3 left" align="left">
               <v-card-title class="py-0">
                 <h4>{{item.sender}}</h4>
@@ -130,7 +128,6 @@ export default {
     },
     youtubeSrc() {return `https://www.youtube.com/embed/${this.link}?autoplay=0&origin=${window.location.href}`},
     facebookSrc() {return `https://web.facebook.com/plugins/video.php?href=${this.link}&show_text=0`},
-    instagramSrc() {return null},
 
     link() {
       let value = this.stream ? this.stream.getURL() : 'Ll0MTsMP_Gk'
@@ -139,7 +136,26 @@ export default {
     },
 
     participants() {return this.stream ? this.stream.getParticipants().length : 0},
-    title() {return this.stream ? this.stream.getTitle() : ''}
+    title() {return this.stream ? this.stream.getTitle() : ''},
+    convoSheet() {return this.stream ? document.getElementById('convo') : null},
+    conversation() {return this.stream ? this.stream.getConversation() : null},
+    offsetHeight() {
+      let value, ROOT = this
+
+      if (this.convoSheet) {
+        value = loadChat(ROOT)
+      } else {
+        value = null
+      }
+
+      async function loadChat (ROOT) {
+        await ROOT.convoSheet.innerHTML
+
+        return ROOT.convoSheet.scrollHeight
+      }
+
+      return value
+    }
   },
 
   firestore: {
@@ -152,9 +168,20 @@ export default {
         if(item._id === this.forumId && item._active) {
           this.stream = new InteractiveSession()
           this.stream = Object.assign(this.stream, item)
+
         } else if (item._id === this.forumId && !item.active) {
           this.$router.push('forum-manager')
         }
+      })
+    },
+
+    offsetHeight () {
+      this.offsetHeight.then((height) => {
+        this.convoSheet.scroll({
+          top: height,
+          left: 0,
+          behaviour: 'smooth'
+        })
       })
     }
   },
@@ -207,10 +234,6 @@ export default {
         }
       });
     }
-  },
-
-  mounted() {
-    
   }
 }
 </script>
@@ -229,25 +252,23 @@ export default {
   bottom: 5vh;
 }
 
-.left-chat-msg:before {
-
-}
-
-.right-chat-msg:before {
-
-}
-
-.overflow-y-scoped {
-  overflow-y: auto;
+.overflow-y-scroll {
+  overflow-y: scroll !important;
 }
 
 @media screen and (max-width: 1024px) {
   .chat-panel {
-    max-height: 100vh !important;
+    max-height: 40vh !important;
+    padding-bottom: 15vh !important;
   }
 
   .full-height {
     height: 120vh
+  }
+
+  .bottom {
+    position: fixed;
+    bottom: 0vh;
   }
 }
 </style>

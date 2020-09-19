@@ -20,6 +20,7 @@ import SocialMediaLinksBottom from "./SocialMediaLinksBottom.vue"
 import StudentCounter from "./StudentCounter.vue"
 import StudentDashboardContent from "./StudentDashboardContent.vue"
 import StudentLoginForm from "./StudentLoginForm.vue"
+import TrainerDashboardContent from "./TrainerDashboardContent.vue"
 import TrainerLoginForm from "./TrainerLoginForm.vue"
 
 
@@ -40,6 +41,7 @@ export default {
         Vue.component(StudentCounter.name, StudentCounter)
         Vue.component(StudentDashboardContent.name, StudentDashboardContent)
         Vue.component(StudentLoginForm.name, StudentLoginForm)
+        Vue.component(TrainerDashboardContent.name, TrainerDashboardContent)
         Vue.component(TrainerLoginForm.name, TrainerLoginForm)
     }
 }

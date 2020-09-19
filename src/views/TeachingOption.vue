@@ -56,28 +56,6 @@
           </v-row>
         </v-card>
       </transition>
-
-      <transition name="slideYneg">
-        <v-card v-if="$keys[6]" @click="uploadLecture('video')" height="300" class="col-10 col-lg-3 mb-5 choose-learning-mode">
-          <v-row class="orange">
-            <v-col align="center">
-              <h2>
-                <v-avatar>
-                  <v-icon class="white">mdi-desktop-mac</v-icon>
-                </v-avatar>
-                Video
-              </h2>
-            </v-col>
-          </v-row>
-          <v-row class="highlight">
-            <v-col align="center">
-              <v-avatar height="150" width="150" class="mt-6 cyan">
-                <v-img :src="require('../assets/images/video1.jpg')"/>
-              </v-avatar>
-            </v-col>
-          </v-row>
-        </v-card>
-      </transition>
     </v-row>
 
     <br/>
@@ -94,7 +72,7 @@ import desktopImg from '@/assets/images/teach-desktop.png'
 import mobileImg from '@/assets/images/teach-mobile.png'
 
 export default {
-  name: 'Learning-option',
+  name: 'Teaching-option',
 
   computed: {
     mobile: () => {

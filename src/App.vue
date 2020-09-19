@@ -246,13 +246,19 @@ export default {
                     this.$store.dispatch('setValue', {name: 'user', newVal: this.$User})
 
                     // send to session storage
-                    sessionStorage.clear()
+                    sessionStorage.removeItem('userId')
+                    sessionStorage.removeItem('userToken')
+                    sessionStorage.removeItem('loginState')
+                    
                     sessionStorage.setItem('userId', this.$User._id)
                     sessionStorage.setItem('userToken', persistentToken)
                     sessionStorage.setItem('loginState', 'true')
 
                     // send to local storage
-                    localStorage.clear()
+                    localStorage.removeItem('userId')
+                    localStorage.removeItem('userToken')
+                    localStorage.removeItem('loginState')
+
                     localStorage.setItem('userId', this.$User._id)
                     localStorage.setItem('userToken', persistentToken)
                     localStorage.setItem('loginState', 'true')

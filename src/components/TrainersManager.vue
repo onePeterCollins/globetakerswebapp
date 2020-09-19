@@ -2,7 +2,7 @@
   <div class="student-manager">
     <v-row class="g-cream">
       <v-col align="center">
-        <h2 class="g-deepblue--text dosis">Student Manager</h2>
+        <h2 class="g-deepblue--text dosis">Trainers Manager</h2>
       </v-col>
     </v-row>
 
@@ -12,7 +12,7 @@
       <v-card class="col-lg-3 col-11 px-lg-5 px-8 pb-0 mx-2 my-3">
         <v-row>
           <v-col>
-            <span><b class="g-deepblue--text">Total students: </b> {{totalStudents}}</span><br/>
+            <span><b class="g-deepblue--text">Total trainers: </b> {{totalTrainers}}</span><br/>
             <span><b class="green--text">Verified: </b> {{verified}}</span><br/>
             <span><b class="red--text">Pending: </b> {{pending}}</span>
           </v-col>
@@ -36,7 +36,7 @@
       </v-card>
       
       <v-card align="center" class="col-lg-3 col-11 px-0 pb-0 mx-2 my-3">
-        <h3 class="g-deepblue--text dosis">Message all students</h3>
+        <h3 class="g-deepblue--text dosis">Message all trainers</h3>
         <br/>
         
         <v-card-text class="px-3 pb-0 mb-0 g-deepblue">
@@ -56,7 +56,7 @@
       <v-card class="col-11 col-lg-4 px-0 pb-0 mx-0 my-5">
         <v-row>
           <v-col class="col-lg-8 px-10">
-            <v-text-field height="30" persistent-hint hint="Enter student name" label="Search" />
+            <v-text-field height="30" persistent-hint hint="Enter trainers name" label="Search" />
           </v-col>
           
           <v-col v-if="!mobile" class="col-lg-4">
@@ -103,8 +103,8 @@
                       </v-col>
                       
                       <v-col class="col-6">
-                        <span v-if="!mobile" class="px-4" align="right">members: {{team.population}}</span>
-                        <p v-else-if="mobile" class="px-2" align="right">members: {{team.population}}</p>
+                        <span v-if="!mobile" class="px-4" align="right">trainers: {{team.population}}</span>
+                        <p v-else-if="mobile" class="px-2" align="right">trainers: {{team.population}}</p>
                         <v-btn v-if="dropDown !== team.name" @click="showTeamMembers(team.name)">show all</v-btn>
                         <v-btn v-else-if="dropDown === team.name" @click="showTeamMembers(team.name)">hide</v-btn>
                       </v-col>
@@ -191,7 +191,7 @@ export default {
   name: 'g-student-manager',
 
   data: () => ({
-    totalStudents: 0,
+    totalTrainers: 0,
     verified: 0,
     pending: 0,
     teamNames: [],
@@ -220,7 +220,7 @@ export default {
       this.teamNames = []
       this.teams = []
       this.members = []
-      this.totalStudents = 0
+      this.totalTrainers = 0
       this.verified = 0
       this.pending = 0
 
@@ -267,8 +267,8 @@ export default {
             userTeam = result.getSubTeam()
             verified = result.verified()
 
-            if (result.getUserType() === 'student') {
-              this.totalStudents++
+            if (result.getUserType() === 'tutor') {
+              this.totalTrainers++
 
               for (let i in this.teamNames) {
                 // search for matching team names
@@ -310,7 +310,7 @@ export default {
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
             this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
-              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.getUserType() === 'student') {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.getUserType() === 'tutor') {
                 this.members.push({
                   name: result.getName(),
                   status: result.verified(),
@@ -338,7 +338,7 @@ export default {
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
             this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
-              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && !result.verified() && result.getUserType() === 'student') {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && !result.verified() && result.getUserType() === 'tutor') {
                 this.members.push({
                   name: result.getName(),
                   status: result.verified(),
@@ -366,7 +366,7 @@ export default {
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
             this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
-              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.verified() && result.getUserType() === 'student') {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.verified() && result.getUserType() === 'tutor') {
                 this.members.push({
                   name: result.getName(),
                   status: result.verified(),
@@ -412,14 +412,14 @@ export default {
     },
 
     generalMessage() {
-      this.$router.push('student-manager/messenger')
+      this.$router.push('trainers-manager/messenger')
     },
 
     inspectStudent(id) {
       this.$store.dispatch('setValue', {name: 'inspectSudent', newVal: id})
       sessionStorage.setItem('inspectStudent', '')
       sessionStorage.setItem('inspectStudent', id)
-      this.$router.push('student-manager/student-inspector')
+      this.$router.push('trainers-manager/trainer-inspector')
     }
   },
 
