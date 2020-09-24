@@ -361,7 +361,7 @@ export default {
       if (this.checkHeader()) {
         let notification
 
-        this.processing = true
+        this.networkMessage.processing = true
 
         if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
           // display recaptcha challenge
@@ -465,7 +465,7 @@ export default {
       this.sender = ''
       this.content.length = 0
       this.content.push(JSON.parse(JSON.stringify(this.contentType.paragraph)))
-      sessionStorage.setItem('viewMessage', '')
+      sessionStorage.clearItem('viewMessage')
     }
   },
 

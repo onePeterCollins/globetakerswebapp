@@ -130,7 +130,7 @@ export default {
 
     loggedIn() {
       if (this.loggedIn) {
-        this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainers-dashboard'
+        this.homeLink = this.user._typeIndex === 0 ? '/student-dashboard' : '/trainer-dashboard'
       } else {
         this.homeLink = '/'
       }

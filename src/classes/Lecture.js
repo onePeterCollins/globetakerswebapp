@@ -10,7 +10,6 @@ export default class Lecture {
     constructor() {
         this._title = ''
         this._author = ''
-        this._format = this.formats[this._formatIndex]
         this._formatIndex = 0
         this._formats = ['text', 'audio']
         this._content = []
@@ -32,7 +31,11 @@ export default class Lecture {
     }
 
     getFormat() {
-        return this._format
+        return this._formats[this._formatIndex]
+    }
+
+    getFormatIndex() {
+        return this._formatIndex
     }
 
     getContent() {

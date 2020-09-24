@@ -99,10 +99,10 @@ export default {
   methods: {
     uploadLecture(type) {
       if (type === 'audio') {
+        this.$store.dispatch('setValue', {name: 'createLecture', newVal: 'audio'})
         this.$router.push('upload-lesson')
       } else if (type === 'text') {
-        this.$router.push('upload-lesson')
-      } else if (type === 'video') {
+        this.$store.dispatch('setValue', {name: 'createLecture', newVal: 'text'})
         this.$router.push('upload-lesson')
       }
     }

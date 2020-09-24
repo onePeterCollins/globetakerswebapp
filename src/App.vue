@@ -354,7 +354,7 @@ export default {
               alerts.push(item)
             })
           }).then(() => {
-            this.alertCounter = alerts.length - this.$User.getNotifications().length
+            alerts.length ? this.alertCounter = alerts.length - this.$User.getNotifications().length : this.alertCounter = 0
           })
         })
       } else if (this.$User.getUserType() === 'tutor') {
@@ -368,7 +368,7 @@ export default {
               alerts.push(item)
             })
           }).then(() => {
-            this.alertCounter = alerts.length - this.$User.getNotifications().length
+            alerts.length ? this.alertCounter = alerts.length - this.$User.getNotifications().length : this.alertCounter = 0
           })
         })
       }

@@ -63,6 +63,7 @@ let state = {
     return value
   },
 
+  createLecture: '',
   loggingOut: false,
   refreshUser: false,
   adminAccess: false,

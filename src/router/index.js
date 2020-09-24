@@ -79,11 +79,6 @@ const routes = [
 
   // trainers
   {
-    path: '/trainer',
-    name: 'Trainer',
-    component: () => import('../views/Trainer.vue')
-  },
-  {
     path: '/trainer-dashboard',
     name: 'Trainer-dashboard',
     component: () => import('../views/TrainerDashboard.vue')

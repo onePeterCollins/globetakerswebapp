@@ -15,6 +15,7 @@ import firebase from 'firebase'
 // Get a Firestore instance
 export const App = firebase.initializeApp(firebaseConfig)
 export const db = App.firestore()
+export const storage = App.storage("gs://globetakersonline.appspot.com").ref()
 
 const { Timestamp, GeoPoint } = firebase.firestore
 export { Timestamp, GeoPoint }
