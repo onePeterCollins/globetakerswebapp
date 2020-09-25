@@ -56,6 +56,28 @@
           </v-row>
         </v-card>
       </transition>
+
+    <transition name="slideYneg">
+        <v-card v-if="$keys[4]" @click="viewLectures()" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
+          <v-row class="orange">
+            <v-col align="center">
+              <h2>
+                <v-avatar>
+                  <v-icon class="white">mdi-book</v-icon>
+                </v-avatar>
+                My Lectures
+              </h2>
+            </v-col>
+          </v-row>
+          <v-row class="highlight">
+            <v-col align="center">
+              <v-avatar height="150" width="150" class="mt-6 cyan option">
+                <v-img :src="require('../assets/images/text1.jpg')"/>
+              </v-avatar>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
     </v-row>
 
     <br/>
@@ -105,6 +127,10 @@ export default {
         this.$store.dispatch('setValue', {name: 'createLecture', newVal: 'text'})
         this.$router.push('upload-lesson')
       }
+    },
+
+    viewLectures() {
+      this.$router.push('my-lectures')
     }
   },
 

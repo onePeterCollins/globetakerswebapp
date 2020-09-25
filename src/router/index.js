@@ -93,6 +93,11 @@ const routes = [
     name: 'Upload-lesson',
     component: () => import('../views/UploadLesson.vue')
   },
+  {
+    path: '/trainer-dashboard/my-lectures',
+    name: 'My-lectures',
+    component: () => import('../views/LectureList.vue')
+  },
 
   // admin
   {

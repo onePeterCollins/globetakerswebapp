@@ -143,11 +143,7 @@
 
                 <v-textarea class="mx-1 mx-lg-5" prepend-icon="mdi-text" rows="3" label="Type paragraph text" v-model="item.content" />
               </v-col>
-            </v-row>
-          </v-scale-transition>
 
-          <v-scale-transition v-for="(item, sn) in content" :key="sn">
-            <v-row>
               <v-col v-if="item.type === 'image'">
                 <v-col align="right">
                   <v-btn x-small right fab top class="red" @click="removeImage(sn)">
@@ -159,8 +155,15 @@
                 background-color="white"
                 label="select image file (PNG)"
                 v-model="item.imageFile" @change="setImageContent(item, sn)"/>
+
+                <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image title" height="30" v-model="item.title" />
+                <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image description" height="30" v-model="item.alt" />
               </v-col>
             </v-row>
+          </v-scale-transition>
+
+          <v-scale-transition v-for="(item, sn) in content" :key="sn">
+            
           </v-scale-transition>
 
           <transition name="slideYneg">
@@ -310,6 +313,20 @@ export default {
         this.content.splice(sn, 1)
       },
 
+      setImageContent(item, sn) {
+        this.content[sn].content = this.processImage(item.imageFile, sn)
+      },
+
+      processImage(item, sn) {
+        let reader = new FileReader()
+
+        reader.onload = () => {
+          this.content[sn].content = reader.result
+        }
+
+        reader.readAsDataURL(item)
+      },
+
       setAudioContent(item, sn) {
         this.content[sn].content = this.processAudio(item.audioFile, sn)
       },
@@ -371,13 +388,19 @@ export default {
           // upload all audio and image files
           for (let i in this.content) {
             if (this.content[i].type === 'audio') {
+              let format = this.getFileExtension(this.content[i].audioFile.name)
+
               storage.child(`audioLectures/${this.lecture._id}${i}.mp3`).putString(this.content[i].content, 'data_url').then(() => {
-                this.content[i].content = `audioLectures/${this.lecture._sn}${i}.mp3`
+                this.content[i].content = ''
+                this.content[i].content = `audioLectures/${this.lecture._sn}${i}.${format}`
                 this.content[i].audioFile = null
               })
             } else if (this.content[i].type === 'image') {
+              let format = this.getFileExtension(this.content[i].imageFile.name)
+
               storage.child(`lectureImages/${this.lecture._id}${i}.png`).putString(this.content[i].content, 'data_url').then(() => {
-                this.content[i].content = `lectureImages/${this.lecture._sn}${i}.png`
+                this.content[i].content = ''
+                this.content[i].content = `lectureImages/${this.lecture._sn}${i}.${format}`
                 this.content[i].imageFile = null
               })
             }
@@ -412,6 +435,20 @@ export default {
         return value
       },
 
+      getFileExtension(fileName) {
+        let nameString = fileName.split('').reverse(), extension = '', stop = false
+
+        nameString.forEach((item) => {
+          if (item !== '.' && !stop) {
+            extension += item
+          } else {
+            stop = true
+          }
+        })
+
+        return extension.split('').reverse().join('')
+      },
+
       clear() {
         this.title = ''
         this.lecture = new Lecture()
@@ -420,12 +457,12 @@ export default {
 
     mounted() {
       if (this.lectureType === 'audio') {
-        sessionStorage.clear('lectureType')
+        sessionStorage.removeItem('lectureType')
         sessionStorage.setItem('lectureType', 'audio')
         this.lecture.setFormat(1)
         this.content.push(JSON.parse(JSON.stringify(this.contentType.audio)))
       } else {
-        sessionStorage.clear('lectureType')
+        sessionStorage.removeItem('lectureType')
         sessionStorage.setItem('lectureType', 'text')
         this.lecture.setFormat(0)
         this.content.push(JSON.parse(JSON.stringify(this.contentType.text)))

@@ -10,6 +10,7 @@
       color="g-blue"
       dark
       fixed
+      class="curved"
     >      
       <v-toolbar-items>
         <v-avatar class="mt-1 mr-3">
@@ -80,9 +81,9 @@
     <g-logout-dialog />
     <g-network-message />
 
-    <v-content id="GT-content">
+    <v-main id="GT-content">
       <router-view/>
-    </v-content>
+    </v-main>
 
     <v-footer class="curved gray z5" fixed>
       <v-row justify="center">
@@ -442,8 +443,8 @@ export default {
   background: white !important}
 html {overflow-Y: auto !important;}
 
-header.v-sheet {border-radius: 1.5rem 1.5rem 0px 0px;}
-footer.curved {border-radius: 0px 0px 1.5rem 1.5rem;
+header.curved {border-radius: 1.5rem 1.5rem 0px 0px !important;}
+footer.curved {border-radius: 0px 0px 1.5rem 1.5rem !important;
   box-shadow: 0.5px -0.5px 2.5px 1px rgba(0, 0, 0, 0.5)}
 
 #top-conceal {width: 100vw;
