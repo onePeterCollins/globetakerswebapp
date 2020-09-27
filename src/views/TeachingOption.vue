@@ -72,7 +72,7 @@
           <v-row class="highlight">
             <v-col align="center">
               <v-avatar height="150" width="150" class="mt-6 cyan option">
-                <v-img :src="require('../assets/images/text1.jpg')"/>
+                <v-img :src="require('../assets/images/teach-online.jpg')"/>
               </v-avatar>
             </v-col>
           </v-row>

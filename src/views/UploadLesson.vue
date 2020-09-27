@@ -392,34 +392,49 @@ export default {
 
               storage.child(`audioLectures/${this.lecture._id}${i}.mp3`).putString(this.content[i].content, 'data_url').then(() => {
                 this.content[i].content = ''
-                this.content[i].content = `audioLectures/${this.lecture._sn}${i}.${format}`
+                this.content[i].content = `audioLectures/${this.lecture._id}${i}.${format}`
                 this.content[i].audioFile = null
+              }).then(() => {
+                // set content
+                this.lecture._content = this.content
+
+                // encrypt lecture
+                lecture = {data: this.$Encrypt(JSON.stringify(this.lecture)).token}
+
+                // upload lecture
+                this.$Upload(`${this.lecture.getFormat()}lectures`, `${this.lecture._id}`, lecture).then(() => {
+                  this.networkMessage.processing = false
+                  this.networkMessage.success = 'Lecture uploaded'
+                  // clear lecture
+                  this.clear()
+                  window.location.reload()
+                })
               })
             } else if (this.content[i].type === 'image') {
               let format = this.getFileExtension(this.content[i].imageFile.name)
 
               storage.child(`lectureImages/${this.lecture._id}${i}.png`).putString(this.content[i].content, 'data_url').then(() => {
                 this.content[i].content = ''
-                this.content[i].content = `lectureImages/${this.lecture._sn}${i}.${format}`
+                this.content[i].content = `lectureImages/${this.lecture._id}${i}.${format}`
                 this.content[i].imageFile = null
+              }).then(() => {
+                // set content
+                this.lecture._content = this.content
+
+                // encrypt lecture
+                lecture = {data: this.$Encrypt(JSON.stringify(this.lecture)).token}
+
+                // upload lecture
+                this.$Upload(`${this.lecture.getFormat()}lectures`, `${this.lecture._id}`, lecture).then(() => {
+                  this.networkMessage.processing = false
+                  this.networkMessage.success = 'Lecture uploaded'
+                  // clear lecture
+                  this.clear()
+                  window.location.reload()
+                })
               })
             }
           }
-
-          // set content
-          this.lecture._content = this.content
-
-          // encrypt lecture
-          lecture = {data: this.$Encrypt(JSON.stringify(this.lecture)).token}
-
-          // upload lecture
-          this.$Upload(`${this.lecture.getFormat()}lectures`, `${this.lecture._id}`, lecture).then(() => {
-            this.networkMessage.processing = false
-            this.networkMessage.success = 'Lecture uploaded'
-            // clear lecture
-            this.clear()
-            window.location.reload()
-          })
         }
       },
 
