@@ -213,7 +213,7 @@ export default {
           sessionStorage.setItem('forumId', interactiveSessionId)
 
           // route to the monitoring screen
-          this.$router.push('session-monitor')
+          this.$router.push('/session-monitor')
         })
       } else if (this.videoSource === 'unsupported') {
         alert("can't continue, unsupported video source")
@@ -279,6 +279,10 @@ export default {
 
       }
     }
+  },
+
+  mounted() {
+    sessionStorage.getItem('hostName') ? this.host = sessionStorage.getItem('hostName') : null
   },
 
   hasAnim: true

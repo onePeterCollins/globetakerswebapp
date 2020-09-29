@@ -1,5 +1,5 @@
 <template>
-  <div class="g-lecture-viewer">
+  <div class="g-lectures-list social-media-sketch-pattern">
     <v-row class="g-cream">
       <v-col>
         <h3 align="center">{{lectureType}} lectures</h3>
@@ -28,18 +28,13 @@
       </v-col>
     </v-row>
 
-    <br />
-    <br />
-    <br />
-    <br />
-
     <v-row v-if="lectureType === 'Audio'">
       <v-col v-for="(lecture, sn) in myAudioLectures" :key="sn" class="col-12" align="center">
         <v-card class="my-5 col-11 col-lg-10">
           <v-row>
             <v-col class="col-12 col-lg-6" align="left">
               <h2 class="g-deepblue--text ml-3">{{lecture.getTitle()}}</h2>
-              <v-row>
+              <v-row v-if="!mobile">
                 <v-col class="ml-3">
                   <v-btn @click="edit(sn)" class="mx-2">
                     <v-icon>mdi-pen</v-icon>
@@ -57,9 +52,34 @@
                   </v-btn>
                 </v-col>
               </v-row>
+
+              <v-row v-else>
+                <v-col class="ml-3">
+                  <v-btn @click="edit(sn)">
+                    <v-icon>mdi-pen</v-icon>
+                    Edit
+                  </v-btn>
+                </v-col>
+
+                <v-col class="mr-3">
+                  <v-btn @click="comment(sn)">
+                    <v-icon>mdi-message</v-icon>
+                    Comment
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="mobile">
+                <v-col class="ml-3">
+                  <v-btn @click="deleteLecture(sn)">
+                    <v-icon>mdi-cancel</v-icon>
+                    Delete
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-col>
 
-            <v-col class="col-12 col-lg-6">
+            <v-col v-if="!mobile" class="col-12 col-lg-6">
               <v-row>
                 <v-col align="right">
                   <span class="g-deepblue--text round gray px-2 mx-3">By: {{lecture.getAuthor()}}</span>
@@ -77,18 +97,42 @@
                 </v-col>
               </v-row>
             </v-col>
+
+            <v-col v-else class="col-12 col-lg-6">
+              <v-row>
+                <v-col>
+                  <p class="g-deepblue--text round gray px-2 ml-3">By: {{lecture.getAuthor()}}</p>
+                  <p class="g-deepblue--text round gray px-2 ml-3">Posted: {{lecture.getDate()}}</p>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col align="center">
+                  <span class="g-deepblue--text round gray px-2 mx-3">Views: {{lecture.getViews()}}</span>
+                  <span class="g-deepblue--text round gray px-2 mx-3">Format: <v-icon class="mx-2">mdi-headset</v-icon>{{lecture.getFormat()}}</span>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col align="center">
+                  <span v-if="lecture._approved" class="green--text mx-3" align="left">Approved</span>
+                  <span v-else class="red--text mx-3" align="left">Not Approved</span>
+                </v-col>
+              </v-row>
+            </v-col>
           </v-row>
         </v-card>
       </v-col>
     </v-row>
 
+    <!-- TEXT LECTURES -->
     <v-row v-if="lectureType === 'Text'">
-      <v-col v-for="(lecture, sn) in myTextLectures" :key="sn" align="center" class="col-12">
+      <v-col v-for="(lecture, sn) in myTextLectures" :key="sn" class="col-12" align="center">
         <v-card class="my-5 col-11 col-lg-10">
           <v-row>
             <v-col class="col-12 col-lg-6" align="left">
               <h2 class="g-deepblue--text ml-3">{{lecture.getTitle()}}</h2>
-              <v-row>
+              <v-row v-if="!mobile">
                 <v-col class="ml-3">
                   <v-btn @click="edit(sn)" class="mx-2">
                     <v-icon>mdi-pen</v-icon>
@@ -106,9 +150,34 @@
                   </v-btn>
                 </v-col>
               </v-row>
+
+              <v-row v-else>
+                <v-col class="ml-3">
+                  <v-btn @click="edit(sn)">
+                    <v-icon>mdi-pen</v-icon>
+                    Edit
+                  </v-btn>
+                </v-col>
+
+                <v-col class="mr-3">
+                  <v-btn @click="comment(sn)">
+                    <v-icon>mdi-message</v-icon>
+                    Comment
+                  </v-btn>
+                </v-col>
+              </v-row>
+
+              <v-row v-if="mobile">
+                <v-col class="ml-3">
+                  <v-btn @click="deleteLecture(sn)">
+                    <v-icon>mdi-cancel</v-icon>
+                    Delete
+                  </v-btn>
+                </v-col>
+              </v-row>
             </v-col>
 
-            <v-col class="col-12 col-lg-6">
+            <v-col v-if="!mobile" class="col-12 col-lg-6">
               <v-row>
                 <v-col align="right">
                   <span class="g-deepblue--text round gray px-2 mx-3">By: {{lecture.getAuthor()}}</span>
@@ -122,7 +191,30 @@
                   <span v-else class="red--text mx-3" align="left">Not Approved</span>
 
                   <span class="g-deepblue--text round gray px-2 mx-3">Views: {{lecture.getViews()}}</span>
+                  <span class="g-deepblue--text round gray px-2 mx-3">Format: <v-icon class="mx-2">mdi-headset</v-icon>{{lecture.getFormat()}}</span>
+                </v-col>
+              </v-row>
+            </v-col>
+
+            <v-col v-else class="col-12 col-lg-6">
+              <v-row>
+                <v-col>
+                  <p class="g-deepblue--text round gray px-2 ml-3">By: {{lecture.getAuthor()}}</p>
+                  <p class="g-deepblue--text round gray px-2 ml-3">Posted: {{lecture.getDate()}}</p>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col align="center">
+                  <span class="g-deepblue--text round gray px-2 mx-3">Views: {{lecture.getViews()}}</span>
                   <span class="g-deepblue--text round gray px-2 mx-3">Format: <v-icon class="mx-2">mdi-text</v-icon>{{lecture.getFormat()}}</span>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col align="center">
+                  <span v-if="lecture._approved" class="green--text mx-3" align="left">Approved</span>
+                  <span v-else class="red--text mx-3" align="left">Not Approved</span>
                 </v-col>
               </v-row>
             </v-col>
@@ -197,6 +289,15 @@ export default {
       }
 
       return value
+    },
+    mobile: () => {
+      let value
+
+      window.innerWidth < 1024
+      ? value = true
+      : value = false
+
+      return value
     }
   },
 
@@ -243,17 +344,25 @@ export default {
   methods: {
     edit(index) {
       if (this.lectureType === 'Audio') {
-        sessionStorage.setItem('editLecture', this.myAudioLectures[index])
+        sessionStorage.setItem('editLecture', this.myAudioLectures[index]._id)
+        sessionStorage.setItem('lectureType', this.lectureType)
+        this.$router.push('my-lectures/lecture-editor')
       } else if (this.lectureType === 'Text') {
-        sessionStorage.setItem('editLecture', this.myTextLectures[index])
+        sessionStorage.setItem('editLecture', this.myTextLectures[index]._id)
+        sessionStorage.setItem('lectureType', this.lectureType)
+        this.$router.push('my-lectures/lecture-editor')
       }
     },
 
     comment(index) {
       if (this.lectureType === 'Audio') {
-        sessionStorage.setItem('editLecture', this.myAudioLectures[index])
+        sessionStorage.setItem('editLecture', this.myAudioLectures[index]._id)
+        sessionStorage.setItem('lectureType', this.lectureType)
+        this.$router.push('my-lectures/lecture-viewer')
       } else if (this.lectureType === 'Text') {
-        sessionStorage.setItem('editLecture', this.myTextLectures[index])
+        sessionStorage.setItem('editLecture', this.myTextLectures[index]._id)
+        sessionStorage.setItem('lectureType', this.lectureType)
+        this.$router.push('my-lectures/lecture-viewer')
       }
     },
 

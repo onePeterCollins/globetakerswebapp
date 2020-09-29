@@ -67,9 +67,14 @@ const routes = [
     component: () => import('../views/InteractiveForum.vue')
   },
   {
-    path: '/student-dashboard/Lectures',
+    path: '/student-dashboard/lectures',
     name: 'Lectures',
     component: () => import('../views/Lectures.vue')
+  },
+  {
+    path: '/student-dashboard/lectures/lecture-viewer',
+    name: 'Student-lecture-viewer',
+    component: () => import('../views/LectureViewer.vue')
   },
   {
     path: '/student-dashboard/course-access-denied',
@@ -98,6 +103,21 @@ const routes = [
     name: 'My-lectures',
     component: () => import('../views/LectureList.vue')
   },
+  {
+    path: '/trainer-dashboard/my-lectures/lecture-editor',
+    name: 'Lecture-editor',
+    component: () => import('../views/LectureEditor.vue')
+  },
+  {
+    path: '/trainer-dashboard/my-lectures/lecture-viewer',
+    name: 'Lecture-viewer',
+    component: () => import('../views/LectureViewer.vue')
+  },
+  {
+    path: '/trainer-dashboard/forum-manager',
+    name: 'Trainer-forum-manager',
+    component: () => import('../views/InteractiveForumManager.vue')
+  },
 
   // admin
   {
@@ -122,11 +142,11 @@ const routes = [
   },
   {
     path: '/proprietor/forum-manager',
-    name: 'forum-manager',
+    name: 'Admin-forum-manager',
     component: () => import('../views/InteractiveForumManager.vue')
   },
   {
-    path: '/proprietor/session-monitor',
+    path: '/session-monitor',
     name: 'session-monitor',
     component: () => import('../components/SessionMonitor.vue')
   },

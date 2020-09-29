@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-row>
-      <h3 class="yellow z3 wide" align="center">Lectures</h3>
+      <h3 class="yellow z3 wide" align="center">{{lectureType}} Lectures</h3>
     </v-row>
 
     <transition name="slideYpos">
@@ -42,72 +42,75 @@
     <br/>
     <br/>
 
-    <v-row>
-      <v-card v-for="(lecture, sn) in lectures" :key="sn" class="col-10 col-lg-5 center mb-5 gray">
-        <v-row>
-          <v-col class="col-9">
-            <h4 class="ml-2">{{lecture.title + ' ' + lecture.sn}}</h4>
-            <span class="ml-2">Trainer: </span><span class="dosis-semibold">{{lecture.trainer}}</span>
-          </v-col>
-          <!-- popover menu -->
-          <v-col align="right">
-            <v-btn
-              v-if="mobile"
-              fab
-              color="transparent"
-              depressed
-              small
-              @click="setPopmenuName('popmenu', sn)"
-              v-popover:popmenu.left
-            >
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+    <v-row v-if="lectures.length > 0">
+      <v-col v-for="(lecture, sn) in lectures" :key="sn" class="col-12 col-lg-6" align="center">
+        <v-card class="col-11 col-lg-10 mb-5 gray" align="left">
+          <v-row>
+            <v-col class="col-9">
+              <h4 class="ml-2">{{lecture.getTitle()}}</h4>
+              <span class="ml-2">Trainer: </span><span class="dosis-semibold">{{lecture.getAuthor()}}</span>
+            </v-col>
+            <!-- popover menu -->
+            <v-col align="right">
+              <v-btn
+                v-if="mobile"
+                fab
+                color="transparent"
+                depressed
+                small
+                @click="setPopmenuName('popmenu', sn)"
+                v-popover:popmenu.left
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
 
-            <v-btn
-              v-else-if="!mobile"
-              class="mr-5"
-              fab
-              color="transparent"
-              depressed
-              small
-              @click="setPopmenuName('popmenu', sn)"
-              v-popover:popmenu.bottom
-            >
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+              <v-btn
+                v-else-if="!mobile"
+                class="mr-5"
+                fab
+                color="transparent"
+                depressed
+                small
+                @click="setPopmenuName('popmenu', sn)"
+                v-popover:popmenu.bottom
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
 
-            <popover v-if="popmenuSN == sn" :class="popoverClass" :name="popmenuName">
-              <v-list dense align="center">
-                <v-list-item link to="/home">
-                  <v-list-item-action>
-                    <v-icon>mdi-open-in-new</v-icon>
-                  </v-list-item-action>
+              <popover v-if="popmenuSN == sn" :class="popoverClass" :name="popmenuName">
+                <v-list dense align="center">
+                  <v-list-item link to="/home">
+                    <v-list-item-action>
+                      <v-icon>mdi-open-in-new</v-icon>
+                    </v-list-item-action>
 
-                  <v-list-item-content>
-                    <v-list-item-title>Open</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
+                    <v-list-item-content>
+                      <v-list-item-title>Open</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
 
-                <v-list-item link to="/home">
-                  <v-list-item-action>
-                    <v-icon>mdi-help</v-icon>
-                  </v-list-item-action>
+                  <v-list-item link to="/home">
+                    <v-list-item-action>
+                      <v-icon>mdi-help</v-icon>
+                    </v-list-item-action>
 
-                  <v-list-item-content>
-                    <v-list-item-title>Ask question</v-list-item-title>
-                  </v-list-item-content>
-                </v-list-item>
-              </v-list>
-            </popover>
-          </v-col>
-        </v-row>
+                    <v-list-item-content>
+                      <v-list-item-title>Ask question</v-list-item-title>
+                    </v-list-item-content>
+                  </v-list-item>
+                </v-list>
+              </popover>
+            </v-col>
+          </v-row>
 
-        <v-row justify="center">
-          <v-col align="left">
-            <p class="ml-2">{{lecture.summary + ' ' + lecture.sn}}</p>
-          </v-col>
-        </v-row>
-      </v-card>
+          <v-row justify="center">
+            <v-col align="left">
+              <span class="ml-2">Posted: {{lecture.getDate()}}</span>
+              <span class="ml-12">Views: {{lecture.getViews()}}</span>
+            </v-col>
+          </v-row>
+        </v-card>
+      </v-col>
     </v-row>
 
     <br/>
@@ -119,6 +122,9 @@
 </template>
 
 <script>
+import Lecture from '../classes/Lecture'
+import {db} from '../firebase'
+
 export default {
   name: 'Lectures',
 
@@ -126,16 +132,12 @@ export default {
     more: '',
     tip: true,
     menuVisible: false,
-    lectures: [
-      {sn: 1, title: 'demo lecture', trainer: 'trainer 1', summary: 'one line summary of lecture'},
-      {sn: 2, title: 'demo lecture', trainer: 'trainer 1', summary: 'one line summary of lecture'},
-      {sn: 3, title: 'demo lecture', trainer: 'trainer 1', summary: 'one line summary of lecture'},
-      {sn: 4, title: 'demo lecture', trainer: 'trainer 1', summary: 'one line summary of lecture'},
-      {sn: 5, title: 'demo lecture', trainer: 'trainer 1', summary: 'one line summary of lecture'},
-      {sn: 6, title: 'demo lecture', trainer: 'trainer 1', summary: 'one line summary of lecture'}
-    ],
+    lectures: [],
     popmenuName: '',
-    popmenuSN: ''
+    popmenuSN: '',
+    lecture: new Lecture(),
+    audioLectures: [],
+    textLectures: []
   }),
 
   computed: {
@@ -149,6 +151,10 @@ export default {
       return value
     },
 
+    lectureType () {
+      return sessionStorage.getItem('lectureType')
+    },
+
     popoverClass: () => {
       let value
 
@@ -160,6 +166,33 @@ export default {
     }
   },
 
+  firestore: {
+    audioLectures: db.collection('audiolectures'),
+    textLectures: db.collection('textlectures')
+  },
+
+  watch: {
+    audioLectures() {
+      this.audioLectures.forEach((item) => {
+        let lecture = new Lecture()
+
+        Object.assign(lecture, JSON.parse(this.$Decrypt(item.data).token))
+
+        lecture.getFormat() === this.lectureType.toLowerCase() ? this.lectures.push(lecture) : null
+      })
+    },
+
+    textLectures() {
+      this.textLectures.forEach((item) => {
+        let lecture = new Lecture()
+
+        Object.assign(lecture, JSON.parse(this.$Decrypt(item.data).token))
+
+        lecture.getFormat() === this.lectureType.toLowerCase() ? this.lectures.push(lecture) : null
+      })
+    }
+  },
+
   methods: {
     showMore() {
       this.more = true
@@ -168,6 +201,11 @@ export default {
     setPopmenuName(name, sn) {
       this.popmenuName = name
       this.popmenuSN = sn
+    },
+
+    openLecture(sn) {
+      sessionStorage.setItem('openLecture', sn)
+      this.$router.push('lectures/lecture-viewer')
     }
   },
 

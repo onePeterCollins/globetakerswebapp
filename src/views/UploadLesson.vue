@@ -1,5 +1,5 @@
 <template>
-  <div class="upload-lesson">
+  <div class="upload-lesson social-media-sketch-pattern">
     <transition name="slideYpos">
       <v-row v-if="$keys[0]" class="yellow">
         <v-col>
@@ -15,191 +15,219 @@
       <br v-if="mobile"/>
       <br v-if="mobile"/>
 
-      <v-carousel-transition>
-        <form v-if="lectureType && lectureType === 'audio'" class="col-lg-5 col-10  green lighten-4 lesson-upload-form">
-          <v-row justify="center">
-            <v-fade-transition>
-              <h3  v-if="$keys[0]" class="form-title"><v-icon class="green--text">mdi-upload</v-icon> NEW AUDIO LESSON</h3>
-            </v-fade-transition>
-          </v-row>
+      <v-row>
+        <v-col>
+          <v-carousel-transition>
+            <form v-if="lectureType && lectureType === 'audio'" class="col-lg-5 col-11  green lighten-4 lesson-upload-form">
+              <v-row justify="center">
+                <v-fade-transition>
+                  <h3  v-if="$keys[0]" class="form-title"><v-icon class="green--text">mdi-upload</v-icon> NEW AUDIO LESSON</h3>
+                </v-fade-transition>
+              </v-row>
 
-          <v-row justify="center">
-            <v-col class="col-12">
-              <v-fade-transition>
-                <v-text-field v-if="$keys[1]" prepend-icon="mdi-pen" hint="lecture title" label="lecture title" v-model="title" @input="setTitle()"/>
-              </v-fade-transition>
-            </v-col>
-          </v-row>
-
-          <v-scale-transition>
-            <v-row>
-              <v-col>
-                <v-btn @click="addAudio(contentType.audio)">
-                  <v-icon class="green--text">mdi-plus</v-icon>
-                  add audio file
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-scale-transition>
-
-          <v-scale-transition v-for="(item, sn) in content" :key="sn">
-            <v-row>
-              <v-col v-if="item.type === 'audio'">
-                <v-col align="right">
-                  <v-btn x-small right fab top class="red" @click="removeAudio(sn)">
-                    <v-icon class="white--text">mdi-close</v-icon>
-                  </v-btn>
+              <v-row justify="center">
+                <v-col class="col-12">
+                  <v-fade-transition>
+                    <v-text-field v-if="$keys[1]" prepend-icon="mdi-pen" hint="lecture title" label="lecture title" v-model="title" @input="setTitle()"/>
+                  </v-fade-transition>
                 </v-col>
+              </v-row>
 
-                <v-file-input 
-                background-color="white"
-                label="select audio file"
-                v-model="item.audioFile" @change="setAudioContent(item, sn)"/>
+              <v-scale-transition>
+                <v-row>
+                  <v-col>
+                    <v-btn @click="addAudio(contentType.audio)">
+                      <v-icon class="green--text">mdi-plus</v-icon>
+                      add audio file
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-scale-transition>
 
-                <audio v-if="item.content" controls>
-                  <source :src="item.content" type="audio/mp3">
-                  Your browser does not support the audio tag.
-                </audio>
-              </v-col>
-            </v-row>
-          </v-scale-transition>
+              <v-scale-transition v-for="(item, sn) in content" :key="sn">
+                <v-row>
+                  <v-col v-if="item.type === 'audio'">
+                    <v-col align="right">
+                      <v-btn x-small right fab top class="red" @click="removeAudio(sn)">
+                        <v-icon class="white--text">mdi-close</v-icon>
+                      </v-btn>
+                    </v-col>
 
-          <transition name="slideYneg">
-            <v-row v-if="$keys[3]">
-              <span>
-                <b id="verify-lecture"></b>
-              </span>
-            </v-row>
-          </transition>
+                    
 
-          <v-row>
-            <v-col align="center">
-              <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
-              <p v-if='networkMessage.processing' class='g-deepblue--text'>
-                <v-progress-circular indeterminate />
+                    <v-file-input 
+                    background-color="white"
+                    label="select audio file"
+                    v-model="item.audioFile" @change="setAudioContent(item, sn)"/>
 
-                Sending...
-              </p>
-            </v-col>
-          </v-row>
+                    <b>(4 minutes max)</b>
 
-          <v-row>
-            <v-col align="center">
-              <h3 v-if='errorMessage'><h2>{{emoji.emojify(':warning:')}}</h2> {{`${ errorMessage}`}}</h3>
-            </v-col>
-          </v-row>
+                    <audio v-if="item.content" controls>
+                      <source :src="item.content" type="audio/mp3">
+                      Your browser does not support the audio tag.
+                    </audio>
+                  </v-col>
+                </v-row>
+              </v-scale-transition>
 
-          <v-row justify="center">
-            <v-scale-transition>
-              <v-btn v-if="$keys[4]" class="cyan mt-5" @click="send()">
-                <v-icon class="green--text">mdi-upload</v-icon> upload
-              </v-btn>
-            </v-scale-transition>
-          </v-row>
-        </form>
-      </v-carousel-transition>
+              <transition name="slideYneg">
+                <v-row v-if="$keys[3]">
+                  <span>
+                    <b id="verify-lecture"></b>
+                  </span>
+                </v-row>
+              </transition>
 
-      <!-- TEXT LECTURE FORM -->
-      <v-carousel-transition>
-        <v-form v-if="lectureType && lectureType === 'text'" class="col-lg-8 col-11  green lighten-4 lesson-upload-form">
-          <v-row justify="center">
-            <v-fade-transition>
-              <h3  v-if="$keys[0]" class="form-title"><v-icon class="green--text">mdi-upload</v-icon> NEW TEXT LESSON</h3>
-            </v-fade-transition>
-          </v-row>
+              <v-row>
+                <v-col align="center">
+                  <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
+                  <p v-if='networkMessage.processing' class='g-deepblue--text'>
+                    <v-progress-circular :rotate="-90" :value="uploadProgress">{{uploadProgress}}%</v-progress-circular>
 
-          <v-row justify="center">
-            <v-col class="col-12">
-              <v-fade-transition>
-                <v-text-field v-if="$keys[1]" prepend-icon="mdi-pen" hint="lecture title" label="lecture title" v-model="title" @input="setTitle()"/>
-              </v-fade-transition>
-            </v-col>
-          </v-row>
-
-          <v-scale-transition>
-            <v-row>
-              <v-col align="center">
-                <v-btn @click="addText(contentType.text)" class="mx-2">
-                  <v-icon class="green--text">mdi-plus</v-icon>
-                  add paragraph
-                </v-btn>
-
-                <v-btn @click="addImage(contentType.image)" class="mx-2">
-                  <v-icon class="green--text">mdi-plus</v-icon>
-                  add image
-                </v-btn>
-              </v-col>
-            </v-row>
-          </v-scale-transition>
-
-          <v-scale-transition v-for="(item, sn) in content" :key="sn">
-            <v-row>
-              <v-col v-if="item.type === 'text'">
-                <v-col align="right">
-                  <v-btn x-small right fab top class="red" @click="removeText(sn)">
-                    <v-icon class="white--text">mdi-close</v-icon>
-                  </v-btn>
+                    Sending...
+                  </p>
                 </v-col>
+              </v-row>
 
-                <v-textarea class="mx-1 mx-lg-5" prepend-icon="mdi-text" rows="3" label="Type paragraph text" v-model="item.content" />
-              </v-col>
-
-              <v-col v-if="item.type === 'image'">
-                <v-col align="right">
-                  <v-btn x-small right fab top class="red" @click="removeImage(sn)">
-                    <v-icon class="white--text">mdi-close</v-icon>
-                  </v-btn>
+              <v-row>
+                <v-col align="center">
+                  <h3 v-if='errorMessage'><h2>{{emoji.emojify(':warning:')}}</h2> {{`${ errorMessage}`}}</h3>
                 </v-col>
+              </v-row>
 
-                <v-file-input 
-                background-color="white"
-                label="select image file (PNG)"
-                v-model="item.imageFile" @change="setImageContent(item, sn)"/>
+              <v-row justify="center">
+                <v-scale-transition>
+                  <v-btn v-if="$keys[4]" class="cyan mt-5" @click="send()">
+                    <v-icon class="green--text">mdi-upload</v-icon> upload
+                  </v-btn>
+                </v-scale-transition>
+              </v-row>
+            </form>
+          </v-carousel-transition>
 
-                <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image title" height="30" v-model="item.title" />
-                <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image description" height="30" v-model="item.alt" />
-              </v-col>
-            </v-row>
-          </v-scale-transition>
+          <!-- TEXT LECTURE FORM -->
+          <v-carousel-transition>
+            <v-form v-if="lectureType && lectureType === 'text'" class="col-lg-8 col-11  green lighten-4 lesson-upload-form">
+              <v-row justify="center">
+                <v-fade-transition>
+                  <h3  v-if="$keys[0]" class="form-title"><v-icon class="green--text">mdi-upload</v-icon> NEW TEXT LESSON</h3>
+                </v-fade-transition>
+              </v-row>
 
-          <v-scale-transition v-for="(item, sn) in content" :key="sn">
-            
-          </v-scale-transition>
+              <v-row justify="center">
+                <v-col class="col-12">
+                  <v-fade-transition>
+                    <v-text-field v-if="$keys[1]" prepend-icon="mdi-pen" hint="lecture title" label="lecture title" v-model="title" @input="setTitle()"/>
+                  </v-fade-transition>
+                </v-col>
+              </v-row>
 
-          <transition name="slideYneg">
-            <v-row v-if="$keys[3]">
-              <span>
-                <b id="verify-lecture"></b>
-              </span>
-            </v-row>
-          </transition>
+              <v-scale-transition>
+                <v-row>
+                  <v-col v-if="!mobile" align="center">
+                    <v-btn @click="addText(contentType.text)" class="mx-2">
+                      <v-icon class="green--text">mdi-plus</v-icon>
+                      add paragraph
+                    </v-btn>
 
-          <v-row>
-            <v-col align="center">
-              <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
-              <p v-if='networkMessage.processing' class='g-deepblue--text'>
-                <v-progress-circular indeterminate />
+                    <v-btn @click="addImage(contentType.image)" class="mx-2">
+                      <v-icon class="green--text">mdi-plus</v-icon>
+                      add image
+                    </v-btn>
+                  </v-col>
 
-                Sending...
-              </p>
-            </v-col>
-          </v-row>
+                  <v-col v-if="mobile" align="center">
+                    <v-btn @click="addText(contentType.text)" class="mx-2">
+                      <v-icon class="green--text">mdi-plus</v-icon>
+                      add paragraph
+                    </v-btn>
+                  </v-col>
 
-          <v-row>
-            <v-col align="center">
-              <h3 v-if='errorMessage'><h2>{{emoji.emojify(':warning:')}}</h2> {{`${ errorMessage}`}}</h3>
-            </v-col>
-          </v-row>
+                  <v-col v-if="mobile" align="center">
+                    <v-btn @click="addImage(contentType.image)" class="mx-2">
+                      <v-icon class="green--text">mdi-plus</v-icon>
+                      add image
+                    </v-btn>
+                  </v-col>
+                </v-row>
+              </v-scale-transition>
 
-          <v-row justify="center">
-            <v-scale-transition>
-              <v-btn v-if="$keys[4]" class="cyan mt-5" @click="send()">
-                <v-icon class="green--text">mdi-upload</v-icon> upload
-              </v-btn>
-            </v-scale-transition>
-          </v-row>
-        </v-form>
-      </v-carousel-transition>
+              <v-scale-transition v-for="(item, sn) in content" :key="sn">
+                <v-row>
+                  <v-col v-if="item.type === 'text'">
+                    <v-col align="right">
+                      <v-btn x-small right fab top class="red" @click="removeText(sn)">
+                        <v-icon class="white--text">mdi-close</v-icon>
+                      </v-btn>
+                    </v-col>
+
+                    <v-textarea class="mx-1 mx-lg-5" prepend-icon="mdi-text" rows="3" label="Type paragraph text" v-model="item.content" />
+                  </v-col>
+
+                  <v-col v-if="item.type === 'image'">
+                    <v-col align="right">
+                      <v-btn x-small right fab top class="red" @click="removeImage(sn)">
+                        <v-icon class="white--text">mdi-close</v-icon>
+                      </v-btn>
+                    </v-col>
+
+                    <v-file-input 
+                    background-color="white"
+                    label="select image file"
+                    v-model="item.imageFile" @change="setImageContent(item, sn)"/>
+
+                    <v-row>
+                      <v-col align="center">
+                        <v-img v-if="item.content" :src="item.content" height="300" width="300" contain />
+                      </v-col>
+                    </v-row>
+                    
+                    <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image title" height="30" v-model="item.title" />
+                    <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image description" height="30" v-model="item.alt" />
+                  </v-col>
+                </v-row>
+              </v-scale-transition>
+
+              <v-scale-transition v-for="(item, sn) in content" :key="sn">
+                
+              </v-scale-transition>
+
+              <transition name="slideYneg">
+                <v-row v-if="$keys[3]">
+                  <span>
+                    <b id="verify-lecture"></b>
+                  </span>
+                </v-row>
+              </transition>
+
+              <v-row>
+                <v-col align="center">
+                  <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
+                  <p v-if='networkMessage.processing' class='g-deepblue--text'>
+                    <v-progress-circular :rotate="-90" :value="uploadProgress">{{uploadProgress}}%</v-progress-circular>
+
+                    Sending...
+                  </p>
+                </v-col>
+              </v-row>
+
+              <v-row>
+                <v-col align="center">
+                  <h3 v-if='errorMessage'><h2>{{emoji.emojify(':warning:')}}</h2> {{`${ errorMessage}`}}</h3>
+                </v-col>
+              </v-row>
+
+              <v-row justify="center">
+                <v-scale-transition>
+                  <v-btn v-if="$keys[4]" class="cyan mt-5" @click="send()">
+                    <v-icon class="green--text">mdi-upload</v-icon> upload
+                  </v-btn>
+                </v-scale-transition>
+              </v-row>
+            </v-form>
+          </v-carousel-transition>
+        </v-col>
+      </v-row>
       
       <br />
       <br />
@@ -227,13 +255,14 @@ export default {
       errorMessage: null,
       recaptchaVerifierRendered: false,
       verificationCode: '',
-
+      uploadProgress: 0,
       content: [],
 
       contentType: {
         audio: {
           type: 'audio',
           audioFile: null,
+          format: '',
           content: null
         },
 
@@ -245,6 +274,7 @@ export default {
         image: {
           type: 'image',
           imageFile: null,
+          format: '',
           content: null,
           title: '',
           alt: ''
@@ -388,10 +418,13 @@ export default {
           // upload all audio and image files
           for (let i in this.content) {
             if (this.content[i].type === 'audio') {
-              let format = this.getFileExtension(this.content[i].audioFile.name)
-
-              storage.child(`audioLectures/${this.lecture._id}${i}.mp3`).putString(this.content[i].content, 'data_url').then(() => {
+              let format = this.getFileExtension(this.content[i].audioFile.name),
+              storageRef = storage.child(`audioLectures/${this.lecture._id}${i}.${format}`),
+              upload = storageRef.putString(this.content[i].content, 'data_url')
+              
+              upload.then(() => {
                 this.content[i].content = ''
+                this.content[i].format = format
                 this.content[i].content = `audioLectures/${this.lecture._id}${i}.${format}`
                 this.content[i].audioFile = null
               }).then(() => {
@@ -410,11 +443,20 @@ export default {
                   window.location.reload()
                 })
               })
-            } else if (this.content[i].type === 'image') {
-              let format = this.getFileExtension(this.content[i].imageFile.name)
 
-              storage.child(`lectureImages/${this.lecture._id}${i}.png`).putString(this.content[i].content, 'data_url').then(() => {
+              let ROOT = this
+
+              upload.on(firebase.storage.TaskEvent.STATE_CHANGED, function (snapshot) {
+                ROOT.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              })
+            } else if (this.content[i].type === 'image') {
+              let format = this.getFileExtension(this.content[i].imageFile.name),
+              storageRef = storage.child(`lectureImages/${this.lecture._id}${i}.${format}`),
+              upload = storageRef.putString(this.content[i].content, 'data_url')
+
+              upload.then(() => {
                 this.content[i].content = ''
+                this.content[i].format = format
                 this.content[i].content = `lectureImages/${this.lecture._id}${i}.${format}`
                 this.content[i].imageFile = null
               }).then(() => {
@@ -432,6 +474,12 @@ export default {
                   this.clear()
                   window.location.reload()
                 })
+              })
+
+              let ROOT = this
+
+              upload.on(firebase.storage.TaskEvent.STATE_CHANGED, function (snapshot) {
+                ROOT.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
               })
             }
           }

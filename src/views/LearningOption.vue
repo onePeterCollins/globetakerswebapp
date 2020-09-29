@@ -14,7 +14,7 @@
 
     <v-row justify="center">
       <transition name="slideYneg">
-        <v-card v-if="$keys[2]" @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
+        <v-card v-if="$keys[2]" @click="takeLecture('Audio')" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
           <v-row class="orange">
             <v-col align="center">
               <h2>
@@ -36,7 +36,7 @@
       </transition>
 
       <transition name="slideYneg">
-        <v-card v-if="$keys[6]" @click="takeLecture" height="300" class="col-10 col-lg-3 mb-5 choose-learning-mode">
+        <v-card v-if="$keys[6]" @click="takeLecture('Text')" height="300" class="col-10 col-lg-3 mb-5 choose-learning-mode">
           <v-row class="orange">
             <v-col align="center">
               <h2>
@@ -98,9 +98,9 @@ export default {
 
   methods: {
     takeLecture(type) {
-      !type
-      ? this.$router.push('lectures')
-      : this.$router.push('lectures')
+      sessionStorage.removeItem('lectureType')
+      sessionStorage.setItem('lectureType', type)
+      this.$router.push('lectures')
     }
   },
 

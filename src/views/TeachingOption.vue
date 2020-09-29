@@ -1,8 +1,8 @@
 <template>
-  <div class="teaching-option">
-    <v-row class="yellow banner fixed">
+  <div class="teaching-option social-media-sketch-pattern">
+    <v-row class="g-cream">
       <v-col align="center">
-        <h2>Choose your lecture format</h2>
+        <h2 class="g-deepblue--text dosis">Choose your lecture format</h2>
       </v-col>
     </v-row>
 
@@ -57,7 +57,29 @@
         </v-card>
       </transition>
 
-    <transition name="slideYneg">
+      <transition name="slideYneg">
+        <v-card v-if="$keys[2]" @click="goLive(user.getName())" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
+          <v-row class="orange">
+            <v-col align="center">
+              <h2>
+                <v-avatar>
+                  <v-icon class="white">mdi-video</v-icon>
+                </v-avatar>
+                Go Live
+              </h2>
+            </v-col>
+          </v-row>
+          <v-row class="highlight">
+            <v-col align="center">
+              <v-avatar height="150" width="150" class="mt-6 cyan">
+                <v-img :src="require('../assets/images/video-forum.png')"/>
+              </v-avatar>
+            </v-col>
+          </v-row>
+        </v-card>
+      </transition>
+
+      <transition name="slideYneg">
         <v-card v-if="$keys[4]" @click="viewLectures()" height="300" class="col-10 col-lg-3 mb-5 mr-lg-5 choose-learning-mode">
           <v-row class="orange">
             <v-col align="center">
@@ -115,7 +137,8 @@ export default {
       : value = desktopImg
 
       return value
-    }
+    },
+    user() {return this.$store.getters.getUserData}
   },
 
   methods: {
@@ -127,6 +150,12 @@ export default {
         this.$store.dispatch('setValue', {name: 'createLecture', newVal: 'text'})
         this.$router.push('upload-lesson')
       }
+    },
+
+    goLive(username) {
+      sessionStorage.removeItem('hostName')
+      sessionStorage.setItem('hostName', username)
+      this.$router.push('forum-manager')
     },
 
     viewLectures() {
