@@ -259,6 +259,7 @@ export default {
       audio: {
         type: 'audio',
         audioFile: null,
+        format: '',
         content: null
       },
 
@@ -459,6 +460,7 @@ export default {
 
                 upload.then(() => {
                   this.content[i].content = ''
+                  this.content[i].format = format
                   this.content[i].content = `audioLectures/${this.lecture._id}${i}.${format}`
                   this.content[i].audioFile = null
                 }).then(() => {
@@ -474,7 +476,7 @@ export default {
                     this.networkMessage.success = 'Lecture uploaded'
                     // clear lecture
                     this.clear()
-                    window.location.reload()
+                    window.history.go(-1)
                   })
                 })
 
@@ -496,6 +498,7 @@ export default {
 
                 upload.then(() => {
                   this.content[i].content = ''
+                  this.content[i].format = format
                   this.content[i].content = `lectureImages/${this.lecture._id}${i}.${format}`
                   this.content[i].imageFile = null
                 }).then(() => {
@@ -511,7 +514,7 @@ export default {
                     this.networkMessage.success = 'Lecture uploaded'
                     // clear lecture
                     this.clear()
-                    window.location.reload()
+                    window.history.go(-1)
                   })
                 })
 

@@ -69,6 +69,7 @@ let state = {
   adminAccess: false,
   inspectStudent: '',
   viewMessage: {},
+  viewLecture: {},
   forumId: ''
 }
 

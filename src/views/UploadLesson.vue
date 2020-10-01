@@ -472,7 +472,7 @@ export default {
                   this.networkMessage.success = 'Lecture uploaded'
                   // clear lecture
                   this.clear()
-                  window.location.reload()
+                  window.history.go(-1)
                 })
               })
 

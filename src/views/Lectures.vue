@@ -44,7 +44,7 @@
 
     <v-row v-if="lectures.length > 0">
       <v-col v-for="(lecture, sn) in lectures" :key="sn" class="col-12 col-lg-6" align="center">
-        <v-card class="col-11 col-lg-10 mb-5 gray" align="left">
+        <v-card class="col-11 col-lg-10 mb-5 gray" align="left" @click="viewLecture(sn)">
           <v-row>
             <v-col class="col-9">
               <h4 class="ml-2">{{lecture.getTitle()}}</h4>
@@ -79,7 +79,7 @@
 
               <popover v-if="popmenuSN == sn" :class="popoverClass" :name="popmenuName">
                 <v-list dense align="center">
-                  <v-list-item link to="/home">
+                  <v-list-item @click="viewLecture(sn)">
                     <v-list-item-action>
                       <v-icon>mdi-open-in-new</v-icon>
                     </v-list-item-action>
@@ -89,7 +89,7 @@
                     </v-list-item-content>
                   </v-list-item>
 
-                  <v-list-item link to="/home">
+                  <v-list-item @click="viewLecture(sn)">
                     <v-list-item-action>
                       <v-icon>mdi-help</v-icon>
                     </v-list-item-action>
@@ -203,8 +203,11 @@ export default {
       this.popmenuSN = sn
     },
 
-    openLecture(sn) {
-      sessionStorage.setItem('openLecture', sn)
+    viewLecture(sn) {
+      let ROOT = this
+      sessionStorage.removeItem('viewLecture')
+      sessionStorage.setItem('viewLecture', JSON.stringify(this.lectures[sn]))
+      this.$store.dispatch('setValue', {name: 'viewLecture', newVal: ROOT.lectures[sn]})
       this.$router.push('lectures/lecture-viewer')
     }
   },

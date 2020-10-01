@@ -14,6 +14,7 @@ export default class Lecture {
         this._formats = ['text', 'audio']
         this._content = []
         this._questions = []
+        this._seenBy = []
         this._views = 0
         this._date = ''
         this._id = ''
@@ -44,6 +45,10 @@ export default class Lecture {
 
     getQuestions() {
         return this._questions
+    }
+
+    getViewerDetails() {
+        return this._seenBy
     }
 
     getViews() {
@@ -89,6 +94,13 @@ export default class Lecture {
      */
     addQuestion (newQuestion) {
         this._questions.push(newQuestion)
+    }
+
+    /**
+     * @param {Object} newViewer
+     */
+    addViewer (newViewer) {
+        this._seenBy.push(newViewer)
     }
 
     addView () {
