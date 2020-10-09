@@ -178,7 +178,7 @@ export default {
 
         Object.assign(lecture, JSON.parse(this.$Decrypt(item.data).token))
 
-        lecture.getFormat() === this.lectureType.toLowerCase() ? this.lectures.push(lecture) : null
+        lecture.getFormat() === this.lectureType.toLowerCase() && lecture._approved ? this.lectures.push(lecture) : null
       })
     },
 
@@ -188,7 +188,7 @@ export default {
 
         Object.assign(lecture, JSON.parse(this.$Decrypt(item.data).token))
 
-        lecture.getFormat() === this.lectureType.toLowerCase() ? this.lectures.push(lecture) : null
+        lecture.getFormat() === this.lectureType.toLowerCase() && lecture._approved ? this.lectures.push(lecture) : null
       })
     }
   },

@@ -41,9 +41,9 @@
                     Edit
                   </v-btn>
 
-                  <v-btn @click="comment(sn)" class="mx-2">
+                  <v-btn @click="open(sn)" class="mx-2">
                     <v-icon>mdi-message</v-icon>
-                    Comment
+                    Open
                   </v-btn>
 
                   <v-btn @click="deleteLecture(sn)" class="mx-2">
@@ -72,9 +72,9 @@
                 </v-col>
 
                 <v-col class="mr-3">
-                  <v-btn @click="comment(sn)">
+                  <v-btn @click="open(sn)">
                     <v-icon>mdi-message</v-icon>
-                    Comment
+                    Open
                   </v-btn>
                 </v-col>
               </v-row>
@@ -161,9 +161,9 @@
                     Edit
                   </v-btn>
 
-                  <v-btn @click="comment(sn)" class="mx-2">
+                  <v-btn @click="open(sn)" class="mx-2">
                     <v-icon>mdi-message</v-icon>
-                    Comment
+                    Open
                   </v-btn>
 
                   <v-btn @click="deleteLecture(sn)" class="mx-2">
@@ -192,9 +192,9 @@
                 </v-col>
 
                 <v-col class="mr-3">
-                  <v-btn @click="comment(sn)">
+                  <v-btn @click="open(sn)">
                     <v-icon>mdi-message</v-icon>
-                    Comment
+                    Open
                   </v-btn>
                 </v-col>
               </v-row>
@@ -398,19 +398,21 @@ export default {
       }
     },
 
-    comment(index) {
+    open(index) {
       if (this.lectureType === 'Audio') {
-        sessionStorage.removeItem('editLecture')
+        sessionStorage.removeItem('viewLecture')
         sessionStorage.removeItem('lectureType')
-        sessionStorage.setItem('editLecture', this.myAudioLectures[index]._id)
+
+        sessionStorage.setItem('viewLecture', this.myAudioLectures[index]._id)
         sessionStorage.setItem('lectureType', this.lectureType)
-        this.$router.push('my-lectures/lecture-viewer')
+        this.$router.push('lecture-manager/lecture-viewer')
       } else if (this.lectureType === 'Text') {
-        sessionStorage.removeItem('editLecture')
+        sessionStorage.removeItem('viewLecture')
         sessionStorage.removeItem('lectureType')
-        sessionStorage.setItem('editLecture', this.myTextLectures[index]._id)
+
+        sessionStorage.setItem('viewLecture', this.myTextLectures[index]._id)
         sessionStorage.setItem('lectureType', this.lectureType)
-        this.$router.push('my-lectures/lecture-viewer')
+        this.$router.push('lecture-manager/lecture-viewer')
       }
     },
 
@@ -446,6 +448,58 @@ export default {
             }
           }
         }
+      }
+    },
+
+    approveLecture(index) {
+      if (this.lectureType === 'Audio') {
+        let encryptedData, encryptedToken
+
+        this.myAudioLectures[index].approve()
+
+        // encrypt and upload
+        encryptedData = this.$Encrypt(JSON.stringify(this.myAudioLectures[index]))
+
+        encryptedToken = {data: encryptedData.token}
+
+        this.$Upload(`${this.myAudioLectures[index].getFormat()}lectures`, `${this.myAudioLectures[index]._id}`, encryptedToken)
+      } else if (this.lectureType === 'Text') {
+        let encryptedData, encryptedToken
+
+        this.myTextLectures[index].approve()
+
+        // encrypt and upload
+        encryptedData = this.$Encrypt(JSON.stringify(this.myTextLectures[index]))
+
+        encryptedToken = {data: encryptedData.token}
+
+        this.$Upload(`${this.myTextLectures[index].getFormat()}lectures`, `${this.myTextLectures[index]._id}`, encryptedToken)
+      }
+    },
+
+    disapproveLecture(index) {
+      if (this.lectureType === 'Audio') {
+        let encryptedData, encryptedToken
+
+        this.myAudioLectures[index].disapprove()
+
+        // encrypt and upload
+        encryptedData = this.$Encrypt(JSON.stringify(this.myAudioLectures[index]))
+
+        encryptedToken = {data: encryptedData.token}
+
+        this.$Upload(`${this.myAudioLectures[index].getFormat()}lectures`, `${this.myAudioLectures[index]._id}`, encryptedToken)
+      } else if (this.lectureType === 'Text') {
+        let encryptedData, encryptedToken
+
+        this.myTextLectures[index].disapprove()
+
+        // encrypt and upload
+        encryptedData = this.$Encrypt(JSON.stringify(this.myTextLectures[index]))
+
+        encryptedToken = {data: encryptedData.token}
+
+        this.$Upload(`${this.myTextLectures[index].getFormat()}lectures`, `${this.myTextLectures[index]._id}`, encryptedToken)
       }
     }
   }

@@ -181,6 +181,11 @@ const routes = [
     component: () => import('../views/LectureManagerEditor.vue')
   },
   {
+    path: '/proprietor/lecture-manager/lecture-viewer',
+    name: 'Lecture-manager-lecture-viewer',
+    component: () => import('../views/LectureManagerLectureViewer.vue')
+  },
+  {
     path: '/proprietor/team-manager',
     name: 'Team-manager',
     component: () => import('../views/TeamManager.vue')
