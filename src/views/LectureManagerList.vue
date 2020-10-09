@@ -50,6 +50,16 @@
                     <v-icon>mdi-cancel</v-icon>
                     Delete
                   </v-btn>
+
+                  <v-btn v-if="!lecture._approved" @click="approveLecture(sn)" class="mx-2">
+                    <v-icon>mdi-check</v-icon>
+                    Approve
+                  </v-btn>
+
+                  <v-btn v-if="lecture._approved" @click="disapproveLecture(sn)" class="mx-2">
+                    <v-icon>mdi-cancel</v-icon>
+                    Disapprove
+                  </v-btn>
                 </v-col>
               </v-row>
 
@@ -74,6 +84,18 @@
                   <v-btn @click="deleteLecture(sn)">
                     <v-icon>mdi-cancel</v-icon>
                     Delete
+                  </v-btn>
+                </v-col>
+
+                <v-col class="mr-3">
+                  <v-btn v-if="!lecture._approved" @click="approveLecture(sn)">
+                    <v-icon>mdi-check</v-icon>
+                    Approve
+                  </v-btn>
+
+                  <v-btn v-if="lecture._approved" @click="disapproveLecture(sn)" class="mx-2">
+                    <v-icon>mdi-cancel</v-icon>
+                    Disapprove
                   </v-btn>
                 </v-col>
               </v-row>
@@ -148,6 +170,16 @@
                     <v-icon>mdi-cancel</v-icon>
                     Delete
                   </v-btn>
+
+                  <v-btn v-if="!lecture._approved" @click="approveLecture(sn)" class="mx-2">
+                    <v-icon>mdi-check</v-icon>
+                    Approve
+                  </v-btn>
+
+                  <v-btn v-if="lecture._approved" @click="disapproveLecture(sn)" class="mx-2">
+                    <v-icon>mdi-cancel</v-icon>
+                    Disapprove
+                  </v-btn>
                 </v-col>
               </v-row>
 
@@ -172,6 +204,18 @@
                   <v-btn @click="deleteLecture(sn)">
                     <v-icon>mdi-cancel</v-icon>
                     Delete
+                  </v-btn>
+                </v-col>
+
+                <v-col class="mr-3">
+                  <v-btn v-if="!lecture._approved" @click="approveLecture(sn)">
+                    <v-icon>mdi-check</v-icon>
+                    Approve
+                  </v-btn>
+
+                  <v-btn v-if="lecture._approved" @click="disapproveLecture(sn)" class="mx-2">
+                    <v-icon>mdi-cancel</v-icon>
+                    Disapprove
                   </v-btn>
                 </v-col>
               </v-row>
@@ -316,9 +360,7 @@ export default {
 
         Object.assign(audioLecture, JSON.parse(this.$Decrypt(item.data).token))
 
-        if (audioLecture.getAuthor() === this.user.getName()) {
-          lectures.push(audioLecture)
-        }
+        lectures.push(audioLecture)
       })
 
       this.myAudioLectures = lectures
@@ -331,10 +373,8 @@ export default {
         let textLecture = new Lecture()
 
         Object.assign(textLecture, JSON.parse(this.$Decrypt(item.data).token))
-
-        if (textLecture.getAuthor() === this.user.getName()) {
-          lectures.push(textLecture)
-        }
+        
+        lectures.push(textLecture)
       })
 
       this.myTextLectures = lectures
@@ -346,34 +386,30 @@ export default {
       if (this.lectureType === 'Audio') {
         sessionStorage.removeItem('editLecture')
         sessionStorage.removeItem('lectureType')
-
         sessionStorage.setItem('editLecture', this.myAudioLectures[index]._id)
         sessionStorage.setItem('lectureType', this.lectureType)
-        this.$router.push('my-lectures/lecture-editor')
+        this.$router.push('lecture-manager/lecture-editor')
       } else if (this.lectureType === 'Text') {
         sessionStorage.removeItem('editLecture')
         sessionStorage.removeItem('lectureType')
-
         sessionStorage.setItem('editLecture', this.myTextLectures[index]._id)
         sessionStorage.setItem('lectureType', this.lectureType)
-        this.$router.push('my-lectures/lecture-editor')
+        this.$router.push('lecture-manager/lecture-editor')
       }
     },
 
     comment(index) {
       if (this.lectureType === 'Audio') {
+        sessionStorage.removeItem('editLecture')
         sessionStorage.removeItem('lectureType')
-        sessionStorage.removeItem('viewLecture')
-
+        sessionStorage.setItem('editLecture', this.myAudioLectures[index]._id)
         sessionStorage.setItem('lectureType', this.lectureType)
-        sessionStorage.setItem('viewLecture', this.myAudioLectures[index]._id)
         this.$router.push('my-lectures/lecture-viewer')
       } else if (this.lectureType === 'Text') {
+        sessionStorage.removeItem('editLecture')
         sessionStorage.removeItem('lectureType')
-        sessionStorage.removeItem('viewLecture')
-
+        sessionStorage.setItem('editLecture', this.myTextLectures[index]._id)
         sessionStorage.setItem('lectureType', this.lectureType)
-        sessionStorage.setItem('viewLecture', this.myTextLectures[index]._id)
         this.$router.push('my-lectures/lecture-viewer')
       }
     },

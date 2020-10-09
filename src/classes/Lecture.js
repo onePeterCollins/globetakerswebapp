@@ -90,7 +90,7 @@ export default class Lecture {
     }
 
     /**
-     * @param {Number} newQuestion
+     * @param {Object} newQuestion
      */
     addQuestion (newQuestion) {
         this._questions.push(newQuestion)

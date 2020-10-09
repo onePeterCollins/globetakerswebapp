@@ -171,6 +171,31 @@ const routes = [
     component: () => import('../views/TrainerMessenger.vue')
   },
   {
+    path: '/proprietor/lecture-manager',
+    name: 'Lecture-manager',
+    component: () => import('../views/LectureManagerList.vue')
+  },
+  {
+    path: '/proprietor/lecture-manager/lecture-editor',
+    name: 'Lecture-manager-editor',
+    component: () => import('../views/LectureManagerEditor.vue')
+  },
+  {
+    path: '/proprietor/team-manager',
+    name: 'Team-manager',
+    component: () => import('../views/TeamManager.vue')
+  },
+  {
+    path: '/proprietor/message-manager',
+    name: 'message-manager',
+    component: () => import('../views/AdminMessageList.vue')
+  },
+  {
+    path: '/proprietor/message-manager/view-message',
+    name: 'Admin-message-viewer',
+    component: () => import('../views/AdminMessageViewer.vue')
+  },
+  {
     path: '/proprietor/security',
     name: 'admin-security',
     component: () => import('../components/AdminSecurity.vue')

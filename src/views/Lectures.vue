@@ -94,7 +94,7 @@
                       <v-icon>mdi-help</v-icon>
                     </v-list-item-action>
 
-                    <v-list-item-content>
+                    <v-list-item-content @click="viewLecture(sn)">
                       <v-list-item-title>Ask question</v-list-item-title>
                     </v-list-item-content>
                   </v-list-item>
@@ -206,8 +206,8 @@ export default {
     viewLecture(sn) {
       let ROOT = this
       sessionStorage.removeItem('viewLecture')
-      sessionStorage.setItem('viewLecture', JSON.stringify(this.lectures[sn]))
-      this.$store.dispatch('setValue', {name: 'viewLecture', newVal: ROOT.lectures[sn]})
+      sessionStorage.setItem('viewLecture', this.lectures[sn]._id)
+      this.$store.dispatch('setValue', {name: 'viewLecture', newVal: ROOT.lectures[sn]._id})
       this.$router.push('lectures/lecture-viewer')
     }
   },

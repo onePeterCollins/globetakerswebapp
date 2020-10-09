@@ -217,10 +217,11 @@ export default {
         this.contactMessage.setDate(this.date)
 
         // set serial number (for sorting)
-        this.notification.setSn(this.serialNumber)
+        this.contactMessage.setSn(this.serialNumber)
 
         // encrypt message
         message = {data: this.$Encrypt(JSON.stringify(this.contactMessage)).token}
+
 
         // upload message
         this.$Upload('inbox', `${this.contactMessage._id}`, message).then(() => {

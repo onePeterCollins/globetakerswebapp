@@ -1,14 +1,8 @@
 [
   {
-    "origin": ["https://globetakersonline.web.app:443"],
-    "responseHeader": ["json"],
+    "origin": ["*"],
     "method": ["GET", "HEAD", "DELETE"],
-    "maxAgeSeconds": 3600
-  },
-  {
-    "origin": ["https://globetakersonline.firebaseapp.com:443"],
     "responseHeader": ["json"],
-    "method": ["GET", "HEAD", "DELETE"],
     "maxAgeSeconds": 3600
   }
 ]

@@ -15,11 +15,6 @@ export default function messageValidator (message, errorHandler) {
             errorMessage = `${emoji.emojify(':worried:')} Message can not begin with a hyphen`
         }
 
-        // message cannot begin with a special character
-        if (item.toUpperCase() === item.toLowerCase()) {
-            error = true
-            errorMessage = `${emoji.emojify(':warning:')} Message can not begin with a number or special character`
-        }
 
         // message can not begin with white space
         if (index === 0 && item === ' ') {
