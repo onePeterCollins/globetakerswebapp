@@ -57,7 +57,7 @@
               </v-card-text>
             </v-card>
 
-            <v-card v-if="item.type === 'response'" class="col-8 px-1 py-0 my-3 right" align="left">
+            <v-card v-if="item.type === 'response'" class="col-8 px-1 py-0 my-3 right g-rose" align="left">
               <v-card-title class="py-0">
                 <h4>{{item.sender}}</h4>
               </v-card-title>
@@ -99,7 +99,9 @@
   </div>
 </template>
 
-<script>!function(s,n,ap){if(!s.getElementById(ap)){var a=s.createElement("script");a.id=ap,a.src="https://snapwidget.com/js/snapwidget-rpf.js",s.getElementsByTagName("head")[0].appendChild(a)}}(document,0,"snaprpf");</script>
+<script>
+// !function(s,n,ap){if(!s.getElementById(ap)){var a=s.createElement("script");a.id=ap,a.src="https://snapwidget.com/js/snapwidget-rpf.js",s.getElementsByTagName("head")[0].appendChild(a)}}(document,0,"snaprpf");
+</script>
 
 <script>
 import {db} from '../firebase'

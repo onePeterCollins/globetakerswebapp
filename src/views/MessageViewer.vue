@@ -34,7 +34,7 @@
             <v-col class="col-12" align="center">
               <v-card class="col-11">
                 <v-row>
-                  <v-col v-for="(item, sn) in notification.getContent()" :key="sn" class="col-12">
+                  <v-col v-for="(item, sn) in content" :key="sn" class="col-12">
                     <p v-if="item.type === 'paragraph'" class="g-deepblue--text dosis px-5" align="left">{{item.content}}</p>
                     
                     <v-tooltip top>
@@ -50,7 +50,7 @@
                           height="300"
                           width="300"
                           contain
-                          :src="item.content"
+                          :src="item.imageFile"
                           :alt="item.alt" />
 
                       </template>
@@ -83,13 +83,6 @@
           back
         </v-btn>
       </v-col>
-
-      <!-- <v-col align="center">
-        <v-btn>
-          send
-          <v-icon>mdi-send</v-icon>
-        </v-btn>
-      </v-col> -->
     </v-row>
     <br/>
     <br/>
@@ -101,12 +94,14 @@
 
 <script>
 import Notification from '../classes/Notification'
+import {storage} from '../firebase'
 
 export default {
   name: 'g-message-viewer',
 
   data: () => ({
-    display: false
+    display: false,
+    content: []
   }),
 
   computed: {
@@ -138,6 +133,39 @@ export default {
 
   mounted() {
     this.notification._id ? this.display = true : this.display = false
+
+    let ROOT = this
+
+    for (let i in this.notification.getContent()) {
+      if (this.notification.getContent()[i].type === 'image') {
+        storage.child(this.notification.getContent()[i].content).getDownloadURL().then((url) => {
+          let xhr = new XMLHttpRequest()
+
+          xhr.responseType = 'blob'
+
+          xhr.onload = function() {
+            let blob = xhr.response,
+            reader = new FileReader()
+
+            reader.onload = () => {
+              ROOT.content[i] = JSON.parse(JSON.stringify(ROOT.notification._content[i]))
+              ROOT.content[i].content = reader.result
+              ROOT.display = false
+              ROOT.display = true
+            }
+
+            reader.readAsDataURL(blob)
+          }
+
+          xhr.open('GET', url)
+          xhr.send()
+        })
+      } else {
+        ROOT.content[i] = ROOT.notification._content[i]
+        ROOT.display = false
+        ROOT.display = true
+      }
+    }
 
     if (this.notification._unread) {
       let encryptedData, encryptedToken

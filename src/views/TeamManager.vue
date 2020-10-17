@@ -12,9 +12,9 @@
       <v-card class="col-lg-3 col-11 px-lg-5 px-8 pb-0 mx-2 my-3">
         <v-row>
           <v-col>
-            <span><b class="g-deepblue--text">Total students: </b> {{totalStudents}}</span><br/>
-            <span><b class="green--text">Verified: </b> {{verified}}</span><br/>
-            <span><b class="red--text">Pending: </b> {{pending}}</span>
+            <span><b class="g-deepblue--text">Total teams: </b> {{teams.length}}</span><br/>
+            <span><b class="green--text">Trainers: </b> {{totalTrainers}}</span><br/>
+            <span><b class="g-darkblue--text">Students: </b> {{totalStudents}}</span>
           </v-col>
         </v-row>
       </v-card>
@@ -56,7 +56,7 @@
       <v-card class="col-11 col-lg-4 px-0 pb-0 mx-0 my-5">
         <v-row>
           <v-col class="col-lg-8 px-10">
-            <v-text-field height="30" persistent-hint hint="Enter student name" label="Search" />
+            <v-text-field height="30" persistent-hint hint="Enter user name" label="Search" />
           </v-col>
           
           <v-col v-if="!mobile" class="col-lg-4">
@@ -83,7 +83,7 @@
     <br/>
     <br/>
 
-    <!-- <v-row>
+    <v-row>
       <v-col align="center">
         <h2 class="g-deepblue--text">Sub teams</h2>
 
@@ -112,15 +112,15 @@
 
                     <v-row justify="center">
                       <v-col class="col-6">
-                        <h4 class="pl-2 green--text">Verified: {{team.verified}}</h4>
-                        <v-btn v-if="verifiedUsers !== team.name" @click="showVerified(team.name)">show</v-btn>
-                        <v-btn v-if="verifiedUsers === team.name" @click="showVerified(team.name)">hide</v-btn>
+                        <h4 class="pl-2 green--text">Trainers: {{team.trainers}}</h4>
+                        <v-btn v-if="trainers !== team.name" @click="showTrainers(team.name)">show</v-btn>
+                        <v-btn v-if="trainers === team.name" @click="showTrainers(team.name)">hide</v-btn>
                       </v-col>
 
                       <v-col class="col-6">
-                        <h4 class="pl-2 red--text">Pending: {{team.pending}}</h4>
-                        <v-btn v-if="pendingUsers !== team.name" @click="showPending(team.name)">show</v-btn>
-                        <v-btn v-if="pendingUsers === team.name" @click="showPending(team.name)">hide</v-btn>
+                        <h4 class="pl-2 red--text">Students: {{team.students}}</h4>
+                        <v-btn v-if="students !== team.name" @click="showStudents(team.name)">show</v-btn>
+                        <v-btn v-if="students === team.name" @click="showStudents(team.name)">hide</v-btn>
                       </v-col>
                     </v-row>
                   </v-list-item-title>
@@ -138,7 +138,7 @@
             </v-row>
 
             <v-row>
-              <v-card v-if="dropDown === team.name || pendingUsers === team.name || verifiedUsers === team.name" class="col-12 px-1">
+              <v-card v-if="dropDown === team.name || students === team.name || trainers === team.name" class="col-12 px-1">
                 <v-card-title class="px-0 py-0">
                   <v-col align="center" class="col-5 px-1 py-0">
                     <p class="g-cream g-deepblue--text">Name</p>
@@ -156,7 +156,11 @@
                 <v-card-text class="px-0 py-0 my-0">
                   <v-row v-for="(member, sn) in members" :key="sn" class="px-3">
                     <v-col align="left" class="col-5 px-1 py-0 my-0">
-                      <p class="g-white g-deepblue--text py-2 pl-3">{{member.name}}</p>
+                      <p class="g-white g-deepblue--text py-2 pl-3">
+                        {{member.name}} &nbsp; &nbsp;
+                        <small v-if="member.userType === 'tutor'" class="g-rose--text"><b>Trainer</b></small>
+                      </p>
+                      
                     </v-col>
 
                     <v-col align="center" class="col-3 px-1 py-0">
@@ -173,8 +177,13 @@
             </v-row>
           </v-col>
         </v-row>
+
+        <br />
+        <br />
+        <br />
+        <br />
       </v-col>
-    </v-row> -->
+    </v-row>
   </div>
 </template>
 
@@ -186,6 +195,7 @@ export default {
 
   data: () => ({
     totalStudents: 0,
+    totalTrainers: 0,
     verified: 0,
     pending: 0,
     teamNames: [],
@@ -193,8 +203,8 @@ export default {
     members: [],
     users: [],
     dropDown: '',
-    pendingUsers: '',
-    verifiedUsers: '',
+    students: '',
+    trainers: '',
     refreshTeam: ''
   }),
 
@@ -214,6 +224,7 @@ export default {
       this.teams = []
       this.members = []
       this.totalStudents = 0
+      this.totalTrainers = 0
       this.verified = 0
       this.pending = 0
 
@@ -251,7 +262,7 @@ export default {
       verified
 
       for (let i in this.teamNames) {
-        this.teams.push({sn: (i+1), name: this.teamNames[i].name, population: 0, verified: 0, pending: 0, teamLead: this.teamNames[i].teamLead, teamLeadsRank: this.teamNames[i].teamLeadsRank})
+        this.teams.push({sn: (i+1), name: this.teamNames[i].name, population: 0, students: 0, trainers: 0, verified: 0, pending: 0, teamLead: this.teamNames[i].teamLead, teamLeadsRank: this.teamNames[i].teamLeadsRank})
       }
 
       this.users = db.collection('users').get().then((querySnapshot) => {
@@ -269,6 +280,29 @@ export default {
                   for (let index in this.teams) {
                     if (this.teams[index].name.toUpperCase().replace(/ /g, '') === userTeam.toUpperCase().replace(/ /g, '')) {
                       this.teams[index].population++
+                      this.teams[index].students++
+
+                      if (verified) {
+                        this.teams[index].verified++
+                        this.verified++
+                      } else {
+                        this.teams[index].pending++
+                        this.pending++
+                      }
+                    }
+                  }
+                }
+              }
+            } else if (result.getUserType() === 'tutor') {
+              this.totalTrainers++
+
+              for (let i in this.teamNames) {
+                // search for matching team names
+                if (userTeam.toUpperCase().replace(/ /g, '') === this.teamNames[i].name.toUpperCase().replace(/ /g, '')) {
+                  for (let index in this.teams) {
+                    if (this.teams[index].name.toUpperCase().replace(/ /g, '') === userTeam.toUpperCase().replace(/ /g, '')) {
+                      this.teams[index].population++
+                      this.teams[index].trainers++
 
                       if (verified) {
                         this.teams[index].verified++
@@ -293,12 +327,41 @@ export default {
     },
 
     showTeamMembers (teamName) {
-      this.pendingUsers = ''
-      this.verifiedUsers = ''
+      this.students = ''
+      this.trainers = ''
       this.members = []
 
       if (teamName !== this.dropDown) {
         this.dropDown = teamName
+
+        this.users = db.collection('users').get().then((querySnapshot) => {
+          querySnapshot.forEach((item) => {
+            this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '')) {
+                this.members.push({
+                  name: result.getName(),
+                  status: result.verified(),
+                  id: result._id,
+                  teamName: result.getSubTeam(),
+                  userType: result.getUserType()
+                })
+              }
+            })
+          })
+        })
+      } else {
+        this.dropDown = ''
+        this.members = []
+      }
+    },
+
+    showStudents(teamName) {
+      this.dropDown = ''
+      this.trainers = ''
+      this.members = []
+
+      if (teamName !== this.students) {
+        this.students = teamName
 
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
@@ -315,23 +378,23 @@ export default {
           })
         })
       } else {
-        this.dropDown = ''
+        this.students = ''
         this.members = []
       }
     },
 
-    showPending(teamName) {
+    showTrainers(teamName) {
       this.dropDown = ''
-      this.verifiedUsers = ''
+      this.students = ''
       this.members = []
 
-      if (teamName !== this.pendingUsers) {
-        this.pendingUsers = teamName
+      if (teamName !== this.trainers) {
+        this.trainers = teamName
 
         this.users = db.collection('users').get().then((querySnapshot) => {
           querySnapshot.forEach((item) => {
             this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
-              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && !result.verified() && result.getUserType() === 'student') {
+              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.getUserType() === 'tutor') {
                 this.members.push({
                   name: result.getName(),
                   status: result.verified(),
@@ -343,35 +406,7 @@ export default {
           })
         })
       } else {
-        this.pendingUsers = ''
-        this.members = []
-      }
-    },
-
-    showVerified(teamName) {
-      this.dropDown = ''
-      this.pendingUsers = ''
-      this.members = []
-
-      if (teamName !== this.verifiedUsers) {
-        this.verifiedUsers = teamName
-
-        this.users = db.collection('users').get().then((querySnapshot) => {
-          querySnapshot.forEach((item) => {
-            this.$Download(JSON.parse(this.$Decrypt(item.data().data).token)).then((result) => {
-              if (result.getSubTeam().toUpperCase().replace(/ /g, '') === teamName.toUpperCase().replace(/ /g, '') && result.verified() && result.getUserType() === 'student') {
-                this.members.push({
-                  name: result.getName(),
-                  status: result.verified(),
-                  id: result._id,
-                  teamName: result.getSubTeam()
-                })
-              }
-            })
-          })
-        })
-      } else {
-        this.verifiedUsers = ''
+        this.trainers = ''
         this.members = []
       }
     },

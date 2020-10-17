@@ -63,7 +63,7 @@
               </v-card-text>
             </v-card>
 
-            <v-card v-if="item.type === 'response'" class="col-8 px-1 py-0 my-3 right" align="left">
+            <v-card v-if="item.type === 'response'" class="col-8 px-1 py-0 my-3 right g-rose" align="left">
               <v-card-title class="py-0">
                 <h4>{{item.sender}}</h4>
               </v-card-title>

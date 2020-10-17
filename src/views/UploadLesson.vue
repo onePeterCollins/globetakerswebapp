@@ -447,7 +447,7 @@ export default {
               let ROOT = this
 
               upload.on(firebase.storage.TaskEvent.STATE_CHANGED, function (snapshot) {
-                ROOT.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                ROOT.uploadProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
               })
             } else if (this.content[i].type === 'image') {
               let format = this.getFileExtension(this.content[i].imageFile.name),
@@ -479,7 +479,7 @@ export default {
               let ROOT = this
 
               upload.on(firebase.storage.TaskEvent.STATE_CHANGED, function (snapshot) {
-                ROOT.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+                ROOT.uploadProgress = Math.round((snapshot.bytesTransferred / snapshot.totalBytes) * 100)
               })
             }
           }

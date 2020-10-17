@@ -162,7 +162,7 @@
                     <v-textarea v-if="item.type === 'italic'" class="mx-1 mx-lg-5" rows="3" prepend-icon="mdi-text" label="Type italic text" v-model="item.content" />
 
                     <v-col v-if="item.type === 'image'">
-                      <v-file-input class="mx-1 mx-lg-5" label="Attach image" show-size v-model="item.file" @change="processImg(item.file, sn)"/>
+                      <v-file-input class="mx-1 mx-lg-5" label="Attach image" show-size v-model="item.imageFile" @change="processImg(item.imageFile, sn)"/>
                       <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image title" height="30" v-model="item.title" />
                       <v-text-field class="mx-1 mx-lg-5" prepend-icon="mdi-text" label="Enter image description" height="30" v-model="item.alt" />
                     </v-col>
@@ -194,7 +194,7 @@
             <v-col align="center">
               <p v-if='networkMessage.success'><span class='green'>{{emoji.emojify(':white_check_mark:')}}</span> {{`${ networkMessage.success}`}}</p>
               <p v-if='networkMessage.processing' class='g-deepblue--text'>
-                <v-progress-circular indeterminate />
+                <v-progress-circular :rotate="-90" :value="uploadProgress">{{uploadProgress}}%</v-progress-circular>
 
                 Sending...
               </p>
@@ -242,6 +242,7 @@
 <script>
 import Notification from '../classes/Notification'
 import firebase from 'firebase'
+import {storage} from '../firebase'
 
 export default {
   name: 'g-messenger',
@@ -259,6 +260,8 @@ export default {
     },
 
     errorMessage: null,
+
+    uploadProgress: 0,
 
     content: [
       {
@@ -284,7 +287,9 @@ export default {
 
       image: {
         type: 'image',
-        content: {},
+        imageFile: null,
+        format: '',
+        content: null,
         title: '',
         alt: ''
       },
@@ -361,8 +366,6 @@ export default {
       if (this.checkHeader()) {
         let notification
 
-        this.processing = true
-
         if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
           // display recaptcha challenge
           window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('verify-message', {
@@ -382,6 +385,8 @@ export default {
         
 
         if (this.recaptchaVerifierRendered && this.verificationCode !== '') {
+          this.networkMessage.processing = true
+
           // set title
           this.notification.setTitle(this.title)
 
@@ -390,9 +395,6 @@ export default {
 
           // set sender
           this.notification.setSender(this.sender)
-
-          // set notification content
-          this.notification.setContent(this.content)
 
           // set notification ID
           this.notification._id = `${this.notification.getTitle() + this.generateId()}`
@@ -403,19 +405,57 @@ export default {
           // set serial number (for sorting)
           this.notification.setSn(this.serialNumber)
 
-          // encrypt notification
-          notification = {data: this.$Encrypt(JSON.stringify(this.notification)).token}
+          for (let i in this.content) {
+            if (this.content[i].type === 'image') {
+              let format = this.getFileExtension(this.content[i].imageFile.name),
+              storageRef = storage.child(`notificationImages/${this.notification._id}${i}.${format}`),
+              upload = storageRef.putString(this.content[i].content, 'data_url')
 
-          // upload notification
-          this.$Upload(`notify${this.notification.getAudience()}`, `${this.notification._id}`, notification).then(() => {
-            this.networkMessage.success = 'Message sent'
-            window.location.reload()
-          })
+              upload.then(() => {
+                this.content[i].content = ''
+                this.content[i].format = format
+                this.content[i].content = `notificationImages/${this.notification._id}${i}.${format}`
+                this.content[i].imageFile = null
+              }).then(() => {
+                // set notification content
+                this.notification.setContent(this.content)
 
-          // clear notification
-          this.clear()
+                // encrypt notification
+                notification = {data: this.$Encrypt(JSON.stringify(this.notification)).token}
+
+                // upload notification
+                this.$Upload(`notify${this.notification.getAudience()}`, `${this.notification._id}`, notification).then(() => {
+                  this.networkMessage.success = 'Message sent'
+
+                  // clear notification
+                  this.clear()
+                  window.history.go(-1)
+                })
+              })
+
+              let ROOT = this
+
+              upload.on(firebase.storage.TaskEvent.STATE_CHANGED, function (snapshot) {
+                ROOT.uploadProgress = (snapshot.bytesTransferred / snapshot.totalBytes) * 100
+              })
+            }
+          }
         }
       }
+    },
+
+    getFileExtension(fileName) {
+      let nameString = fileName.split('').reverse(), extension = '', stop = false
+
+      nameString.forEach((item) => {
+        if (item !== '.' && !stop) {
+          extension += item
+        } else {
+          stop = true
+        }
+      })
+
+      return extension.split('').reverse().join('')
     },
 
     generateId() {
@@ -450,12 +490,21 @@ export default {
         // set notification date
         this.notification.setDate(this.date)
 
+        for (let i in this.content) {
+          if (this.content[i].type === 'image') {
+            this.content[i].format = this.getFileExtension(this.content[i].imageFile.name)
+          }
+        }
+
+        // set notification content
+        this.notification.setContent(this.content)
+
         this.$store.dispatch('setValue', {name: 'viewMessage', newVal: this.notification})
 
         //save notification in session storage
         sessionStorage.setItem('viewMessage', JSON.stringify(this.notification))
 
-        this.$router.push('/view-notification')
+        this.$router.push('/preview-notification')
       }
     },
 
@@ -465,7 +514,7 @@ export default {
       this.sender = ''
       this.content.length = 0
       this.content.push(JSON.parse(JSON.stringify(this.contentType.paragraph)))
-      sessionStorage.setItem('viewMessage', '')
+      sessionStorage.clearItem('viewMessage')
     }
   },
 

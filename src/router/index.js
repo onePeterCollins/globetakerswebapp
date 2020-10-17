@@ -141,6 +141,11 @@ const routes = [
     component: () => import('../components/TrainersManager.vue')
   },
   {
+    path: '/preview-notification',
+    name: 'PreviewNotification',
+    component: () => import('../views/MessagePreviewer.vue')
+  },
+  {
     path: '/proprietor/forum-manager',
     name: 'Admin-forum-manager',
     component: () => import('../views/InteractiveForumManager.vue')

@@ -70,6 +70,7 @@ let state = {
   inspectStudent: '',
   viewMessage: {},
   viewLecture: {},
+  contactMessage: '',
   forumId: ''
 }
 

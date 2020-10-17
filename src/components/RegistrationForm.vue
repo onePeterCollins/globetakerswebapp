@@ -49,6 +49,24 @@
       <br />
 
       <transition name="slideYneg">
+        <v-row v-if="$keys[4]">
+          <v-col class="g-cream">
+            <v-row>
+              <v-col class="col-2 px-0 mx-0">
+                <v-checkbox class="mt-0 ml-0" color="rgb(255, 127, 165)"  height="20" v-model="agreeToTerms" @input="agreeToTerms = !agreeToTerms" />
+              </v-col>
+
+              <v-col>
+                <span>agree to our <router-link to="/terms">terms of use</router-link></span>
+              </v-col>
+            </v-row>
+          </v-col>
+        </v-row>
+      </transition>
+
+      <br />
+
+      <transition name="slideYneg">
         <v-row v-if="$keys[3]">
           <span>
             <b id="signupVerification"></b>
@@ -97,6 +115,7 @@ export default {
     subTeam: '',
     verificationCode: '',
     recaptchaVerifierRendered: false,
+    agreeToTerms: false,
 
     errorMessages: {
       username: 'Name and surname max 30 characters',
@@ -144,6 +163,8 @@ export default {
       // Validate and update input
       validator.newEntry(this, field, value)
 
+      
+
       if (this.errorFields) {
         this.errorFields = validator.scanEntries(this)
       }
@@ -152,6 +173,15 @@ export default {
     register() {
       // Check for error fields
       this.errorFields = validator.scanEntries(this)
+
+      if (!this.agreeToTerms) {
+        if (!this.errorMessages.generalErrorMessage) {
+          this.errorMessages.generalErrorMessage = []
+          this.errorMessages.generalErrorMessage.push('You have not agreed to our terms of use')
+        }
+
+        !this.errorFields ? this.errorFields = !this.errorFields : null
+      }
 
       if (!this.errorFields) {
         let matchFound, userData, userKey, encryptedData, encryptedToken, encryptedKey

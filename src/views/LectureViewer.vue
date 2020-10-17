@@ -81,9 +81,17 @@
                 </v-col>
 
                 <v-col v-for="(item, sn) in comments" :key="sn" class="col-11 mb-3 g-white" align="left">
-                  <h3>{{item.user}}</h3>
-                  <p>{{item.comment}}</p>
-                  <p>{{item.date}}</p>
+                  <v-card v-if="item.userType === 'tutor'" class="g-rose">
+                    <h3>{{item.user}}</h3>
+                    <p>{{item.comment}}</p>
+                    <p>{{item.date}}</p>
+                  </v-card>
+
+                  <v-card>
+                    <h3>{{item.user}}</h3>
+                    <p>{{item.comment}}</p>
+                    <p>{{item.date}}</p>
+                  </v-card>
                 </v-col>
 
                 <v-col v-if="user.getUserType() === 'student'" class="col-11">
@@ -237,6 +245,7 @@ export default {
       comment = {
         type: 'reply',
         user: ROOT.user.getName(),
+        userType: ROOT.user.getUserType(),
         comment: ROOT.reply,
         date: ROOT.date + ' ' + ROOT.time
       },
