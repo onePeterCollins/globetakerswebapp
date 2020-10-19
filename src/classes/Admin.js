@@ -4,6 +4,8 @@ export default class Admin {
     constructor() {
         this._name = ''
         this._password = ''
+        this._id = ''
+        this._dateCreated = ''
     }
 
     getName() {

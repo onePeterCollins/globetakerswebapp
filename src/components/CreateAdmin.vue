@@ -33,7 +33,7 @@
 
           <transition name="slideYneg">
             <v-row v-if="$keys[3]">
-              <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="**** ****" :hint="errorMessages.password"  height="30" v-model='password' :value="superUser.getPassword()" @input="update('password', password)" />
+              <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="********" :hint="errorMessages.password"  height="30" v-model='password' :value="superUser.getPassword()" />
             </v-row>
           </transition>
 
@@ -42,7 +42,7 @@
           <transition name="slideYneg">
             <v-row v-if="$keys[3]">
               <span>
-                <b id="createAdminVerification"></b>
+                <b id="createAdmin"></b>
               </span>
             </v-row>
           </transition>
@@ -86,6 +86,7 @@
 </template>
 
 <script>
+import firebase from 'firebase'
 import validator from '../form_validation/.globalFormValidation'
 import Admin from '../classes/Admin'
 import {db} from '../firebase'
@@ -132,8 +133,103 @@ export default {
     },
 
     createAdmin() {
+      if (!this.recaptchaVerifierRendered && this.verificationCode === '') {
+        // display recaptcha challenge
+        window.recaptchaVerifier = new firebase.auth.RecaptchaVerifier('createAdmin', {
+          'callback': (response) => {
+            this.verificationCode = response
+            this.createAdmin()
+          },
+          'expired-callback': () => {
+            // Response expired. Ask user to solve reCAPTCHA again.
+            window.location.reload()
+          }
+        })
 
-    }
+        // if (no network) then alert the user
+        if (this.admins.length === 0) {
+          this.networkMessage = {error: 'Poor network'}
+          return
+        } else {
+          window.recaptchaVerifier.render()
+          this.recaptchaVerifierRendered = true
+        }
+      }
+
+      // Check for error fields
+      this.errorFields = validator.scanEntries(this)
+
+      if (!this.errorFields && this.verificationCode.length !== 0) {
+        let matchFound, userData, token
+
+        // Compare data on all fields to what exists on database
+        for (let item in this.admins) {
+          // decrypt existing user data and check for a match
+
+          userData = this.admins[item].data
+
+          // if(matchFound) add login history, update admin details to store, and upload
+          if (userData._name.toUpperCase() === this.username.toUpperCase()) {
+            matchFound = true
+
+            this.errorMessages.generalErrorMessage
+            ? this.errorMessages.generalErrorMessage.push('An admin with the same name already exists')
+            : this.errorMessages.generalErrorMessage = []; this.errorMessages.generalErrorMessage.push('An admin with the same name already exists')
+          }
+        }
+
+        if (!matchFound) {
+          // set username
+          this.$Admin.setName(this.username)
+
+          // set password
+          this.$Admin.setPassword(this.password)
+
+          // set user id
+          this.$Admin._id = this.$Admin.getName() + this.generateId()
+
+          // set date
+          this.$Admin._dateCreated = `${this.date} ${this.time} ${this.timeZone}`
+
+          token = {data: JSON.parse(JSON.stringify(this.$Admin))}
+
+          // Upload user information
+          this.$Upload('admins', `${this.$Admin._id}`, token).then(() => {
+            // set the global user object in the store
+            this.$store.dispatch('setValue', {name: 'admin', newVal: this.$Admin})
+            
+            // send to session storage
+            sessionStorage.clear()
+            sessionStorage.setItem('adminId', this.$Admin._id)
+            sessionStorage.setItem('adminLoginState', 'true')
+
+            //clear local storage
+            localStorage.clear()
+
+            // update network message and redirect to 'awaiting verification' page
+            this.networkMessage = {success: 'Registered successfully'}
+          })
+        }
+      }
+    },
+
+    generateId() {
+      let charCode,
+      value = ''
+
+      for (let i=0; i<12; i++) {
+        charCode = Math.floor(Math.random() * 10)
+        value += charCode.toString()
+      }
+
+      return value
+    },
+
+    usernameHint(errorMessage) {
+      !errorMessage
+      ? this.errorMessages.username = 'Name and surname max 30 characters'
+      : this.errorMessages.username = errorMessage
+    },
   },
 
   hasAnim: true
