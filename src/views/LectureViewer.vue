@@ -1,5 +1,5 @@
 <template>
-  <div v-if="display" class="g-lecture-viewer social-media-sketch-pattern">
+  <div class="g-lecture-viewer social-media-sketch-pattern">
     <v-row class="g-cream">
       <v-col align="center">
         <h2 class="g-deepblue--text dosis">{{lecture._title}}</h2>
@@ -33,7 +33,7 @@
           <v-row justify="center">
             <v-col class="col-12" align="center">
               <v-card class="col-12">
-                <v-row>
+                <v-row v-if="display">
                   <v-col v-for="(item, sn) in content" :key="sn" class="col-12">
                     <p v-if="item.type === 'text'" class="g-deepblue--text dosis px-5" align="left">{{item.content}}</p>
                     
@@ -65,6 +65,22 @@
                     </audio>
                   </v-col>
                 </v-row>
+
+                <v-row v-else>
+                  <v-col>
+                    <v-dialog v-model="displayLoader" :width="dialogWidth" class="px-0">
+                      <v-card class="px-3 py-3">
+                        <v-card-title class="alert">Loading lecture</v-card-title>
+                        <v-card-text>please wait...</v-card-text>
+                          <v-row>
+                            <v-col align="center">
+                              <v-progress-circular indeterminate />
+                            </v-col>
+                          </v-row>
+                      </v-card>
+                    </v-dialog>
+                  </v-col>
+                </v-row>
               </v-card>
 
               <v-row>
@@ -87,7 +103,7 @@
                     <p>{{item.date}}</p>
                   </v-card>
 
-                  <v-card>
+                  <v-card v-else>
                     <h3>{{item.user}}</h3>
                     <p>{{item.comment}}</p>
                     <p>{{item.date}}</p>
@@ -165,7 +181,23 @@ export default {
       return value
     },
     date() {return this.$store.getters.getState.dateString()},
-    time() {return this.$store.getters.getState.timeString()}
+    time() {return this.$store.getters.getState.timeString()},
+    dialogWidth() {
+      let value
+
+      if (window.innerWidth >= 1264) {
+        value = '30vw'
+      } else if (window.innerWidth < 1264 &&  window.innerWidth >= 960) {
+        value = '50vw'
+      } else {
+        value = '90vw'
+      }
+
+      return value
+    },
+    displayLoader() {
+      return !this.display
+    }
   },
 
   firestore: {

@@ -25,7 +25,7 @@
 
           <transition name="slideYneg">
             <v-row v-if="$keys[2]">
-              <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" :hint='errorMessages.username'  height="30" v-model='username' :value='superUser.getName()' @input="update('name', username)" />
+              <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-account" label="Full name" :hint='errorMessages.username'  height="30" v-model='username' :value='$Admin.getName()' @input="update('name', username)" />
             </v-row>
           </transition>
 
@@ -33,7 +33,7 @@
 
           <transition name="slideYneg">
             <v-row v-if="$keys[3]">
-              <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="********" :hint="errorMessages.password"  height="30" v-model='password' :value="superUser.getPassword()" />
+              <v-text-field color="rgb(255, 127, 165)" prepend-icon="mdi-lock" label="********" :hint="errorMessages.password"  height="30" v-model='password' :value="$Admin.getPassword()" />
             </v-row>
           </transition>
 
@@ -88,7 +88,6 @@
 <script>
 import firebase from 'firebase'
 import validator from '../form_validation/.globalFormValidation'
-import Admin from '../classes/Admin'
 import {db} from '../firebase'
 
 export default {
@@ -109,7 +108,6 @@ export default {
     errorFields: null,
     networkMessage: null,
     admins: [],
-    superUser: new Admin()
   }),
 
   computed: {
@@ -195,17 +193,6 @@ export default {
 
           // Upload user information
           this.$Upload('admins', `${this.$Admin._id}`, token).then(() => {
-            // set the global user object in the store
-            this.$store.dispatch('setValue', {name: 'admin', newVal: this.$Admin})
-            
-            // send to session storage
-            sessionStorage.clear()
-            sessionStorage.setItem('adminId', this.$Admin._id)
-            sessionStorage.setItem('adminLoginState', 'true')
-
-            //clear local storage
-            localStorage.clear()
-
             // update network message and redirect to 'awaiting verification' page
             this.networkMessage = {success: 'Registered successfully'}
           })

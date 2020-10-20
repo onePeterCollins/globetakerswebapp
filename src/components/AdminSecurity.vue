@@ -14,6 +14,12 @@ export default {
     
   }),
 
+  mounted() {
+    if (!sessionStorage.getItem('adminId') && sessionStorage.getItem('adminAccess') !== 'true') {
+      this.$router.push('proprietor')
+    }
+  },
+
   components: {
     createAdmin: createAdmin
   }

@@ -63,6 +63,12 @@ export default {
 
       return value
     }
+  },
+
+  mounted() {
+    if (!sessionStorage.getItem('adminId') && sessionStorage.getItem('adminAccess') !== 'true') {
+      this.$router.push('proprietor')
+    }
   }
 }
 </script>
